@@ -1,0 +1,15 @@
+#pragma once
+
+class Time {
+public:
+    Time();
+
+	const float getDelta() const;
+	const float getNow() const;
+
+	const void update(const float time);
+
+private:
+    float m_now, m_last;
+    float m_deltaTime;
+};

@@ -1,0 +1,6 @@
+[submodule "2 - A Virtual Being/modules/glew"]
+	path = 2 - A Virtual Being/modules/glew
+	url = https://github.com/Perlmint/glew-cmake
+[submodule "2 - A Virtual Being/modules/glfw"]
+	path = 2 - A Virtual Being/modules/glfw
+	url = https://github.com/glfw/glfw

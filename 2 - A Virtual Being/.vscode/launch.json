@@ -1,0 +1,12 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "CMake",
+			"type": "cppdbg",
+			"request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "cwd": "${command:cmake.getLaunchTargetDirectory}",
+		}
+	]
+}
