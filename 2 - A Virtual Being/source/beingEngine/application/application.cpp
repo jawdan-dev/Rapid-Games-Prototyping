@@ -6,8 +6,8 @@ Application::Application() :
 	m_window(640, 360) {}
 
 void Application::start() {
-	FILE* vsFile = fopen("./shader.vs", "rb");
-	FILE* fsFile = fopen("./shader.fs", "rb");
+	FILE* vsFile = fopen("assets/shader.vs", "rb");
+	FILE* fsFile = fopen("assets/shader.fs", "rb");
 
 	fseek(vsFile, 0, SEEK_END);
 	const long vsFileSize = ftell(vsFile);

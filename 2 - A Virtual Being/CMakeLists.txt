@@ -15,6 +15,14 @@ set_target_properties(
 
 target_include_directories(AVirtualBeing PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/source)
 
+
+file(GLOB_RECURSE ASSET_FILES_RAW ${CMAKE_CURRENT_SOURCE_DIR}/source/virtualGame/assets/**)
+foreach(ASSET_FILE IN LISTS ASSET_FILES_RAW)
+	FILE(RELATIVE_PATH ASSET_FILE_RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/source/virtualGame/assets/ ${ASSET_FILE})
+	add_custom_command(TARGET AVirtualBeing POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ASSET_FILE} ${TARGET_OUTPUT_DIRECTORY}/assets/${ASSET_FILE_RELATIVE})
+endforeach()
+
+
 # Submodule validate function.
 function(check_and_add_subdirectory dir)
 	if(NOT EXISTS ${dir}/CMakeLists.txt)
