@@ -1,8 +1,6 @@
 #pragma once
 #include <beingEngine/core/core.hpp>
 
-#include <beingEngine/core/glfw.hpp>
-
 class Input {
 public:
     typedef int Key;

@@ -1,7 +1,6 @@
 #pragma once
 #include <beingEngine/core/core.hpp>
 
-#include <beingEngine/core/glfw.hpp>
 #include <beingEngine/systems/input.hpp>
 #include <beingEngine/systems/time.hpp>
 
@@ -15,6 +14,7 @@ public:
 	const Time& getTime() const { return m_time; }
 
     void process();
+    void draw();
 
 private:
     GLFWwindow *m_window;
