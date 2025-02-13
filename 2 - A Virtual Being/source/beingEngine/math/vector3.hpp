@@ -28,7 +28,10 @@ public:
 		return sqrtf(lengthSquared());
 	}
 	inline const Vector3 normal() const {
-		return (*this) / length();
+		const float len = length();
+		if (len <= 0)
+			return Vector3();
+		return (*this) / len;
 	}
 	inline const Vector3 cross(const Vector3& other) const {
 		return Vector3(

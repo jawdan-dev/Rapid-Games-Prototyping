@@ -26,7 +26,10 @@ public:
         return sqrtf(lengthSquared());
     }
 	inline const Vector2 normal() const {
-		return (*this) / length();
+		const float len = length();
+		if (len <= 0)
+			return Vector2();
+		return (*this) / len;
 	}
 
 #define VEC_OPERATOR(OP)                                                                                          \
