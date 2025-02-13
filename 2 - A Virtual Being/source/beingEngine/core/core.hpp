@@ -28,3 +28,4 @@ typedef std::string String;
 
 #include <beingEngine/math/vector2.hpp>
 #include <beingEngine/math/vector3.hpp>
+#include <beingEngine/systems/file.hpp>

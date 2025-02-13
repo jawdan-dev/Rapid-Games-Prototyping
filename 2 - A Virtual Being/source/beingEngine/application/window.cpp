@@ -34,9 +34,22 @@ Window::Window(const int width, const int height) :
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CW);
 
+	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* glfwWindow, int width, int height) {
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+		glViewport(0, 0, width, height);
+	});
 	glfwSetKeyCallback(m_window, [](GLFWwindow* glfwWindow, int key, int scancode, int action, int mods) {
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
 		window.m_input.registerKeyEvent(key, action);
+	});
+
+	glfwSetMouseButtonCallback(m_window, [](GLFWwindow* glfwWindow, int button, int action, int mods) {
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+		window.m_input.registerKeyEvent(button, action);
+	});
+	glfwSetCursorPosCallback(m_window, [](GLFWwindow* glfwWindow, double mouseX, double mouseY) {
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+		window.m_input.setMousePosition(Vector2(mouseX, mouseY));
 	});
 
 	glfwShowWindow(m_window);

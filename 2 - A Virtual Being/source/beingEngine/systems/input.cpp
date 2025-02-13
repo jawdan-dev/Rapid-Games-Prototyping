@@ -1,6 +1,8 @@
 #include "input.hpp"
 
-Input::Input() : m_keyDown(), m_keyPressed(), m_keyUp() {}
+Input::Input() :
+	m_keyDown(), m_keyPressed(), m_keyUp(),
+	m_mousePosition(0, 0) {}
 
 const bool Input::isKeyDown(const Key key) const {
 	return m_keyDown.find(key) != m_keyDown.end();
@@ -13,21 +15,21 @@ const bool Input::isKeyUp(const Key key) const {
 }
 
 void Input::processInput() {
-    m_keyUp.clear();
-    m_keyDown.clear();
+	m_keyUp.clear();
+	m_keyDown.clear();
 }
 void Input::registerKeyEvent(const int key, const int action) {
-    switch (action) {
-        case GLFW_PRESS: {
-            m_keyDown.emplace(key);
-            m_keyPressed.emplace(key);
-        } break;
+	switch (action) {
+		case GLFW_PRESS: {
+			m_keyDown.emplace(key);
+			m_keyPressed.emplace(key);
+		} break;
 
-        case GLFW_RELEASE: {
-            auto it = m_keyPressed.find(key);
-            if (it != m_keyPressed.end())
-                m_keyPressed.erase(it);
-            m_keyUp.emplace(key);
-        } break;
-    }
+		case GLFW_RELEASE: {
+			auto it = m_keyPressed.find(key);
+			if (it != m_keyPressed.end())
+				m_keyPressed.erase(it);
+			m_keyUp.emplace(key);
+		} break;
+	}
 }

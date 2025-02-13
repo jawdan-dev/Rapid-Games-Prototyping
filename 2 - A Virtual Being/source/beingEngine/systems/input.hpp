@@ -11,9 +11,13 @@ public:
 	const bool isKeyPressed(const Key key) const;
 	const bool isKeyUp(const Key key) const;
 
+	inline const Vector2& getMousePosition() const { return m_mousePosition; }
+	void setMousePosition(const Vector2& mousePosition) { m_mousePosition = mousePosition; }
+
 	void processInput();
 	void registerKeyEvent(const int key, const int action);
 
 private:
     std::set<Key> m_keyDown, m_keyPressed, m_keyUp;
+	Vector2 m_mousePosition;
 };
