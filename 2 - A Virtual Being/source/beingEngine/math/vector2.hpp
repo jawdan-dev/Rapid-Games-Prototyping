@@ -22,9 +22,12 @@ public:
     inline const float lengthSquared() const {
         return dot(*this);
     }
-    inline const float length(const Vector2& other) const {
+    inline const float length() const {
         return sqrtf(lengthSquared());
     }
+	inline const Vector2 normal() const {
+		return (*this) / length();
+	}
 
 #define VEC_OPERATOR(OP)                                                                                          \
     const Vector2 operator OP(const Vector2& other) const { return Vector2(m_x OP other.m_x, m_y OP other.m_y); } \

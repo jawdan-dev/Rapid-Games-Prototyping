@@ -62,8 +62,6 @@ void Mesh::upload() {
 			m_drawCount = __max(m_drawCount, it.second.m_dataCount);
 		}
 
-		printf("stride: %zu, drawcount: %zu\n", m_attributeStride, m_drawCount);
-
 		void* data = malloc(m_drawCount * m_attributeStride);
 		for (auto it : m_data) {
 			const size_t dataSize = glGetTypeByteSize(it.second.m_glType);

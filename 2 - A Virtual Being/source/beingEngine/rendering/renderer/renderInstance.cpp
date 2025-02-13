@@ -27,6 +27,11 @@ RenderInstance::RenderInstance(Shader& shader, Mesh& mesh) :
 	glBindVertexArray(0);
 }
 RenderInstance::~RenderInstance() {
+	if (m_instanceData != nullptr) {
+		free(m_instanceData);
+		m_instanceData = nullptr;
+	}
+
 	if (m_vao) {
 		glDeleteVertexArrays(1, &m_vao);
 		m_vao = 0;
@@ -76,7 +81,6 @@ void RenderInstance::draw() {
 	const bool instanced = m_shader->getInstanceAttributesTotalSize() > 0;
 
 	glBindVertexArray(m_vao);
-	glUseProgram(m_shader->getProgram());
 
 	if (ebo) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);

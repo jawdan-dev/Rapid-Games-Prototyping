@@ -6,7 +6,7 @@
 class Instance {
 public:
 	Instance();
-	Instance(const Instance& other) = delete;
+	Instance(const Instance& other);
 	~Instance();
 
 	const std::map<String, InstanceData>& getInstanceData() const { return m_data; };
@@ -14,6 +14,8 @@ public:
 	void setDataRaw(const String& attributeName, const void* data, const GLenum glType);
 	template<typename T>
 	void setData(const String& attributeName, const T& data, const GLenum glType) { setDataRaw(attributeName, &data, glType); }
+
+	const bool operator <(const Instance& other) const;
 
 private:
 	std::map<String, InstanceData> m_data;
