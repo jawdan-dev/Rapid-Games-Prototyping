@@ -4,7 +4,7 @@
 #include <cstdio>
 
 int main() {
-    printf("\n\n> My lawyers advised against this.\n");
+    printf("\n\n> My lawyers advised against making a whole engine for a game jam.\n");
 
     try {
         Application application;
