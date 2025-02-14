@@ -1,7 +1,7 @@
 #pragma once
 #include <beingEngine/core/core.hpp>
 
-#include <beingEngine/application/window.hpp>
+#include <beingEngine/window/window.hpp>
 
 class Application {
 public:
