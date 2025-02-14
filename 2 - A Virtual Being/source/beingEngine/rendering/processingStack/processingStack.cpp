@@ -25,7 +25,7 @@ void ProcessingStack::render(Renderer& renderer, const Matrix4& viewProjection) 
 		layer->draw();
 		lastRenderer = &layer->getRenderer();
 	}
-	
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	lastRenderer->render(viewProjection);
 }

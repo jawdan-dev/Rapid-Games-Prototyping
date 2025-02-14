@@ -13,7 +13,7 @@ public:
 
 	void setSize(const int width, const int height);
 	void pushLayer(ProcessingLayer* const layer);
-	template <typename T, typename... Args>
+	template<typename T, typename... Args>
 	void emplaceLayer(Args... args) { return pushLayer(new T(args...)); }
 
 	void render(Renderer& renderer, const Matrix4& viewProjection);

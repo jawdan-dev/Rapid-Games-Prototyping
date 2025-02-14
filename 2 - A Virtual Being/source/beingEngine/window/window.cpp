@@ -19,6 +19,8 @@ Window::Window(const int width, const int height) :
 	m_window = glfwCreateWindow(width, height, "...", NULL, NULL);
 	if (m_window == nullptr)
 		BEING_ERROR("Failed to initialize window.\n");
+	m_width = width;
+	m_height = height;
 
 	glfwMakeContextCurrent(m_window);
 	glfwSetWindowUserPointer(m_window, this);

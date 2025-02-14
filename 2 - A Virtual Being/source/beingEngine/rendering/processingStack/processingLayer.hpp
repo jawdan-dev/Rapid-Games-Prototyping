@@ -14,7 +14,6 @@ public:
 	inline GLuint getFramebuffer() { return m_framebuffer; }
 	inline Renderer& getRenderer() { return m_renderer; }
 
-
 	void setSize(const int width, const int height);
 	virtual void onResize();
 
