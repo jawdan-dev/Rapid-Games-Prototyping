@@ -7,5 +7,5 @@ class UniformBuffer : public Instance {
 public:
 	using Instance::Instance;
 
-	void bindAll(Shader& shader) const;
+	void bindAll(Shader& shader, GLuint& samplerCounter) const;
 };

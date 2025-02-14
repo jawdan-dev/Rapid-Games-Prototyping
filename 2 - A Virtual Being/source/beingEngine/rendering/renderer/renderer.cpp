@@ -17,12 +17,14 @@ void Renderer::draw(Shader& shader, const UniformBuffer& uniformBuffer, Mesh& me
 }
 void Renderer::render(const Matrix4& viewProjection) {
 	for (auto& it : m_renderInstances) {
+		GLuint sampleCounter = 0;
+
 		// This is scuffed.
 		Shader& shader = *std::get<0>(it.first);
 		const UniformBuffer& uniformBuffer = std::get<2>(it.first);
 
 		glUseProgram(shader.getProgram());
-		uniformBuffer.bindAll(shader);
+		uniformBuffer.bindAll(shader, sampleCounter);
 		if (shader.hasUniform("u_viewProjection")) {
 			glUniformMatrix4fv(
 				shader.getUniform("u_viewProjection").m_location,

@@ -1,21 +1,26 @@
 #include "application.hpp"
 
 #include <beingEngine/rendering/renderer/renderer.hpp>
+#include <beingEngine/rendering/processingStack/processingStack.hpp>
+#include <virtualGame/postProcessing/test.hpp>
 
 Application::Application() :
 	m_window(640, 360) {}
 
 void Application::start() {
-	Shader shader(File::readAll("assets/shader.vs"), File::readAll("assets/shader.fs"));
+	ProcessingStack processingStack(m_window.getWidth(), m_window.getHeight());
+	processingStack.emplaceLayer<TestPostProcessing>();
 
+	Shader shader("shader");
+
+	const float meshDepth = -0.1f;
 	std::vector<Vector3> vertices = {
-		Vector3(0, 0, 0),
-		Vector3(0, 1.0f, 0),
-		Vector3(1.0f, 0, 0),
-
-		Vector3(0, 0, 0),
-		Vector3(1.0f, 0, 0),
-		Vector3(0, 1.0f, 0),
+		Vector3(0, 0, meshDepth),
+		Vector3(0, 1.0f, meshDepth),
+		Vector3(1.0f, 0, meshDepth),
+		Vector3(0, 0, meshDepth),
+		Vector3(1.0f, 0, meshDepth),
+		Vector3(0, 1.0f, meshDepth),
 	};
 
 	Mesh mesh;
@@ -60,9 +65,11 @@ void Application::start() {
 		const Matrix4 viewProjection =
 			Matrix4::perspective(90.0f / (3.14f / 180.0f), 1.0f, 0.01f, 1000.0f) *
 			Matrix4::lookAt(Vector3(0, 0, 10 * sinf(time.getNow() + 0.2f)), Vector3(0, 0, 0));
-		renderer.render(viewProjection);
+				
+		processingStack.render(renderer, viewProjection);
+		m_window.render();
 
-		m_window.draw();
 		renderer.clear();
+		processingStack.clear();
 	}
 }

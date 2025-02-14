@@ -1,6 +1,6 @@
 #include "uniformBuffer.hpp"
 
-void UniformBuffer::bindAll(Shader& shader) const {
+void UniformBuffer::bindAll(Shader& shader, GLuint& samplerCounter) const {
 	for (auto it : getInstanceData()) {
 		if (!shader.hasUniform(it.first))
 			continue;
@@ -23,6 +23,15 @@ void UniformBuffer::bindAll(Shader& shader) const {
 			case GL_FLOAT_MAT4:
 				glUniformMatrix4fv(uniformData.m_location, 1, GL_FALSE, ((Matrix4*)data)->getData());
 				break;
+
+			case GL_SAMPLER_2D: {
+				const GLuint samplerIndex = samplerCounter++;
+				
+				glActiveTexture(GL_TEXTURE0 + samplerIndex);
+				glBindTexture(GL_TEXTURE_2D, *(GLuint*)data);
+				
+				glUniform1i(uniformData.m_location, samplerIndex);
+			} break;
 
 			default:
 				BEING_ERROR("Unsupported uniform type, soz.");

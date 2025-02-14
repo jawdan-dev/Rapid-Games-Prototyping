@@ -6,6 +6,7 @@
 
 class Shader {
 public:
+    Shader(const String& shaderPath);
     Shader(const String& vertexShaderSource, const String& fragmentShaderSource);
     Shader(const Shader& other) = delete;
     ~Shader();

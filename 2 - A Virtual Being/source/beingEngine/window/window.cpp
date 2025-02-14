@@ -2,6 +2,7 @@
 
 Window::Window(const int width, const int height) :
 	m_window(nullptr),
+	m_width(0), m_height(0),
 	m_input(), m_time() {
 	glfwSetErrorCallback([](int errorCode, const char* description) {
 		printf("Window.cpp: GLFW Error %i: %s\n", errorCode, description);
@@ -27,7 +28,7 @@ Window::Window(const int width, const int height) :
 		BEING_ERROR("GLEW Failed to initialize.");
 
 	glfwSwapInterval(1);
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.8f, 0.1f, 0.1f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);
@@ -37,6 +38,8 @@ Window::Window(const int width, const int height) :
 	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* glfwWindow, int width, int height) {
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
 		glViewport(0, 0, width, height);
+		window.m_width = width;
+		window.m_height = width;
 	});
 	glfwSetKeyCallback(m_window, [](GLFWwindow* glfwWindow, int key, int scancode, int action, int mods) {
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
@@ -72,9 +75,9 @@ void Window::process() {
 	m_time.update(glfwGetTime());
 
 	glfwPollEvents();
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Window::draw() {
+void Window::render() {
 	glfwSwapBuffers(m_window);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

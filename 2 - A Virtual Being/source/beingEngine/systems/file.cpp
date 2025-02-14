@@ -1,7 +1,7 @@
 #include "file.hpp"
 
 const String File::readAll(const String& filePath) {
-	FILE* const file = fopen(filePath.c_str(), "rb");
+	FILE* const file = fopen(("assets/" + filePath).c_str(), "rb");
 	if (file == nullptr)
 		BEING_ERROR("Failed to open file.");
 

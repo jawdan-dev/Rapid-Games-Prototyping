@@ -55,6 +55,10 @@ const size_t glGetTypeBase(const GLenum glType) {
 		case GL_SAMPLER_2D:
 		case GL_SAMPLER_3D:
 		case GL_SAMPLER_CUBE: return GL_SAMPLER;
+		case GL_TEXTURE:
+		case GL_TEXTURE_1D:
+		case GL_TEXTURE_2D:
+		case GL_TEXTURE_3D: return GL_TEXTURE;
 	}
 	BEING_ERROR("Unknown GL Type");
 	return 0;
@@ -67,7 +71,8 @@ const size_t glGetTypeBaseByteSize(const GLenum glType) {
 		case GL_UNSIGNED_INT: return sizeof(unsigned int);
 		case GL_FLOAT: return sizeof(float);
 		case GL_DOUBLE: return sizeof(double);
-		//case GL_SAMPLER: return sizeof(...);
+		case GL_TEXTURE:
+		case GL_SAMPLER: return sizeof(GLuint);
 	}
 	BEING_ERROR("Unknown GL Type");
 	return 0;
@@ -136,6 +141,10 @@ const size_t glGetTypeElementCount(const GLenum glType) {
 		case GL_SAMPLER_2D:
 		case GL_SAMPLER_3D:
 		case GL_SAMPLER_CUBE: return 1;
+		case GL_TEXTURE:
+		case GL_TEXTURE_1D:
+		case GL_TEXTURE_2D:
+		case GL_TEXTURE_3D: return 1;
 	}
 	BEING_ERROR("Unknown GL Type");
 	return 0;

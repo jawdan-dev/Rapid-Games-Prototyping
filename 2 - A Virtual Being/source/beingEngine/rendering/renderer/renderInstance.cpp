@@ -68,8 +68,8 @@ void RenderInstance::draw() {
 	if (m_modified) {
 		glBindBuffer(GL_ARRAY_BUFFER, m_ivbo);
 		glBufferData(GL_ARRAY_BUFFER, m_instanceCapacity * m_shader->getInstanceAttributesTotalSize(), m_instanceData, GL_DYNAMIC_DRAW);
-		m_modified = false;
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		m_modified = false;
 	}
 
 	const GLuint vbo = m_mesh->getVBO();

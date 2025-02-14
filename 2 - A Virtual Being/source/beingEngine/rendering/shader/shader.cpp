@@ -1,5 +1,8 @@
 #include "shader.hpp"
 
+Shader::Shader(const String& shaderPath) :
+	Shader(File::readAll(shaderPath + ".vs"), File::readAll(shaderPath + ".fs")) {}
+
 Shader::Shader(const String& vertexShaderSource, const String& fragmentShaderSource) :
 	m_program(0),
 	m_attributes(), m_uniforms(),
@@ -111,13 +114,13 @@ void Shader::loadAttributes() {
 
 		m_attributes.emplace(
 			String(nameBuffer),
-			(ShaderAttribute){
-				.m_location = attributeLocation,
+			(ShaderAttribute) {
+			.m_location = attributeLocation,
 				.m_glType = attributeType,
 				.m_dataSize = glGetTypeByteSize(attributeType),
 				.m_dataOffset = staticAttribute ? m_staticAttributesTotalSize : m_instanceAttributesTotalSize,
 				.m_isStatic = staticAttribute,
-			});
+		});
 
 		const size_t dataSize = glGetTypeByteSize(attributeType);
 		if (staticAttribute) {
@@ -152,10 +155,10 @@ void Shader::loadUniforms() {
 
 		m_uniforms.emplace(
 			String(nameBuffer),
-			(ShaderUniform){
-				.m_location = uniformLocation,
+			(ShaderUniform) {
+			.m_location = uniformLocation,
 				.m_glType = uniformType,
-			});
+		});
 	}
 
 	delete[] nameBuffer;
