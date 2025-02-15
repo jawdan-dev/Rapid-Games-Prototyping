@@ -30,6 +30,7 @@ void Embeds::loadIntoTexture(const Embed embed, const GLuint texture) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+#include "font.ipp"
+#include "inputMap.ipp"
 #include "crtDots.ipp"
 #include "crtMap.ipp"
-#include "inputMap.ipp"

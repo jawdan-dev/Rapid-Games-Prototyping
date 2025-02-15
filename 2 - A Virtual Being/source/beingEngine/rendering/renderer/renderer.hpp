@@ -14,10 +14,13 @@ public:
 	Renderer(const Renderer& other) = delete;
 	~Renderer();
 
+	inline void setClearColor(const Vector3& color) { m_clearColor = color; }
+
 	void draw(Shader& shader, const UniformBuffer& uniformBuffer, Mesh& mesh, Instance& instance);
 	void render(const Matrix4& viewProjection);
 	void clear();
 
 private:
 	std::map<std::tuple<Shader*, Mesh*, UniformBuffer>, RenderInstance> m_renderInstances;
+	Vector3 m_clearColor;
 };

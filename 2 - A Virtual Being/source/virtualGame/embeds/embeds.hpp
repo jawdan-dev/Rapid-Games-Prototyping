@@ -25,6 +25,7 @@ public:
 	static EmbedColor readPixel(const Embed embed, const int x, const int y);
 	static void loadIntoTexture(const Embed embed, const GLuint texture);
 
+	static const uint64_t s_Font[];
 	static const uint64_t s_InputMap[];
 	static const uint64_t s_CRTDots[];
 static const uint64_t s_CRTMap[];

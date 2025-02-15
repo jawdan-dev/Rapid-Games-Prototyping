@@ -1,7 +1,8 @@
 #include "renderer.hpp"
 
 Renderer::Renderer() :
-	m_renderInstances() {}
+	m_renderInstances(),
+	m_clearColor() {}
 Renderer::~Renderer() {
 	// CBA to cleanup data rn.
 }
@@ -16,6 +17,9 @@ void Renderer::draw(Shader& shader, const UniformBuffer& uniformBuffer, Mesh& me
 	it->second.addInstance(instance);
 }
 void Renderer::render(const Matrix4& viewProjection) {
+	glClearColor(m_clearColor.x(), m_clearColor.y(), m_clearColor.z(), 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	for (auto& it : m_renderInstances) {
 		GLuint sampleCounter = 0;
 

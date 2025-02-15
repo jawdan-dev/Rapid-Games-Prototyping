@@ -2,17 +2,21 @@
 
 #include <beingEngine/rendering/processingStack/processingStack.hpp>
 #include <beingEngine/rendering/renderer/renderer.hpp>
-#include <virtualGame/postProcessing/crtDots.hpp>
 #include <virtualGame/postProcessing/crtCurve.hpp>
+#include <virtualGame/postProcessing/crtDots.hpp>
 #include <virtualGame/postProcessing/test.hpp>
+#include <virtualGame/application/textRenderer.hpp>
 
 Application::Application() :
 	m_window(640 * 2, 360 * 2) {}
 
 void Application::start() {
 	ProcessingStack processingStack(m_window.getWidth(), m_window.getHeight());
-	processingStack.emplaceLayer<CRTDotsPostProcessing>();
+	// processingStack.emplaceLayer<CRTDotsPostProcessing>();
 	processingStack.emplaceLayer<CRTCurveProcessing>(5.0f, screenRatio, 10);
+
+	TextRenderer textRenderer;
+
 
 	Shader shader("shader");
 
@@ -80,6 +84,12 @@ void Application::start() {
 		instance.setData("test", mouseScaled.x(), GL_FLOAT);
 		instance.setData("test2", mouseScaled.y() * screenRatio, GL_FLOAT);
 		renderer.draw(shader, uniforms, cursor, instance);
+
+		const float scale = 0.04f;
+		const float lineSpacing = -1.2f;
+		textRenderer.drawText(renderer, Vector2(-0.8f, 0 * lineSpacing * scale), scale, "[SYSTEM STATUS]");
+		textRenderer.drawText(renderer, Vector2(-0.8f, 1 * lineSpacing * scale), scale, "> OPERATING SYSTEM VERSION 8.72b");
+		textRenderer.drawText(renderer, Vector2(-0.8f, 3 * lineSpacing * scale), scale, "> Status.......... ONLINE");
 
 		const Matrix4 viewProjection =
 			// Matrix4::perspective(90.0f * degToRad, (float)m_window.getWidth() / (float)m_window.getHeight(), 0.01f, 1000.0f) *
