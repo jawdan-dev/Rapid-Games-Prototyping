@@ -1,4 +1,3 @@
-
 #version 460 core
 
 in vec3 v_pos;

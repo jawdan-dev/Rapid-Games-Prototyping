@@ -60,20 +60,22 @@ public:
 		m_uniformBuffer.setData("u_crtViewProjection", crtViewProjection, GL_FLOAT_MAT4);
 
 		Vector2 mousePos = Input::s_input->getMousePosition();
-		// printf("%f, %f\n", mousePos.x(), mousePos.y());
 		const Vector2 inputScalar(getWidth(), getHeight());
 		mousePos /= inputScalar;
-
 
 		const Embeds::Embed inputMap = Embeds::s_InputMap;
 		const int xPos = mousePos.x() * (float)Embeds::getWidth(inputMap),
 				  yPos = mousePos.y() * (float)Embeds::getHeight(inputMap);
 		const Embeds::EmbedColor color = Embeds::readPixel(inputMap, xPos, yPos);
 
-		if (color.a == 0 || color.b > 0) {
+		// Holy crap this is sinning.
+		const int x = (int)color.r | (((int)color.b & 0xf0) << 4),
+				  y = (int)color.g | (((int)color.b & 0x0f) << 8);
+
+		if (color.a == 0) {
 			mousePos = Vector2(0.0f, 0.0f);
 		} else {
-			mousePos = Vector2((float)color.r / 255.0f, (float)color.g / 255.0f) * inputScalar;
+			mousePos = Vector2((float)x / (float)0xfff, (float)y / (float)0xfff) * inputScalar;
 		}
 		Input::s_input->setWeakMousePosition(mousePos);
 	}

@@ -28,6 +28,7 @@ typedef std::string String;
 
 constexpr float PI = 3.14159265358979323846;
 constexpr float degToRad = PI / 180.0f;
+constexpr float screenRatio = 1080.0f / 1920.0f;
 
 #include <beingEngine/math/vector2.hpp>
 #include <beingEngine/math/vector3.hpp>
