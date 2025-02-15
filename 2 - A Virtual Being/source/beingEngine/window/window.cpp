@@ -30,13 +30,14 @@ Window::Window(const int width, const int height) :
 		BEING_ERROR("GLEW Failed to initialize.");
 
 	glfwSwapInterval(1);
-	glClearColor(0.8f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CW);
 
+	glfwSetWindowAspectRatio(m_window, 1920, 1080);
 	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* glfwWindow, int width, int height) {
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
 		glViewport(0, 0, width, height);

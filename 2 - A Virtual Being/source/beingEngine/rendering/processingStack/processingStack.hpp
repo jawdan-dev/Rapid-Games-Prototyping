@@ -16,6 +16,7 @@ public:
 	template<typename T, typename... Args>
 	void emplaceLayer(Args... args) { return pushLayer(new T(args...)); }
 
+	void process();
 	void render(Renderer& renderer, const Matrix4& viewProjection);
 	void clear();
 

@@ -2,7 +2,9 @@
 
 class Time {
 public:
-    Time();
+	static Time* s_time;
+
+	Time();
 
 	const float getDelta() const;
 	const float getNow() const;
@@ -10,6 +12,6 @@ public:
 	const void update(const float time);
 
 private:
-    float m_now, m_last;
-    float m_deltaTime;
+	float m_now, m_last;
+	float m_deltaTime;
 };

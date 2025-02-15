@@ -26,10 +26,10 @@ void UniformBuffer::bindAll(Shader& shader, GLuint& samplerCounter) const {
 
 			case GL_SAMPLER_2D: {
 				const GLuint samplerIndex = samplerCounter++;
-				
+
 				glActiveTexture(GL_TEXTURE0 + samplerIndex);
 				glBindTexture(GL_TEXTURE_2D, *(GLuint*)data);
-				
+
 				glUniform1i(uniformData.m_location, samplerIndex);
 			} break;
 

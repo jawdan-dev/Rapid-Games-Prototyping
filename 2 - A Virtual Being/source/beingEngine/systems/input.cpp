@@ -1,5 +1,7 @@
 #include "input.hpp"
 
+Input* Input::s_input = nullptr;
+
 Input::Input() :
 	m_keyDown(), m_keyPressed(), m_keyUp(),
 	m_mousePosition(0, 0) {}
@@ -14,9 +16,18 @@ const bool Input::isKeyUp(const Key key) const {
 	return m_keyUp.find(key) != m_keyUp.end();
 }
 
+void Input::setMousePosition(const Vector2& mousePosition) {
+	m_mousePosition = mousePosition;
+	setWeakMousePosition(mousePosition);
+}
+void Input::setWeakMousePosition(const Vector2& mousePosition) {
+	m_weakMousePosition = mousePosition;
+}
+
 void Input::processInput() {
 	m_keyUp.clear();
 	m_keyDown.clear();
+	m_weakMousePosition = m_mousePosition;
 }
 void Input::registerKeyEvent(const int key, const int action) {
 	switch (action) {

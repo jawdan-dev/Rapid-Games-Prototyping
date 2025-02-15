@@ -14,6 +14,8 @@ public:
 	const int getHeight() const { return m_height; }
 	const Input& getInput() const { return m_input; }
 	const Time& getTime() const { return m_time; }
+	Input& getInput() { return m_input; }
+	Time& getTime() { return m_time; }
 
 	void process();
 	void render();

@@ -1,5 +1,7 @@
 #include "time.hpp"
 
+Time* Time::s_time = nullptr;
+
 Time::Time() : m_now(0), m_last(0),
                m_deltaTime(0) {}
 

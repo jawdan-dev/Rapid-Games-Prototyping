@@ -18,8 +18,13 @@ void ProcessingStack::setSize(const int width, const int height) {
 void ProcessingStack::pushLayer(ProcessingLayer* const layer) {
 	layer->setSize(m_width, m_height);
 	m_layers.emplace_back(layer);
+	layer->setup();
 }
 
+void ProcessingStack::process() {
+	for (auto layer : m_layers)
+		layer->process();
+}
 void ProcessingStack::render(Renderer& renderer, const Matrix4& viewProjection) {
 	Renderer* lastRenderer = &renderer;
 

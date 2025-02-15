@@ -26,6 +26,9 @@ typedef std::string String;
 #define STRINGIFY(x) _STRINGIFY(x)
 #define BEING_ERROR(msg) throw std::runtime_error(__FILE_NAME__ ":" STRINGIFY(__LINE__) ": " msg);
 
+constexpr float PI = 3.14159265358979323846;
+constexpr float degToRad = PI / 180.0f;
+
 #include <beingEngine/math/vector2.hpp>
 #include <beingEngine/math/vector3.hpp>
 #include <beingEngine/math/matrix4.hpp>
