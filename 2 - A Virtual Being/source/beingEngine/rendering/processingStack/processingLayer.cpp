@@ -41,8 +41,8 @@ void ProcessingLayer::setSize(const int width, const int height) {
 
 	const GLenum targetDrawBuffers[] = {GL_COLOR_ATTACHMENT0};
 	glDrawBuffers(sizeof(targetDrawBuffers) / sizeof(*targetDrawBuffers), targetDrawBuffers);
-	glViewport(0, 0, m_width, m_height);
 
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -50,6 +50,7 @@ void ProcessingLayer::onResize() {}
 
 void ProcessingLayer::passRenderer(Renderer& previousRenderer, const Matrix4& viewProjection) {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+	glViewport(0, 0, m_width, m_height);
 	previousRenderer.render(viewProjection);
 }
 void ProcessingLayer::clear() {

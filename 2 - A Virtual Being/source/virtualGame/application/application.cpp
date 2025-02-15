@@ -1,7 +1,7 @@
 #include "application.hpp"
 
-#include <beingEngine/rendering/renderer/renderer.hpp>
 #include <beingEngine/rendering/processingStack/processingStack.hpp>
+#include <beingEngine/rendering/renderer/renderer.hpp>
 #include <virtualGame/postProcessing/test.hpp>
 
 Application::Application() :
@@ -29,6 +29,7 @@ void Application::start() {
 	Renderer renderer;
 
 	while (m_window.isOpen()) {
+		processingStack.setSize(m_window.getWidth(), m_window.getHeight());
 		m_window.process();
 
 		const Input& input = m_window.getInput();
@@ -63,9 +64,9 @@ void Application::start() {
 		renderer.draw(shader, uniforms, mesh, instance);
 
 		const Matrix4 viewProjection =
-			Matrix4::perspective(90.0f / (3.14f / 180.0f), 1.0f, 0.01f, 1000.0f) *
+			Matrix4::perspective(90.0f / (3.14f / 180.0f), (float)m_window.getWidth() / (float)m_window.getHeight(), 0.01f, 1000.0f) *
 			Matrix4::lookAt(Vector3(0, 0, 10 * sinf(time.getNow() + 0.2f)), Vector3(0, 0, 0));
-				
+
 		processingStack.render(renderer, viewProjection);
 		m_window.render();
 

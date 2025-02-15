@@ -41,7 +41,7 @@ Window::Window(const int width, const int height) :
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
 		glViewport(0, 0, width, height);
 		window.m_width = width;
-		window.m_height = width;
+		window.m_height = height;
 	});
 	glfwSetKeyCallback(m_window, [](GLFWwindow* glfwWindow, int key, int scancode, int action, int mods) {
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
