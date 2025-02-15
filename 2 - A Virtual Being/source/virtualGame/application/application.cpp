@@ -13,7 +13,6 @@ void Application::start() {
 	ProcessingStack processingStack(m_window.getWidth(), m_window.getHeight());
 	processingStack.emplaceLayer<CRTDotsPostProcessing>();
 	processingStack.emplaceLayer<CRTCurveProcessing>(5.0f, screenRatio, 10);
-	// processingStack.emplaceLayer<TestPostProcessing>();
 
 	Shader shader("shader");
 

@@ -13,7 +13,7 @@ public:
 		union {
 			uint32_t raw;
 			struct {
-				uint8_t a, r, g, b;
+				uint8_t b, g, r, a;
 			};
 		};
 	};
