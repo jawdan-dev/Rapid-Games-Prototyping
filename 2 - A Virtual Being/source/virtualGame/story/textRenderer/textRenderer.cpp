@@ -10,24 +10,25 @@ TextRenderer::TextRenderer() :
 	Embeds::loadIntoTexture(Embeds::s_Font, m_font);
 
 	const float textSize = 0.5f;
+	const float textDepth = 0.1f;
 	std::vector<Vector3> textVertices = {
-		Vector3(-textSize, -textSize, 0.1),
-		Vector3(textSize, -textSize, 0.1),
-		Vector3(-textSize, textSize, 0.1),
-		Vector3(textSize, textSize, 0.1),
+		Vector3(-textSize, -textSize, textDepth),
+		Vector3(textSize, -textSize, textDepth),
+		Vector3(-textSize, textSize, textDepth),
+		Vector3(textSize, textSize, textDepth),
 	};
 	std::vector<Vector2> textUVs = {
-		Vector2(0, 1),
-		Vector2(1, 1),
 		Vector2(0, 0),
 		Vector2(1, 0),
+		Vector2(0, 1),
+		Vector2(1, 1),
 	};
 	std::vector<uint16_t> textIndices = {
 		0,
-		2,
-		1,
 		1,
 		2,
+		2,
+		1,
 		3,
 	};
 	m_mesh.setData("v_pos", textVertices, GL_FLOAT_VEC3);
@@ -44,15 +45,16 @@ TextRenderer::~TextRenderer() {
 	}
 }
 
-void TextRenderer::drawCharacter(Renderer& renderer, const Vector2 pos, const float scale, const char character) {
+void TextRenderer::drawCharacter(Renderer& renderer, const Vector2 pos, const float scale, const char character, const Vector3& color) {
 	m_instance.setData("i_index", (float)(character - ' '), GL_FLOAT);
 	m_instance.setData("i_pos", pos, GL_FLOAT_VEC2);
 	m_instance.setData("i_scale", scale, GL_FLOAT);
+	m_instance.setData("i_color", color, GL_FLOAT_VEC3);
 	renderer.draw(m_shader, m_uniforms, m_mesh, m_instance);
 }
-void TextRenderer::drawText(Renderer& renderer, const Vector2 pos, const float scale, const String& string) {
-	Vector2 spacing(1.1f * scale, 0);
+void TextRenderer::drawText(Renderer& renderer, const Vector2 pos, const float scale, const String& string, const Vector3& color) {
+	Vector2 spacing(1.2f * scale, 0);
 	for (int i = 0; i < string.size(); i++) {
-		drawCharacter(renderer, pos + (spacing * i), scale, string[i]);
+		drawCharacter(renderer, pos + (spacing * i), scale, string[i], color);
 	}
 }

@@ -27,7 +27,8 @@ const GLuint Shader::compileShader(const String& source, const GLenum shaderType
 		BEING_ERROR("Failed to create shader.");
 
 	const char* cSource = source.c_str();
-	glShaderSource(shader, 1, &cSource, NULL);
+	GLint len = source.size();
+	glShaderSource(shader, 1, &cSource, &len);
 	glCompileShader(shader);
 
 	int success;
@@ -36,6 +37,8 @@ const GLuint Shader::compileShader(const String& source, const GLenum shaderType
 		char infoLog[512];
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
 		printf("%s\n", infoLog);
+
+		printf("%s\n", source.c_str());
 
 		switch (shaderType) {
 			case GL_VERTEX_SHADER: {

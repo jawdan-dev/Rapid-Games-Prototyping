@@ -10,10 +10,10 @@ const String File::readAll(const String& filePath) {
 	fseek(file, 0, SEEK_SET);
 
 	char* rawFileString = new char[fileSize + 1];
-	fread(rawFileString, sizeof(char), fileSize, file);
+	const size_t readBytes = fread(rawFileString, sizeof(char), fileSize, file);
 	fclose(file);
 
-	rawFileString[fileSize] = '\0';
+	rawFileString[readBytes] = '\0';
 	const String fileString(rawFileString);
 
 	delete[] rawFileString;

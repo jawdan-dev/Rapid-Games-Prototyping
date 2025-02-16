@@ -1,0 +1,47 @@
+
+
+\#chatroom1-1:
+\@[Player]: blah \@[Sage] in-text citation
+\@[]: blah
+\@[Sage]: blah \@[Pamela](Nickname) more text
+\@[Pamela]: blah (but more boomer-y)
+\<care|Ernest+10|Sage-10|home>
+\<\@[Sage]|end>
+\<Sage<80|Ask for blah help|boss>
+\<Sage<40|40 Condition|Sage+1|AI+10|boss>
+\<Sage>0|40 Condition|boss>
+\<Sage>1|40 Condition|boss>
+\<AI>=10|40 Condition|boss>
+\<Humanity>10|40 Condition|Humanity+10|boss>
+\end
+
+
+\#boss:
+\#chatroom2-2:
+\<Sage was here|home>
+\end
+
+
+
+
+
+[SYSTEM STATUS]
+> Operating System - VERSION 8.?72?.?b
+
+> System Status\...... \high[ONLINE]
+> System Status\...... \~[ONLINE|\high[STABLE]]
+
+\~[text1|text2|text3|text4]
+\~[lorem|de|length check|céch?]
+
+> this is a \<Distress Call|home> mid text option
+that branches
+\end
+
+
+\#home:
+ Jeremy \|--+|---|
+   Sage \|---|-+-|
+    Pam \|+--|---|
+\<chatroom1|chatroom1-1>
+\end

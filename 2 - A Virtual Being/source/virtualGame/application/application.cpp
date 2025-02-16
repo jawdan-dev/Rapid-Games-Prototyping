@@ -5,7 +5,8 @@
 #include <virtualGame/postProcessing/crtCurve.hpp>
 #include <virtualGame/postProcessing/crtDots.hpp>
 #include <virtualGame/postProcessing/test.hpp>
-#include <virtualGame/application/textRenderer.hpp>
+#include <virtualGame/story/interpreter/interpreter.hpp>
+#include <virtualGame/story/textRenderer/textRenderer.hpp>
 
 Application::Application() :
 	m_window(640 * 2, 360 * 2) {}
@@ -16,7 +17,7 @@ void Application::start() {
 	processingStack.emplaceLayer<CRTCurveProcessing>(5.0f, screenRatio, 10);
 
 	TextRenderer textRenderer;
-
+	StoryInterpreter storyInterpreter;
 
 	Shader shader("shader");
 
@@ -36,11 +37,11 @@ void Application::start() {
 	const float cursorScale = 0.05f;
 	std::vector<Vector3> cursorVertices = {
 		Vector3(cursorScale, cursorScale, 0),
-		Vector3(cursorScale, -cursorScale, 0),
 		Vector3(-cursorScale, cursorScale, 0),
 		Vector3(cursorScale, -cursorScale, 0),
+		Vector3(cursorScale, -cursorScale, 0),
+		Vector3(-cursorScale, cursorScale, 0),
 		Vector3(-cursorScale, -cursorScale, 0),
-		Vector3(-cursorScale, cursorScale, 0),
 	};
 	Mesh cursor;
 	cursor.setData("v_pos", cursorVertices, GL_FLOAT_VEC3);
@@ -53,15 +54,12 @@ void Application::start() {
 
 		Time::s_time = &m_window.getTime();
 		Input::s_input = &m_window.getInput();
-
+		{
+			Vector2 inputFlip = Input::s_input->getMousePosition();
+			inputFlip.y() = m_window.getHeight() - inputFlip.y();
+			Input::s_input->setWeakMousePosition(inputFlip);
+		}
 		processingStack.process();
-
-		if (Input::s_input->isKeyDown(GLFW_KEY_A))
-			printf("down\n");
-		if (Input::s_input->isKeyPressed(GLFW_KEY_A))
-			printf("presssed\n");
-		if (Input::s_input->isKeyUp(GLFW_KEY_A))
-			printf("up\n");
 
 		static int counter = 0;
 		if (counter++ > 200) {
@@ -72,29 +70,25 @@ void Application::start() {
 		Instance instance;
 		UniformBuffer uniforms;
 
-		instance.setData("test", sinf(Time::s_time->getNow()) * 2.0f, GL_FLOAT);
-		instance.setData("anything", Vector3(0.5, 0.1, 0.5), GL_FLOAT_VEC3);
-		renderer.draw(shader, uniforms, mesh, instance);
-
-		instance.setData("test", -0.1f, GL_FLOAT);
-		instance.setData("anything", Vector3(0.0, fabsf(cosf(Time::s_time->getNow())) - 0.5f, 0.0), GL_FLOAT_VEC3);
-		renderer.draw(shader, uniforms, mesh, instance);
-
 		const Vector2 mouseScaled = ((Input::s_input->getMousePosition() / Vector2(m_window.getWidth(), m_window.getHeight())) - 0.5f) * 2.0f;
 		instance.setData("test", mouseScaled.x(), GL_FLOAT);
 		instance.setData("test2", mouseScaled.y() * screenRatio, GL_FLOAT);
 		renderer.draw(shader, uniforms, cursor, instance);
 
-		const float scale = 0.04f;
-		const float lineSpacing = -1.2f;
-		textRenderer.drawText(renderer, Vector2(-0.8f, 0 * lineSpacing * scale), scale, "[SYSTEM STATUS]");
-		textRenderer.drawText(renderer, Vector2(-0.8f, 1 * lineSpacing * scale), scale, "> OPERATING SYSTEM VERSION 8.72b");
-		textRenderer.drawText(renderer, Vector2(-0.8f, 3 * lineSpacing * scale), scale, "> Status.......... ONLINE");
+		// const float scale = 0.04f;
+		// const float lineSpacing = -1.2f;
+		// textRenderer.drawText(renderer, Vector2(-0.8f, 0 * lineSpacing * scale), scale, "[SYSTEM STATUS]");
+		// textRenderer.drawText(renderer, Vector2(-0.8f, 1 * lineSpacing * scale), scale, "> OPERATING SYSTEM VERSION 8.72b");
+		// textRenderer.drawText(renderer, Vector2(-0.8f, 3 * lineSpacing * scale), scale, "> Status.......... ONLINE");
+
+		storyInterpreter.process();
+		storyInterpreter.draw(renderer, textRenderer);
 
 		const Matrix4 viewProjection =
 			// Matrix4::perspective(90.0f * degToRad, (float)m_window.getWidth() / (float)m_window.getHeight(), 0.01f, 1000.0f) *
-			Matrix4::orthographic(-1, 1, screenRatio, -screenRatio, 0.1, 1000.0f) *
-			Matrix4::lookAt(Vector3(0, 0, 1), Vector3(0, 0, 0));
+			// Matrix4::orthographic(-1, 1, screenRatio, -screenRatio, 0.1, 1000.0f) *
+			Matrix4::orthographic(0, m_window.getWidth(), 0, m_window.getHeight(), -100.0f, 100.0f) *
+			Matrix4::lookAt(Vector3(0, 0, 2), Vector3(0, 0, 0));
 
 		processingStack.render(renderer, viewProjection);
 		m_window.render();

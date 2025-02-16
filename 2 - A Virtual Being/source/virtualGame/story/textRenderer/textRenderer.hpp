@@ -1,3 +1,4 @@
+#pragma once
 #include <beingEngine/core/core.hpp>
 
 #include <beingEngine/rendering/renderer/renderer.hpp>
@@ -8,8 +9,8 @@ public:
 	TextRenderer(const TextRenderer& other) = delete;
 	~TextRenderer();
 
-	void drawCharacter(Renderer& renderer, const Vector2 pos, const float scale, const char character);
-	void drawText(Renderer& renderer, const Vector2 pos, const float scale, const String& string);
+	void drawCharacter(Renderer& renderer, const Vector2 pos, const float scale, const char character, const Vector3& color = Vector3(1, 1, 1));
+	void drawText(Renderer& renderer, const Vector2 pos, const float scale, const String& string, const Vector3& color = Vector3(1, 1, 1));
 
 private:
 	Shader m_shader;
