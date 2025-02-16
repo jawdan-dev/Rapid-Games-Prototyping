@@ -18,12 +18,13 @@ public:
 
 	void addCharacter(const Character& character);
 	void setFlag(const String& flagName, const int flagValue);
+	void setScale(const float scale) { m_relativeScale = scale; };
 
 	void process();
 	void draw(Renderer& renderer, TextRenderer& textRenderer);
 
 private:
-	void readFile(const String& path);
+	void readFile();
 
 	void processInput();
 
@@ -42,7 +43,7 @@ private:
 
 	const bool handleInteraction(String& input);
 
-	const Vector2 getDrawPosition(const float xIndex, const float yIndex) const;
+	const Vector3 getDrawPosition(const float xIndex, const float yIndex) const;
 
 	const bool getCharacterConditionArguments(const String& condition, String& name, String& expression, String& value) const;
 	const bool isCharacterCondition(const String& condition) const;
@@ -51,6 +52,7 @@ private:
 	const bool getStatementArguments(const String& condition, String& name, String& expression, String& value) const;
 	const bool isStatement(const String& condition) const;
 	const bool runStatement(const String& condition);
+
 private:
 	std::vector<Character> m_characters;
 	std::map<String, int> m_flags;
@@ -60,11 +62,10 @@ private:
 
 	std::vector<String> m_activeLines;
 
-	size_t m_drawLine, m_drawCharacter;
+	int m_drawLine, m_drawCharacter;
 	float m_delay;
 
-	Shader m_buttonShader;
-	UniformBuffer m_buttonUniforms;
-	Mesh m_buttonMesh;
-	Instance m_buttonInstance;
+	String m_lastGoto;
+	float m_inputCooldown;
+	float m_relativeScale;
 };

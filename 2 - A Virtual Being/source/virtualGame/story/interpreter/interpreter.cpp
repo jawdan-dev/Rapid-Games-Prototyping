@@ -8,9 +8,8 @@ StoryInterpreter::StoryInterpreter() :
 	m_currentLine(0),
 	m_lines(), m_activeLines(),
 	m_drawLine(0), m_drawCharacter(0), m_delay(0),
-	m_buttonShader("shaders/button"), m_buttonUniforms(),
-	m_buttonMesh(), m_buttonInstance() {
-	readFile("story");
+	m_lastGoto(""), m_inputCooldown(0), m_relativeScale(1.0f) {
+	readFile();
 
 	addCharacter(Character("Player", Vector3(1.0f, 1.0f, 1.0f)));
 	addCharacter(Character("System", Vector3(102, 119, 153) / 255.0f));
@@ -25,31 +24,6 @@ StoryInterpreter::StoryInterpreter() :
 	addCharacter(Character("Tori", Vector3(255, 187, 51) / 255.0f));
 	addCharacter(Character("Abby", Vector3(255, 153, 153) / 255.0f));
 	addCharacter(Character("Vincent", Vector3(136, 17, 255) / 255.0f));
-
-	const float buttonBaseSize = 0.5f;
-	std::vector<Vector3> buttonVertices = {
-		Vector3(-buttonBaseSize, -buttonBaseSize, 0),
-		Vector3(buttonBaseSize, -buttonBaseSize, 0),
-		Vector3(-buttonBaseSize, buttonBaseSize, 0),
-		Vector3(buttonBaseSize, buttonBaseSize, 0),
-	};
-	std::vector<Vector2> buttonUVs = {
-		Vector2(0, 1),
-		Vector2(1, 1),
-		Vector2(0, 0),
-		Vector2(1, 0),
-	};
-	std::vector<uint16_t> buttonIndices = {
-		0,
-		1,
-		2,
-		2,
-		1,
-		3,
-	};
-	m_buttonMesh.setData("v_pos", buttonVertices, GL_FLOAT_VEC3);
-	m_buttonMesh.setData("v_uv", buttonUVs, GL_FLOAT_VEC2);
-	m_buttonMesh.setIndices(buttonIndices);
 }
 StoryInterpreter::~StoryInterpreter() {}
 
@@ -84,12 +58,12 @@ void StoryInterpreter::setFlag(const String& flagName, const int flagValue) {
 }
 
 void StoryInterpreter::process() {
+	processInput();
+
 	if (m_delay > 0.0f) {
 		m_delay -= Time::s_time->getDelta();
 		return;
 	}
-
-	processInput();
 
 	if (m_activeLines.size() <= 0) {
 		while (m_currentLine < m_lines.size() && m_lines[m_currentLine] != "\\end") {
@@ -103,14 +77,17 @@ void StoryInterpreter::process() {
 
 	if (m_drawLine < m_activeLines.size()) {
 		String line = m_activeLines[m_drawLine];
+		std::vector<int> lineEquivalent;
+		lineEquivalent.reserve(line.size());
 
 		DrawInformation drawInformation;
 		int lineSelectableOffset = 0;
-		for (int j = 0; j < line.size() && j <= m_drawCharacter; j++) {
+		for (int j = 0; j < line.size(); j++) {
 			String newLine = line.substr(j);
 			const size_t newLineLength = newLine.size();
 
 			if (!resolveSpecial(newLine, drawInformation)) {
+				lineEquivalent.push_back(j + lineSelectableOffset);
 				continue;
 			}
 
@@ -119,9 +96,9 @@ void StoryInterpreter::process() {
 			j--;
 		}
 
-		if (m_drawCharacter < line.size() && m_drawCharacter + lineSelectableOffset < m_activeLines[m_drawLine].size()) {
-			if (m_activeLines[m_drawLine][m_drawCharacter + lineSelectableOffset] == '.') {
-				for (int i = m_drawCharacter + lineSelectableOffset; i >= 0; i--) {
+		if (m_drawCharacter < line.size()) {
+			if (line[m_drawCharacter] == '.') {
+				for (int i = lineEquivalent[m_drawCharacter]; i >= 0; i--) {
 					if (m_activeLines[m_drawLine][i] == '.')
 						continue;
 					if (m_activeLines[m_drawLine][i] != '\\')
@@ -141,8 +118,13 @@ void StoryInterpreter::process() {
 }
 
 static const float spacing = 1.2f;
-static const float scale = 20.0f;
-static const Vector2 offset(50.0f, 50.0f);
+static const float lineSpacing = 1.5f;
+static const float scale = 17.5f;
+static const Vector3 offset(50.0f, 50.0f, 0.0f);
+
+static const int maxLineWidth =
+	(1280.0f - (offset.x() * 2.0f) + ((spacing - 1.0f) * scale)) /
+	(scale * spacing);
 
 void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 	struct Selectable {
@@ -153,19 +135,20 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 		int width;
 
 		DrawInformation drawInformation;
+		int collapseDepth;
 	};
 
 	std::vector<Selectable> selectables;
 	for (int i = 0; i < m_activeLines.size() && i <= m_drawLine; i++) {
-
 		String line = m_activeLines[i];
 		int lineSelectableOffset = 0;
 
 		Vector3 defaultColor = Vector3(1.0f, 1.0f, 1.0f);
 
+		int lastCollapseIndex = -1, lastCollapseEnd = -1, collapseCount = 0;
 		for (int j = 0; j < line.size(); j++) {
 			String newLine = line.substr(j);
-			const size_t newLineLength = newLine.size();
+			const int newLineLength = newLine.size();
 
 			DrawInformation drawInformation{
 				.specialCount = 0,
@@ -186,12 +169,22 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 			// |---|---|---|---|---|---|---|---|
 
 			if (drawInformation.specialCount > 0) {
+				if (lastCollapseEnd > j || lastCollapseIndex == j) {
+					collapseCount++;
+					lastCollapseEnd = __max(lastCollapseEnd, j + drawInformation.specialCount);
+				} else {
+					lastCollapseIndex = j;
+					lastCollapseEnd = j + drawInformation.specialCount;
+					collapseCount = 0;
+				}
+
 				selectables.push_back((Selectable){
 					.line = i,
 					.lineStart = j + lineSelectableOffset,
 					.drawStart = j,
 					.width = drawInformation.specialCount,
 					.drawInformation = drawInformation,
+					.collapseDepth = collapseCount,
 				});
 			}
 
@@ -207,31 +200,6 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 			line = line.substr(0, m_drawCharacter);
 		// textRenderer.drawText(renderer, getDrawPosition(0, i), scale, line);
 
-		for (int i = 0; i < selectables.size(); i++) {
-			for (int j = i + 1; j < selectables.size(); j++) {
-				const int iStart = selectables[i].drawStart, iEnd = iStart + selectables[i].width,
-						  jStart = selectables[j].drawStart, jEnd = iStart + selectables[j].width;
-				if (jStart >= iEnd)
-					continue;
-
-				if (jEnd > iEnd) {
-					// Split.
-					selectables.insert(
-						selectables.begin() + j,
-						(Selectable){
-							.line = selectables[i].line,
-							.lineStart = selectables[i].lineStart,
-							.drawStart = selectables[i].drawStart,
-							.width = iEnd - jEnd,
-							.drawInformation = selectables[i].drawInformation,
-						});
-				}
-
-				// Always shorten.
-				selectables[i].width = jStart - iStart;
-			}
-		}
-
 		bool alreadyInteracted = false;
 		int lastDrawIndex = 0;
 		for (auto it : selectables) {
@@ -239,13 +207,12 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 			const int j = it.drawStart;
 			const int specialCount = it.width;
 
-			const Vector2 min(getDrawPosition((float)j - 0.5f, (float)i - 0.5f)), max(getDrawPosition((float)(j + specialCount) - 0.5f, (float)i + 0.5f));
+			const Vector3 min(getDrawPosition((float)j - 0.5f, (float)i - 0.5f)), max(getDrawPosition((float)(j + specialCount) - 0.5f, (float)i + 0.5f));
 			const Vector2 mpos = Input::s_input->getMousePosition();
 			const bool mouseWithin = min.x() <= mpos.x() && mpos.x() <= max.x() && min.y() <= mpos.y() && mpos.y() <= max.y();
 
-			String modifiableLine = m_activeLines[i].substr(it.lineStart);
 			const bool interactable = it.drawInformation.enabled && !it.drawInformation.errorOccurred;
-			const bool isInteracting = mouseWithin && interactable && !alreadyInteracted;
+			const bool isInteracting = mouseWithin && interactable && !alreadyInteracted && m_inputCooldown <= 0.0f;
 			const bool pressed = isInteracting && Input::s_input->isKeyPressed(GLFW_MOUSE_BUTTON_1);
 			const bool used = isInteracting && Input::s_input->isKeyUp(GLFW_MOUSE_BUTTON_1);
 			if (isInteracting)
@@ -264,34 +231,68 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 			}
 
 			const int drawIndex = (lastDrawIndex > j) ? j : lastDrawIndex;
-			textRenderer.drawText(renderer, getDrawPosition(drawIndex, i), scale, line.substr(drawIndex, j - drawIndex), defaultColor);
-			textRenderer.drawText(renderer, getDrawPosition(j, i), scale, line.substr(j, specialCount), drawColor);
+			textRenderer.drawText(renderer, getDrawPosition(drawIndex, i), scale * m_relativeScale, line.substr(drawIndex, j - drawIndex), defaultColor);
+			textRenderer.drawText(renderer, getDrawPosition(j, i) + Vector3(0, 0, (float)it.collapseDepth * 0.1f), scale * m_relativeScale, line.substr(j, specialCount), drawColor);
 			lastDrawIndex = j + specialCount;
 
 			if (used) {
+				m_inputCooldown = 0.4f;
+				// Massive bug here on self-generating expressions....
+				String modifiableLine = m_activeLines[i].substr(it.lineStart);
 				if (handleInteraction(modifiableLine))
 					return;
 				m_activeLines[i] = m_activeLines[i].substr(0, it.lineStart) + modifiableLine;
 			}
 		}
-		textRenderer.drawText(renderer, getDrawPosition(lastDrawIndex, i), scale, line.substr(lastDrawIndex, line.size() - lastDrawIndex), defaultColor);
+		textRenderer.drawText(renderer, getDrawPosition(lastDrawIndex, i), scale * m_relativeScale, line.substr(lastDrawIndex, line.size() - lastDrawIndex), defaultColor);
 
 		selectables.clear();
 	}
 }
 
-void StoryInterpreter::readFile(const String& path) {
+void StoryInterpreter::readFile() {
+	const String path = "story";
 	const String story = File::readAll(path + ".txt");
 
+	m_lines.clear();
 	for (size_t i = 0; i < story.size(); i++) {
 		String line = "";
 		while (i < story.size() && story[i] != '\n')
 			line += story[i++];
+
 		m_lines.emplace_back(line);
 	}
 }
 
 void StoryInterpreter::processInput() {
+	if (m_inputCooldown > 0.0f) {
+		m_inputCooldown -= Time::s_time->getDelta();
+		return;
+	}
+
+	if (Input::s_input->getMousePosition().lengthSquared() <= 0.0f)
+		return;
+
+	if (Input::s_input->isKeyUp(GLFW_MOUSE_BUTTON_1)) {
+		if (m_drawLine < m_activeLines.size()) {
+			m_drawLine = m_activeLines.size();
+			m_inputCooldown = 0.6f;
+		}
+	}
+	if (Input::s_input->isKeyUp(GLFW_KEY_F1)) {
+		readFile();
+		if (!gotoLine(m_lastGoto)) {
+			m_activeLines.clear();
+			m_currentLine = 0;
+		}
+		m_inputCooldown = 1.0f;
+	}
+	if (Input::s_input->isKeyUp(GLFW_KEY_F5)) {
+		readFile();
+		m_activeLines.clear();
+		m_currentLine = 0;
+		m_inputCooldown = 1.0f;
+	}
 }
 
 const int StoryInterpreter::getGotoLine(const String& name) const {
@@ -310,6 +311,7 @@ const bool StoryInterpreter::gotoLine(const String& name) {
 	if (gotoLine == -1)
 		return false;
 
+	m_lastGoto = name;
 	m_currentLine = gotoLine;
 	m_activeLines.clear();
 
@@ -354,6 +356,10 @@ const bool StoryInterpreter::resolveSpecial(String& input, DrawInformation& draw
 			.color = Vector3(255, 0, 68) / 255.0f,
 		},
 		(HighlightColor){
+			.text = "\\warning[",
+			.color = Vector3(255, 187, 51) / 255.0f,
+		},
+		(HighlightColor){
 			.text = "\\success[",
 			.color = Vector3(85, 221, 85) / 255.0f,
 		},
@@ -362,6 +368,7 @@ const bool StoryInterpreter::resolveSpecial(String& input, DrawInformation& draw
 	for (auto highlight : highlightColors) {
 		if (input.substr(0, highlight.text.size()) != highlight.text)
 			continue;
+
 		input = input.substr(highlight.text.size());
 
 		int i = 0;
@@ -378,6 +385,79 @@ const bool StoryInterpreter::resolveSpecial(String& input, DrawInformation& draw
 		input.erase(input.begin() + i);
 		drawInformation.color = highlight.color;
 		drawInformation.specialCount = i;
+		return true;
+	}
+
+	if (input.substr(0, 5) == "\\line") {
+		input = input.substr(5);
+		for (int i = 0; i < maxLineWidth; i++)
+			input = "-" + input;
+
+		return true;
+	}
+	if (input.substr(0, 8) == "\\center[") {
+		input = input.substr(8);
+
+		int i = 0;
+		int depth = 0;
+		for (; i < input.size() && (input[i] != ']' || depth > 0); i++) {
+			if (input[i] == '[')
+				depth++;
+			else if (input[i] == ']')
+				depth--;
+		}
+		if (i >= input.size() || input[i] != ']')
+			return false;
+
+		const String centered = input.substr(0, i);
+		input.erase(input.begin() + i);
+
+		const int spaceCount = (maxLineWidth - centered.size()) / 2;
+		for (int i = 0; i < spaceCount; i++)
+			input = " " + input;
+
+		return true;
+	}
+	if (input.substr(0, 14) == "\\relationship[") {
+		input = input.substr(14);
+
+		int i = 0;
+		int depth = 0;
+		for (; i < input.size() && (input[i] != ']' || depth > 0); i++) {
+			if (input[i] == '[')
+				depth++;
+			else if (input[i] == ']')
+				depth--;
+		}
+		if (i >= input.size() || input[i] != ']')
+			return false;
+
+		const String name = input.substr(0, i);
+
+		String output = "";
+		auto it = m_flags.find(name);
+		int countOffset = 0;
+		if (it != m_flags.end()) {
+			output = "\\@[" + name + "] [";
+			const int value = __min(__max(it->second, -2), 2);
+			for (int i = -2; i <= 2; i++)
+				output += i == value ? (i == 0 ? "+" : (i < 0 ? "\\error[+]" : "\\success[+]")) : "-";
+
+			countOffset += 4;
+			if (value < 0)
+				countOffset += 8;
+			if (value > 0)
+				countOffset += 10;
+
+			output += "]";
+		} else {
+			output = "{  ?  }";
+		}
+
+		while (output.size() < (maxLineWidth / 3) + countOffset)
+			output = " " + output;
+
+		input = output + input.substr(i + 1);
 		return true;
 	}
 
@@ -565,8 +645,11 @@ const bool StoryInterpreter::handleInteraction(String& input) {
 	return false;
 }
 
-const Vector2 StoryInterpreter::getDrawPosition(const float xIndex, const float yIndex) const {
-	return Vector2(xIndex * spacing * scale, yIndex * spacing * scale) + offset;
+const Vector3 StoryInterpreter::getDrawPosition(const float xIndex, const float yIndex) const {
+	return Vector3(
+			   xIndex * spacing * scale * m_relativeScale,
+			   yIndex * lineSpacing * scale * m_relativeScale, 0) +
+		   offset;
 }
 
 const bool StoryInterpreter::getCharacterConditionArguments(
@@ -591,7 +674,7 @@ const bool StoryInterpreter::getCharacterConditionArguments(
 			} break;
 
 			case 1: {
-				if (character == '<' || character == '>' || character == '=') {
+				if (character == '?' || character == '<' || character == '>' || character == '=') {
 					expression += character;
 				} else {
 					target = 2;
@@ -612,7 +695,7 @@ const bool StoryInterpreter::isCharacterCondition(const String& condition) const
 	const bool valid = getCharacterConditionArguments(condition, name, expression, value);
 
 	return valid && name.size() > 0 &&
-		   expression.size() > 0 && value.size() > 0;
+		   expression.size() > 0 && (value.size() > 0 || expression == "?");
 }
 
 const bool StoryInterpreter::characterConditionMet(const String& condition) const {
@@ -650,7 +733,8 @@ const bool StoryInterpreter::characterConditionMet(const String& condition) cons
 	}
 
 	if (expression == "?") {
-		return m_flags.find(name) != m_flags.end();
+		// This is technically inverted, but its for Markus so its fine <3.
+		return m_flags.find(name) == m_flags.end();
 	} else if (expression == "==" || expression == "=") {
 		return nameValue == valueValue;
 	} else if (expression == ">=") {

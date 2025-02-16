@@ -1,12 +1,55 @@
+\center[[SYSTEM STATUS]]
+\@[System]: Operating Version \high[8.72w2a]
+\@[System]: Status\.....                    [\high[ONLINE]]
+
+\line
+
+\@[System]: Power Status\...             [\success[AVAILABLE]]
+\@[System]: Narrow Scan Status\....    [\error[UNAVAILABLE]]
+\@[System]: Broad Scan Status\.....      [\success[AVAILABLE]]
+
+> Starting system broad scans:
+\@[System]: Hull Status\.......           [\error[BREACHED]]
+\@[System]: Thruster Status\..        [\warning[DISCONNECTED]]
+\@[System]: Weapon Status\........         [\error[OFFLINE]]
+\@[System]: Oxeseal Status\.......          [\error[FAILED]]
+\@[System]: Survivors Scan\.........        [\error[FAILED]]
+\@[System]: Communications Status\...    [\success[AVAILABLE]]
+
+\line
+
+> So this would go to chatroom0: \<Distress Call|chatroom1-1>
+\end
+
+
+\#home:
+\center[Relationships]
+\line
+\relationship[Jeremy] \relationship[Markus] \relationship[Alex]
+\relationship[Ernest] \relationship[Sage] \relationship[Pamela]
+\relationship[Tori] \relationship[Abby] \relationship[Vincent]
+
+\center[Chat Rooms]
+\line
+\<Chatroom 1|chatroom1-1>
+[\warning[TODO]]: Format this to be nicer.
+\end
+
+
 
 
 \#chatroom1-1:
 \@[Player]: blah \@[Sage] in-text citation
 \@[]: blah
 \@[Sage]: blah \@[Pamela](Nickname) more text
+
+\@[System]: Sharing logs\...
+
 \@[Pamela]: blah (but more boomer-y)
+
 \<care|Ernest+10|Sage-10|home>
-\<\@[Sage]|end>
+\<Gimme everyone's stats|Jeremy-2|Markus+1|Alex+2|Ernest+0|Sage+2|Pamela-2|Tori+1|Abby-1|Vincent=0|chatroom2-2>
+\<Ask for \@[Sage]'s help|end>
 \<Sage<80|Ask for blah help|boss>
 \<Sage<40|40 Condition|Sage+1|AI+10|boss>
 \<Sage>0|40 Condition|boss>
@@ -18,7 +61,7 @@
 
 \#boss:
 \#chatroom2-2:
-\<Sage was here|home>
+\<\@[Sage] was here|home>
 \end
 
 
@@ -39,9 +82,3 @@ that branches
 \end
 
 
-\#home:
- Jeremy \|--+|---|
-   Sage \|---|-+-|
-    Pam \|+--|---|
-\<chatroom1|chatroom1-1>
-\end

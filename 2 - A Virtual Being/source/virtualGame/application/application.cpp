@@ -19,7 +19,7 @@ void Application::start() {
 	TextRenderer textRenderer;
 	StoryInterpreter storyInterpreter;
 
-	Shader shader("shader");
+	// Shader shader("shader");
 
 	const float meshDepth = 0;
 	std::vector<Vector3> vertices = {
@@ -70,10 +70,10 @@ void Application::start() {
 		Instance instance;
 		UniformBuffer uniforms;
 
-		const Vector2 mouseScaled = ((Input::s_input->getMousePosition() / Vector2(m_window.getWidth(), m_window.getHeight())) - 0.5f) * 2.0f;
-		instance.setData("test", mouseScaled.x(), GL_FLOAT);
-		instance.setData("test2", mouseScaled.y() * screenRatio, GL_FLOAT);
-		renderer.draw(shader, uniforms, cursor, instance);
+		// const Vector2 mouseScaled = ((Input::s_input->getMousePosition() / Vector2(m_window.getWidth(), m_window.getHeight())) - 0.5f) * 2.0f;
+		// instance.setData("test", mouseScaled.x(), GL_FLOAT);
+		// instance.setData("test2", mouseScaled.y() * screenRatio, GL_FLOAT);
+		// renderer.draw(shader, uniforms, cursor, instance);
 
 		// const float scale = 0.04f;
 		// const float lineSpacing = -1.2f;
@@ -81,6 +81,7 @@ void Application::start() {
 		// textRenderer.drawText(renderer, Vector2(-0.8f, 1 * lineSpacing * scale), scale, "> OPERATING SYSTEM VERSION 8.72b");
 		// textRenderer.drawText(renderer, Vector2(-0.8f, 3 * lineSpacing * scale), scale, "> Status.......... ONLINE");
 
+		storyInterpreter.setScale((float)m_window.getWidth() / 1280.0f);
 		storyInterpreter.process();
 		storyInterpreter.draw(renderer, textRenderer);
 

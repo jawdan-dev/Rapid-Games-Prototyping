@@ -17,11 +17,12 @@ TextRenderer::TextRenderer() :
 		Vector3(-textSize, textSize, textDepth),
 		Vector3(textSize, textSize, textDepth),
 	};
+	const float uvOffset = 0.05f;
 	std::vector<Vector2> textUVs = {
-		Vector2(0, 0),
-		Vector2(1, 0),
-		Vector2(0, 1),
-		Vector2(1, 1),
+		Vector2(0 + uvOffset, 0 + uvOffset),
+		Vector2(1 - uvOffset, 0 + uvOffset),
+		Vector2(0 + uvOffset, 1 - uvOffset),
+		Vector2(1 - uvOffset, 1 - uvOffset),
 	};
 	std::vector<uint16_t> textIndices = {
 		0,
@@ -45,15 +46,15 @@ TextRenderer::~TextRenderer() {
 	}
 }
 
-void TextRenderer::drawCharacter(Renderer& renderer, const Vector2 pos, const float scale, const char character, const Vector3& color) {
+void TextRenderer::drawCharacter(Renderer& renderer, const Vector3 pos, const float scale, const char character, const Vector3& color) {
 	m_instance.setData("i_index", (float)(character - ' '), GL_FLOAT);
-	m_instance.setData("i_pos", pos, GL_FLOAT_VEC2);
+	m_instance.setData("i_pos", pos, GL_FLOAT_VEC3);
 	m_instance.setData("i_scale", scale, GL_FLOAT);
 	m_instance.setData("i_color", color, GL_FLOAT_VEC3);
 	renderer.draw(m_shader, m_uniforms, m_mesh, m_instance);
 }
-void TextRenderer::drawText(Renderer& renderer, const Vector2 pos, const float scale, const String& string, const Vector3& color) {
-	Vector2 spacing(1.2f * scale, 0);
+void TextRenderer::drawText(Renderer& renderer, const Vector3 pos, const float scale, const String& string, const Vector3& color) {
+	Vector3 spacing(1.2f * scale, 0, 0);
 	for (int i = 0; i < string.size(); i++) {
 		drawCharacter(renderer, pos + (spacing * i), scale, string[i], color);
 	}

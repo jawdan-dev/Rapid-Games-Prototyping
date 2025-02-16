@@ -9,8 +9,8 @@ public:
 	TextRenderer(const TextRenderer& other) = delete;
 	~TextRenderer();
 
-	void drawCharacter(Renderer& renderer, const Vector2 pos, const float scale, const char character, const Vector3& color = Vector3(1, 1, 1));
-	void drawText(Renderer& renderer, const Vector2 pos, const float scale, const String& string, const Vector3& color = Vector3(1, 1, 1));
+	void drawCharacter(Renderer& renderer, const Vector3 pos, const float scale, const char character, const Vector3& color = Vector3(1, 1, 1));
+	void drawText(Renderer& renderer, const Vector3 pos, const float scale, const String& string, const Vector3& color = Vector3(1, 1, 1));
 
 private:
 	Shader m_shader;
