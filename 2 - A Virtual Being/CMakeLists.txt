@@ -5,7 +5,7 @@ add_executable(AVirtualBeing ${CMAKE_CURRENT_SOURCE_DIR}/source/beingEngine/core
 file(GLOB_RECURSE SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
 target_sources(AVirtualBeing PRIVATE ${SRC_FILES})
 
-set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
+set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++ -mwindows")
 
 set(TARGET_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/binaries/desktop)
 set_target_properties(
