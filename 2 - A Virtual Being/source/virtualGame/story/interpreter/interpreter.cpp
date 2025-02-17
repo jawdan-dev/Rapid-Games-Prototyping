@@ -8,7 +8,8 @@ StoryInterpreter::StoryInterpreter() :
 	m_currentLine(0),
 	m_lines(), m_activeLines(),
 	m_drawLine(0), m_drawCharacter(0), m_delay(0),
-	m_lastGoto(""), m_inputCooldown(0), m_relativeScale(1.0f) {
+	m_lastGoto(""), m_relativeScale(1.0f),
+	m_interactingGroup(-1), m_inputCooldown(0) {
 	readFile();
 
 	addCharacter(Character("Player", Vector3(1.0f, 1.0f, 1.0f)));
@@ -24,6 +25,10 @@ StoryInterpreter::StoryInterpreter() :
 	addCharacter(Character("Tori", Vector3(255, 187, 51) / 255.0f));
 	addCharacter(Character("Abby", Vector3(255, 153, 153) / 255.0f));
 	addCharacter(Character("Vincent", Vector3(136, 17, 255) / 255.0f));
+
+	setFlag("AIFactor", 50);
+	setFlag("HumanFactor", 50);
+	setFlag("EnemyPower", 100);
 }
 StoryInterpreter::~StoryInterpreter() {}
 
@@ -127,25 +132,31 @@ static const int maxLineWidth =
 	(scale * spacing);
 
 void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
-	struct Selectable {
-		int line;
-		int lineStart;
+	int drawHeight = 0;
+	int activeLineGroup = 0;
 
-		int drawStart;
-		int width;
-
-		DrawInformation drawInformation;
-		int collapseDepth;
-	};
-
-	std::vector<Selectable> selectables;
-	for (int i = 0; i < m_activeLines.size() && i <= m_drawLine; i++) {
-		String line = m_activeLines[i];
-		int lineSelectableOffset = 0;
+	m_interactingGroup = -1;
+	for (int lineIndex = 0; lineIndex < m_activeLines.size() && lineIndex <= m_drawLine; lineIndex++) {
+		struct SectionProperties {
+			int group, originalLine;
+			Vector3 color;
+			bool enabled, errorOccurred, canSplit;
+		};
 
 		Vector3 defaultColor = Vector3(1.0f, 1.0f, 1.0f);
 
-		int lastCollapseIndex = -1, lastCollapseEnd = -1, collapseCount = 0;
+		String line = m_activeLines[lineIndex];
+		std::vector<SectionProperties> lineSections;
+		for (int i = 0; i < line.size(); i++)
+			lineSections.emplace_back((SectionProperties){
+				.group = -1,
+				.originalLine = i,
+				.color = defaultColor,
+				.enabled = false,
+				.errorOccurred = false,
+				.canSplit = false,
+			});
+
 		for (int j = 0; j < line.size(); j++) {
 			String newLine = line.substr(j);
 			const int newLineLength = newLine.size();
@@ -161,92 +172,177 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 			if (drawInformation.colorWholeLine)
 				defaultColor = drawInformation.color;
 
-			if (i == m_drawLine)
-				drawInformation.specialCount = __min(drawInformation.specialCount + j, m_drawCharacter) - j;
-
-			///////////////DRAW$FENCE//////////////////
-			//   0   1   2   3   4   5   6   7
-			// |---|---|---|---|---|---|---|---|
-
 			if (drawInformation.specialCount > 0) {
-				if (lastCollapseEnd > j || lastCollapseIndex == j) {
-					collapseCount++;
-					lastCollapseEnd = __max(lastCollapseEnd, j + drawInformation.specialCount);
-				} else {
-					lastCollapseIndex = j;
-					lastCollapseEnd = j + drawInformation.specialCount;
-					collapseCount = 0;
-				}
+				for (int i = 0; i < drawInformation.specialCount; i++) {
+					const int index = j + i;
+					lineSections[index].color = drawInformation.color;
 
-				selectables.push_back((Selectable){
-					.line = i,
-					.lineStart = j + lineSelectableOffset,
-					.drawStart = j,
-					.width = drawInformation.specialCount,
-					.drawInformation = drawInformation,
-					.collapseDepth = collapseCount,
-				});
+					lineSections[index].originalLine = lineSections[j].originalLine;
+					lineSections[index].enabled |= drawInformation.enabled;
+					lineSections[index].errorOccurred |= drawInformation.errorOccurred;
+
+					if (lineSections[index].group == -1)
+						lineSections[index].group = activeLineGroup;
+				}
+				activeLineGroup++;
+			} else {
+				if (lineSections[j].group == -1)
+					lineSections[j].color = drawInformation.color;
 			}
 
 			if (!special)
 				continue;
 
-			lineSelectableOffset += ((int)newLineLength - (int)newLine.size());
 			line = line.substr(0, j) + newLine;
+			const int lineSelectableOffset = ((int)newLineLength - (int)newLine.size());
+			if (lineSelectableOffset > 0) {
+				// Smaller -> Remove elements.
+				for (int i = 0; i < lineSelectableOffset; i++)
+					lineSections.erase(lineSections.begin() + j + drawInformation.specialCount);
+			} else if (lineSelectableOffset < 0) {
+				// Bigger -> Add elements.
+				for (int i = 0; i < -lineSelectableOffset; i++)
+					lineSections.insert(lineSections.begin() + j + 1, lineSections[j]);
+			}
+
 			j--;
 		}
 
-		if (i == m_drawLine)
-			line = line.substr(0, m_drawCharacter);
-		// textRenderer.drawText(renderer, getDrawPosition(0, i), scale, line);
+		for (int i = 0; i < line.size() && i < lineSections.size(); i++) {
+			if (lineSections[i].group != -1 || line[i] != ' ')
+				continue;
+			lineSections[i].canSplit = true;
+		}
 
-		bool alreadyInteracted = false;
-		int lastDrawIndex = 0;
-		for (auto it : selectables) {
-			const int i = it.line;
-			const int j = it.drawStart;
-			const int specialCount = it.width;
+		// printf("%s\n", line.c_str());
+		// for (int i = 0; i < line.size(); i++)
+		// 	printf("%c", lineSections[i].enabled ? '^' : (lineSections[i].canSplit ? '|' : '_'));
+		// printf("\n");
+		// for (int i = 0; i < line.size(); i++)
+		// 	printf("%c", lineSections[i].group != -1 ? '0' + lineSections[i].group : 'x');
+		// printf("\n");
+		// for (int i = 0; i < line.size(); i++)
+		// 	printf("%i", (int)(lineSections[i].color.y() * 9));
+		// printf("\n");
+		// exit(0);
 
-			const Vector3 min(getDrawPosition((float)j - 0.5f, (float)i - 0.5f)), max(getDrawPosition((float)(j + specialCount) - 0.5f, (float)i + 0.5f));
-			const Vector2 mpos = Input::s_input->getMousePosition();
-			const bool mouseWithin = min.x() <= mpos.x() && mpos.x() <= max.x() && min.y() <= mpos.y() && mpos.y() <= max.y();
+		struct DrawLine {
+			String line;
+			std::vector<SectionProperties> sections;
+		};
+		std::vector<DrawLine> drawLines;
 
-			const bool interactable = it.drawInformation.enabled && !it.drawInformation.errorOccurred;
-			const bool isInteracting = mouseWithin && interactable && !alreadyInteracted && m_inputCooldown <= 0.0f;
-			const bool pressed = isInteracting && Input::s_input->isKeyPressed(GLFW_MOUSE_BUTTON_1);
-			const bool used = isInteracting && Input::s_input->isKeyUp(GLFW_MOUSE_BUTTON_1);
-			if (isInteracting)
-				alreadyInteracted = true;
-
-			Vector3 drawColor = it.drawInformation.color;
-			if (it.drawInformation.errorOccurred) {
-				drawColor = Vector3(1.0f, 0.0f, 1.0f);
-			} else if (!interactable) {
-			} else if (used) {
-				drawColor = Vector3(1.0f, 1.0f, 1.0f);
-			} else if (pressed) {
-				drawColor = drawColor * Vector3(0.6f, 0.5f, 0.8);
-			} else if (isInteracting) {
-				drawColor = drawColor * Vector3(1.2f, 1.1f, 1.4);
-			}
-
-			const int drawIndex = (lastDrawIndex > j) ? j : lastDrawIndex;
-			textRenderer.drawText(renderer, getDrawPosition(drawIndex, i), scale * m_relativeScale, line.substr(drawIndex, j - drawIndex), defaultColor);
-			textRenderer.drawText(renderer, getDrawPosition(j, i) + Vector3(0, 0, (float)it.collapseDepth * 0.1f), scale * m_relativeScale, line.substr(j, specialCount), drawColor);
-			lastDrawIndex = j + specialCount;
-
-			if (used) {
-				m_inputCooldown = 0.4f;
-				// Massive bug here on self-generating expressions....
-				String modifiableLine = m_activeLines[i].substr(it.lineStart);
-				if (handleInteraction(modifiableLine))
-					return;
-				m_activeLines[i] = m_activeLines[i].substr(0, it.lineStart) + modifiableLine;
+		int textOffset = 0;
+		if (m_activeLines[lineIndex].substr(0, 3) == "\\@[") {
+			for (int i = 0; i + 1 < line.size(); i++) {
+				if (m_activeLines[lineIndex].substr(i, 3) == "]: ") {
+					textOffset = i + 2;
+					break;
+				}
 			}
 		}
-		textRenderer.drawText(renderer, getDrawPosition(lastDrawIndex, i), scale * m_relativeScale, line.substr(lastDrawIndex, line.size() - lastDrawIndex), defaultColor);
+		String lineOffsetSpacing = "";
+		for (int i = 0; i < textOffset; i++)
+			lineOffsetSpacing += ' ';
 
-		selectables.clear();
+		int maxLineWidthLocal = maxLineWidth;
+		while (line.size() > maxLineWidthLocal) {
+			int splitIndex = maxLineWidthLocal;
+			for (; splitIndex >= 0 && !lineSections[splitIndex].canSplit; splitIndex--)
+				;
+			if (splitIndex < 0) {
+				splitIndex = maxLineWidthLocal;
+				for (; splitIndex < line.size() && !lineSections[splitIndex].canSplit; splitIndex++)
+					;
+				if (splitIndex >= line.size())
+					break;
+			}
+
+			std::vector<SectionProperties> drawSections;
+			if (drawLines.size() > 0)
+				for (int i = 0; i < textOffset; i++)
+					drawSections.push_back(lineSections[0]);
+			for (int i = 0; i < splitIndex; i++)
+				drawSections.push_back(lineSections[i]);
+
+			drawLines.emplace_back((DrawLine){
+				.line = (drawLines.size() > 0) ? (lineOffsetSpacing + line.substr(0, splitIndex)) : line.substr(0, splitIndex),
+				.sections = drawSections,
+			});
+
+			line = line.substr(splitIndex + 1);
+			lineSections.erase(lineSections.begin(), lineSections.begin() + splitIndex + 1);
+
+			maxLineWidthLocal = maxLineWidth - textOffset;
+		}
+		if (drawLines.size() > 0) {
+			for (int i = 0; i < textOffset; i++)
+				lineSections.push_back(lineSections[0]);
+			drawLines.emplace_back((DrawLine){
+				.line = lineOffsetSpacing + line,
+				.sections = lineSections,
+			});
+		} else {
+			drawLines.emplace_back((DrawLine){
+				.line = line,
+				.sections = lineSections,
+			});
+		}
+
+		for (int i = 0; i < drawLines.size() && m_interactingGroup == -1; i++) {
+			for (int j = 0; j < drawLines[i].line.size() && j < drawLines[i].sections.size(); j++) {
+				if (!drawLines[i].sections[j].enabled || drawLines[i].sections[j].errorOccurred)
+					continue;
+
+				const Vector3
+					min(getDrawPosition((float)j - 0.5f, (float)(drawHeight + i) - 0.5f)),
+					max(getDrawPosition((float)j + 0.5f, (float)(drawHeight + i) + 0.5f));
+				const Vector2 mpos = Input::s_input->getMousePosition();
+				const bool mouseWithin = min.x() <= mpos.x() && mpos.x() <= max.x() && min.y() <= mpos.y() && mpos.y() <= max.y();
+
+				const bool isInteracting = mouseWithin && m_inputCooldown <= 0.0f;
+				if (!isInteracting)
+					continue;
+
+				m_interactingGroup = drawLines[i].sections[j].group;
+				const bool used = Input::s_input->isKeyUp(GLFW_MOUSE_BUTTON_1);
+
+				if (!used)
+					continue;
+
+				m_inputCooldown = 0.4f;
+
+				const int lineStart = drawLines[i].sections[j].originalLine;
+				String modifiableLine = m_activeLines[lineIndex].substr(lineStart);
+
+				if (handleInteraction(modifiableLine))
+					return;
+
+				m_activeLines[lineIndex] = m_activeLines[lineIndex].substr(0, lineStart) + modifiableLine;
+			}
+		}
+		for (int i = 0; i < drawLines.size(); i++) {
+			for (int j = 0; j < drawLines[i].line.size() && j < drawLines[i].sections.size(); j++) {
+				Vector3 drawColor = drawLines[i].sections[j].color;
+				if (drawLines[i].sections[j].errorOccurred) {
+					drawColor = Vector3(1.0f, 0.0f, 1.0f);
+				} else if (m_interactingGroup != -1 && m_interactingGroup == drawLines[i].sections[j].group) {
+					const bool pressed = Input::s_input->isKeyPressed(GLFW_MOUSE_BUTTON_1),
+							   used = Input::s_input->isKeyUp(GLFW_MOUSE_BUTTON_1);
+
+					if (used) {
+						drawColor = Vector3(1.0f, 1.0f, 1.0f);
+					} else if (pressed) {
+						drawColor = drawColor * Vector3(0.6f, 0.5f, 0.8);
+					} else {
+						drawColor = drawColor * Vector3(1.2f, 1.1f, 1.4);
+					}
+				}
+
+				textRenderer.drawCharacter(renderer, getDrawPosition(j, drawHeight), scale * m_relativeScale, drawLines[i].line[j], drawColor);
+			}
+			drawHeight++;
+		}
 	}
 }
 
@@ -270,7 +366,7 @@ void StoryInterpreter::processInput() {
 		return;
 	}
 
-	if (Input::s_input->getMousePosition().lengthSquared() <= 0.0f)
+	if (Input::s_input->getMousePosition().lengthSquared() <= 0.0f || m_interactingGroup != -1)
 		return;
 
 	if (Input::s_input->isKeyUp(GLFW_MOUSE_BUTTON_1)) {
@@ -458,6 +554,8 @@ const bool StoryInterpreter::resolveSpecial(String& input, DrawInformation& draw
 			output = " " + output;
 
 		input = output + input.substr(i + 1);
+		drawInformation.specialCount = output.size() - 1;
+		drawInformation.color = Vector3(1.0f, 1.0f, 1.0f);
 		return true;
 	}
 
@@ -466,20 +564,11 @@ const bool StoryInterpreter::resolveSpecial(String& input, DrawInformation& draw
 
 		std::vector<String> commands;
 
-		int depth = 0;
 		int i = 0, j = 0;
-		bool spaceFound = false, closeFound = false;
-		for (; i < input.size() && (input[i] != '>' || !(spaceFound || closeFound) || depth > 0); i++) {
-			if (input[i] == ' ') {
-				spaceFound = true;
-			} else if (spaceFound && input[i] == '<') {
-				depth++;
-			} else if (spaceFound && input[i] == '>') {
-				depth--;
-			} else if (input[i] == '|') {
+		for (; i < input.size() && (input[i] != '>' || (i + 1 < input.size() && input[i + 1] != ' ')); i++) {
+			if (input[i] == '|') {
 				commands.push_back(input.substr(j, i - j));
 				j = i + 1;
-				closeFound = true;
 			}
 		}
 		if (i < input.size() && input[i] == '>') {
@@ -598,20 +687,11 @@ const bool StoryInterpreter::handleInteraction(String& input) {
 	if (input.substr(0, 2) == "\\<") {
 		std::vector<String> commands;
 
-		int depth = 0;
-		int i = 2, j = 2;
-		bool spaceFound = false, closeFound = false;
-		for (; i < input.size() && (input[i] != '>' || !(spaceFound || closeFound) || depth > 0); i++) {
-			if (input[i] == ' ') {
-				spaceFound = true;
-			} else if (spaceFound && input[i] == '<') {
-				depth++;
-			} else if (spaceFound && input[i] == '>') {
-				depth--;
-			} else if (input[i] == '|') {
+		int i = 0, j = 0;
+		for (; i < input.size() && (input[i] != '>' || (i + 1 < input.size() && input[i + 1] != ' ')); i++) {
+			if (input[i] == '|') {
 				commands.push_back(input.substr(j, i - j));
 				j = i + 1;
-				closeFound = true;
 			}
 		}
 		if (i < input.size() && input[i] == '>')
@@ -665,7 +745,10 @@ const bool StoryInterpreter::getCharacterConditionArguments(
 		const char character = condition[i];
 		switch (target) {
 			case 0: {
-				if (('a' <= character && character <= 'z') || ('A' <= character && character <= 'Z') || ('0' <= character && character <= '9')) {
+				if (('a' <= character && character <= 'z') ||
+					('A' <= character && character <= 'Z') ||
+					('0' <= character && character <= '9') ||
+					character == '_') {
 					name += character;
 				} else {
 					target = 1;
@@ -764,7 +847,10 @@ const bool StoryInterpreter::getStatementArguments(
 		const char character = condition[i];
 		switch (target) {
 			case 0: {
-				if (('a' <= character && character <= 'z') || ('A' <= character && character <= 'Z') || ('0' <= character && character <= '9')) {
+				if (('a' <= character && character <= 'z') ||
+					('A' <= character && character <= 'Z') ||
+					('0' <= character && character <= '9') ||
+					(character == '_')) {
 					name += character;
 				} else {
 					target = 1;

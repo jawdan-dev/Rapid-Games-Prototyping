@@ -63,7 +63,7 @@ void Application::start() {
 
 		static int counter = 0;
 		if (counter++ > 200) {
-			printf("time: %fms; fps: %f\n", m_window.getTime().getDelta(), 1.0f / m_window.getTime().getDelta());
+			// printf("time: %fms; fps: %f\n", m_window.getTime().getDelta(), 1.0f / m_window.getTime().getDelta());
 			counter = 0;
 		}
 

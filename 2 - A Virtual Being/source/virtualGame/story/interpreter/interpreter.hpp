@@ -66,6 +66,8 @@ private:
 	float m_delay;
 
 	String m_lastGoto;
-	float m_inputCooldown;
 	float m_relativeScale;
+
+	int m_interactingGroup;
+	float m_inputCooldown;
 };
