@@ -17,7 +17,7 @@ TextRenderer::TextRenderer() :
 		Vector3(-textSize, textSize, textDepth),
 		Vector3(textSize, textSize, textDepth),
 	};
-	const float uvOffset = 0.05f;
+	const float uvOffset = 0.125f;
 	std::vector<Vector2> textUVs = {
 		Vector2(0 + uvOffset, 0 + uvOffset),
 		Vector2(1 - uvOffset, 0 + uvOffset),
