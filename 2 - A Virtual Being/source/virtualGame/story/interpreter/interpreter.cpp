@@ -289,8 +289,11 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 			});
 		}
 
-		for (int i = 0; i < drawLines.size() && m_interactingGroup == -1; i++) {
-			for (int j = 0; j < drawLines[i].line.size() && j < drawLines[i].sections.size(); j++) {
+		const int maxDrawCharacters = (lineIndex == m_drawLine) ? m_drawCharacter : 99652;
+
+		for (int i = 0, remainingCharacters = maxDrawCharacters; i < drawLines.size() && m_interactingGroup == -1 && remainingCharacters > 0; i++) {
+			for (int j = 0; j < drawLines[i].line.size() && j < drawLines[i].sections.size() && remainingCharacters > 0; j++) {
+				remainingCharacters--;
 				if (!drawLines[i].sections[j].enabled || drawLines[i].sections[j].errorOccurred)
 					continue;
 
@@ -321,8 +324,8 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 				m_activeLines[lineIndex] = m_activeLines[lineIndex].substr(0, lineStart) + modifiableLine;
 			}
 		}
-		for (int i = 0; i < drawLines.size(); i++) {
-			for (int j = 0; j < drawLines[i].line.size() && j < drawLines[i].sections.size(); j++) {
+		for (int i = 0, remainingCharacters = maxDrawCharacters; i < drawLines.size() && remainingCharacters > 0; i++) {
+			for (int j = 0; j < drawLines[i].line.size() && j < drawLines[i].sections.size() && remainingCharacters > 0; j++) {
 				Vector3 drawColor = drawLines[i].sections[j].color;
 				if (drawLines[i].sections[j].errorOccurred) {
 					drawColor = Vector3(1.0f, 0.0f, 1.0f);
@@ -340,6 +343,7 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 				}
 
 				textRenderer.drawCharacter(renderer, getDrawPosition(j, drawHeight), scale * m_relativeScale, drawLines[i].line[j], drawColor);
+				remainingCharacters--;
 			}
 			drawHeight++;
 		}
