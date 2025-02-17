@@ -63,7 +63,6 @@ public:
 		const Vector2 inputScalarRaw(getWidth(), getHeight());
 		const Vector2 inputScalar(inputScalarRaw.y() / screenRatio, inputScalarRaw.y());
 		const Vector2 offset = Vector2(getWidth() - inputScalar.x(), 0) * 0.5f;
-		printf("aw: %i ,, %f %f: offset: %f :: %f %f\n", getWidth(), inputScalar.x(), inputScalar.y(), offset.x(), mousePos.x(), mousePos.y());
 		mousePos -= offset;
 		mousePos /= inputScalar;
 
