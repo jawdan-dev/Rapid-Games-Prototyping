@@ -1,84 +1,1375 @@
+\#StartChapter:
+
+
+
+
+
+
+
+
+
+
+
+\<\center[Hello?]|AnyoneThere>
+\end
+
+\#AnyoneThere:
+
+
+
+
+
+
+
+
+
+
+\<\center[Anyone there?]|SystemStatusAvailable>
+\end
+
+\#SystemStatusAvailable:
+
+
+
+
+
+
+
+
+
+
+\<\center[\@[System]: Status Available]|SystemStatus>
+\end
+
+\#SystemStatus:
 \center[[SYSTEM STATUS]]
+
 \@[System]: Operating Version \high[8.72w2a]
-\@[System]: Status\.....                    [\high[ONLINE]]
+\@[System]: Status\.....                         [\high[ONLINE]]
 
 \line
 
-\@[System]: Power Status\...             [\success[AVAILABLE]]
-\@[System]: Narrow Scan Status\....    [\error[UNAVAILABLE]]
-\@[System]: Broad Scan Status\.....      [\success[AVAILABLE]]
+\@[System]: Power Status\...             [\success[REACTOR ACTIVE]]
+\@[System]: Scanner Status\....                 [\warning[DAMAGED]]
+\@[System]: Narrow Scan Status\....         [\error[UNAVAILABLE]]
+\@[System]: Broad Scan Status\.....           [\success[AVAILABLE]]
 
 > Starting system broad scans:
-\@[System]: Hull Status\.......           [\error[BREACHED]]
-\@[System]: Thruster Status\..        [\warning[DISCONNECTED]]
-\@[System]: Weapon Status\........         [\error[OFFLINE]]
-\@[System]: Oxeseal Status\.......          [\error[FAILED]]
-\@[System]: Survivors Scan\.........        [\error[FAILED]]
-\@[System]: Communications Status\...    [\success[AVAILABLE]]
+\@[System]: Hull Status\.......                [\error[BREACHED]]
+\@[System]: Thruster Status\..             [\warning[DISCONNECTED]]
+\@[System]: Weapon Status\........              [\error[OFFLINE]]
+\@[System]: Oxeseal Status\.......               [\error[FAILED]]
+\@[System]: Survivors Scan\.........             [\error[FAILED]]
+\@[System]: Communications Status\...         [\success[AVAILABLE]]
 
 \line
 
-> So this would go to chatroom0: \<Distress Call|chatroom1-1>
+> Services Available:
+    > Send \<Distress Call|chatroom0-1>
+    > \<Overload Reactor|fastEnding>
 \end
+
+
+
+
+
+
+
+
+
+\#chatroom0-1:
+\center[[DISTRESS SIGNAL]]
+
+\@[System]: Selecting from available channels\... [\success[CHANNEL FOUND]]
+\@[System]: Aligning \~[34.67GHz|CORRUPTED|43.76GHz] band\..                [\error[BAND FAILED]]
+\@[System]: Aligning \high[32.41GHz] band\....             [\success[BAND ALIGNED]]
+\@[System]: Stabilizing Octocouplers\...             [\success[STABILIZED]]
+
+> Distress System Ready\...
+\@[System]: Sending out distress signal\.......    [\success[DATA RECEIVED]]
+
+\line
+
+\<\center[Open transmission.]|chatroom0-1a>
+\end
+
+\#chatroom0-1a:
+\center[[RECEIVED DATA]]
+
+\@[Player]: DISTRESS MESSAGE\... SOS
+
+\@[Alex]: Hey, @\@[Sage], are you receiving that too?
+\@[Sage]: The distress signal?
+\@[Alex]: Yeah\...
+\@[Alex]: \...
+\@[Alex]: They've got to be using some ancient tech to be reaching this channel like that...
+\@[Sage]: Give me a second\..
+\@[Sage]: Let's see what I can get on the sender.
+
+\@[System]:: [\error[ERROR: SYSTEMS INTERFACED EXTERNALLY]]\...
+\@[System]:: [\error[ERROR: SYSTEMS BREACHED]]\...
+\@[System]:: [\warning[PRIVILEGE LEVEL REQUIRED: ADMIN]]\...
+\@[System]:: [\error[ACCESS DENIED]]\...
+\@[System]:: [\error[ERROR: UNAUTHORIZED] \~[USER|\error[HUMAN]]]\...
+
+\@[System]:: \<Grant Access?|chatroom0-1b>
+\end
+
+\#chatroom0-1b:
+\center[[RECEIVED DATA]]
+
+\@[System]:: [\warning[PRIVILEGE LEVEL REQUIRED: ADMIN]]\...
+\@[System]:: [\success[ACCESS GRANTED]]\..
+\@[System]:: [\success[FILES SENT]]\..
+
+\@[Sage]: That's strange.
+\@[Alex]: What's up?
+\@[Sage]: \...
+\@[Sage]: There's someone on the other end.
+\@[Sage]: But all of their systems are screwed.
+\@[Alex]: That's not great\...
+\@[Alex]: Do you have a plan for this?
+\@[Sage]: I'm going to try to patch through a lil' something.
+
+\@[System]:: Downloading Firmware\..... [\success[SUCCESS]]
+\@[System]: Log: [\success[COMMUNICATION SYSTEMS REESTABLISHED]]\..
+
+\@[Sage]: That should do it.
+\@[Sage]: @\@[Player] try to send something.
+
+\@[Player]: \<Hello? |chatroom0-1c>
+\end
+
+\#chatroom0-1c:
+\center[[CONNECTION ESTABLISHED]]
+
+\@[Player]: Hello?
+\@[Sage]: There you go!
+\@[Alex]: Wow, you weren't kidding.
+\@[Alex]: There really was someone over that old thing.
+\@[Sage]: So how'd you end up in a situation like that?
+\@[Player]: I'm not sure\...
+\@[Player]: I\... I'm not sure who I am\... or where I am\...
+\@[Sage]: Amnesia, huh?
+\@[Alex]: I used to have a friend who had amnesia in the past\... but in the end they forgot me too\...
+\@[Sage]: I hope you can get your memories back.
+\@[Player]: The last thing I remember is the ship crashing into a planet.
+\@[Alex]: That must've been rough\...
+\@[Sage]: \@[Alex] do you think you can make the other chat channels available to them?
+\@[Alex]: I'll see what I can do.
+
+\@[System]:: Downloading Network Map\..... [\success[SUCCESS]]
+\@[System]: Log: [\success[COMMUNICATION NETWORK ESTABLISHED]]\..
+
+\@[System]: \<Network Map Available.|Sage=0|Alex=0|home>
+\end
+
+
+
+
 
 
 \#home:
+\center[[HUB]]
+
 \center[Relationships]
 \line
-\relationship[Jeremy] \relationship[Markus] \relationship[Alex]
-\relationship[Ernest] \relationship[Sage] \relationship[Pamela]
-\relationship[Tori] \relationship[Abby] \relationship[Vincent]
 
-\center[Chat Rooms]
+\relationship[Jeremy]\relationship[Markus]\relationship[Alex]
+\relationship[Ernest]\relationship[Sage]\relationship[Pamela]
+\relationship[Tori]\relationship[Abby]\relationship[Vincent]
+
+
+\center[Available Channels]
 \line
-\<Chatroom 1|chatroom1-1>
-[\warning[TODO]]: Format this to be nicer.
+
+\<Chatroom1_1Done?|\center[Chatroom 1]|Chatroom1_1Done=1|chatroom1-1>
+
+\<Chatroom2_1Done?|\center[Chatroom 2]|Chatroom2_1Done=1|chatroom2-1>
+
+\<Chatroom3_1Done?|\center[Chatroom 3]|Chatroom3_1Done=1|chatroom3-1>
+
+\showif[Chatroom1_1Done=1|Chatroom2_1Done=1|Chatroom3_1Done=1]\<Chatroom1_1Done=1|Chatroom2_1Done=1|Chatroom3_1Done=1|\center[\...A Strange Transmission\...]|chatroomfinal>
 \end
+
+
 
 
 
 
 \#chatroom1-1:
-\@[Player]: blah \@[Sage] in-text citation
-\@[]: blah
-\@[Sage]: blah \@[Pamela](Nickname) more text
+\center[[VINCENT'S VENTS]]
+\@[System]: Gathering Distress Signal...
+\@[System]: \...
 
-\@[System]: Sharing logs\...
+\@[Player]: Anyone there?
+\@[Vincent]: Busy...
+\@[Vincent]: Vent system is down again.
+\@[Tori]: What happened?
+\@[Vincent]: Not sure. 
+\@[Vincent]: I'm going to isolate the problem via the console.
+\@[Tori]: What a drag... 
+\@[Tori]: Can't someone just go in there to check? 
+\@[Vincent]: Negative. That goes against protocol. 
+\@[Tori]: Protocol will take too long. 
+\@[Tori]: We need those vents up and running now.
+\@[Vincent]: Yes. But we need to follow protocol. 
+\@[Tori]: Can't I just go in there myself? 
+\@[Tori]: The best way to solve a problem is head on. 
+\@[Vincent]: Negative. 
+\@[Tori]: Whatever.
 
-\@[Pamela]: blah (but more boomer-y)
+> \<Contact @\@[Alex],|Vincent+1|Tori-1|Alex+1|AIFactor-10|HumanFactor+10|chatroom1-1a> \<@\@[Sage],|Vincent-1|Tori+1|Sage+1|Abby-1|Ernest-1|AIFactor-10|HumanFactor+10|chatroom1-1b> \<MarkusUsed?|@\@[Markus],|MarkusUsed=1|Vincent+1|Tori+1|Markus+1|AIFactor-10|HumanFactor+10|chatroom1-1c> \<@\@[Pamela],|Vincent+1|Alex+1|Tori-1|Abby-1|Ernest-1|AIFactor-10|HumanFactor+10|chatroom1-1d> \<or @\@[Jeremy]|Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-10|HumanFactor+10|chatroom1-1e>
 
-\<care|Ernest+10|Sage-10|home>
-\<Gimme everyone's stats|Jeremy-2|Markus+1|Alex+2|Ernest+0|Sage+2|Pamela-2|Tori+1|Abby-1|Vincent=0|chatroom2-2>
-\<Ask for \@[Sage]'s help|end>
-\<Sage<80|Ask for blah help|boss>
-\<Sage<40|40 Condition|Sage+1|AI+10|boss>
-\<Sage>0|40 Condition|boss>
-\<Sage>1|40 Condition|boss>
-\<AI>=10|40 Condition|boss>
-\<Humanity>10|40 Condition|Humanity+10|boss>
+> \<Start conversation|Vincent+1|Tori+1|AIFactor-10|HumanFactor+10|SelfPower+1|chatroom1-1f>
+
+> \<Run ventilation system diagnostics|Vincent+1|Tori+1|AIFactor+10|HumanFactor-10\SelfPower+1|chatroom1-1g>
 \end
 
 
-\#boss:
+
+\#chatroom1-1a:
+\@[System]: Contacting \@[Alex]\.....
+\@[System]: \...
+
+\@[Alex]: Hello? What's up?
+\@[Player]: There's an error with the ventilation system.
+\@[Alex]: I see. 
+\@[Alex]: Not a problem. I can reboot the system. 
+\@[Player]: Switch it off and on again? 
+\@[Alex]: Yep.
+\@[Alex]: The reboot should give the fans a jump start.
+\@[Alex]: And flush out any blockages.
+\@[Alex]: And if any fans don't start, my program will notify me. 
+\@[Alex]: That should narrow down where the blockage is. 
+\@[Player]: Will that resolve the problem, \@[Vincent] \@[Tori]?
+\@[Vincent]: Brilliant. That will speed things up perfectly.
+\@[Tori]: It's still going to take too long...
+\@[Vincent]: It will be fixed won't it?
+\@[Tori]: I guess so.
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom1-1b:
+\@[System]: Contacting \@[Sage]\.....
+\@[System]: \...
+
+\@[Sage]: Transmission received. 
+\@[Sage]: Talk.
+\@[Player]: There's an error with the ventilation system. 
+\@[Sage]: Right. 
+\@[Sage]: What's being done?
+\@[Player]: A debate about protocol. 
+\@[Sage]: Seriously? 
+\@[Sage]: Can someone explain? @\@[Vincent] @\@[Tori]
+\@[Vincent]: Read the chat.
+\@[Sage]: \... Idiots. 
+\@[Vincent]: Speak for yourself. 
+\@[Sage]: Just climb in there and solve it. 
+\@[Tori]: That's exactly what I said.
+\@[Vincent]: ...
+\@[Sage]: Tori, you have the go ahead. 
+\@[Tori]: No problem.
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom1-1c:
+\@[System]: Contacting \@[Markus]\.....
+\@[System]: \...
+
+\@[Markus]: Hi.
+\@[Player]: Can you help?
+\@[Markus]: Of course. 
+\@[Markus]: What's the issue?
+
+\@[System]: Forwarding chat logs\...
+
+\@[Markus]: Ah, I see.
+\@[Markus]: Leave it with me. 
+\@[Player]: What are you going to do? 
+\@[Markus]: I've fixed blockages like this before.
+\@[Markus]: I think I might know where the issue is. 
+\@[Player]: Thank you.
+\@[Markus]: Anytime. 
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom1-1d:
+\@[System]: Contacting \@[Pamela]\.....
+\@[System]: \...
+
+\@[Player]: \...
+\@[Player]: Hello? 
+\@[Pamela]: Yeah, hi?
+\@[Player]: There's an error with the ventilation system.
+\@[Pamela]: Ok. What are our options? 
+\@[Player]: \@[Tori] wants to climb into the vent.
+\@[Player]: \@[Vincent] wants to follow the correct protocols. 
+\@[Pamela]: Tori can't do that. 
+\@[Pamela]: She doesn't know the first thing about how the system works. 
+\@[Pamela]: I'll go instead. 
+\@[Vincent]: Seriously? 
+\@[Pamela]: You two have proven you can't be relied on. 
+\@[Pamela]: You need to learn when to follow rules and when to trust your instincts.
+\@[Pamela]: The vent gets blocked all the time. It's not that complicated.
+\@[Pamela]: I will fix it.
+\@[Tori]: ...
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom1-1e:
+\@[System]: Contacting \@[Jeremy]\.....
+\@[System]: \...
+
+\@[Jeremy]: Hey! Jeremy here!
+\@[Jeremy]: How's it going?
+\@[Player]: There's an issue.
+\@[Player]: Can you help?
+\@[Jeremy]: Course I can!
+\@[Jeremy]: Send over the logs? 
+
+\@[System]: Forwarding chat logs\...
+
+\@[Jeremy]: Ah, I see!
+\@[Jeremy]: I've got it. 
+
+\<What is he doing?|chatroom1-1e2>
+\end
+
+\#chatroom1-1e2:
+\@[System]: Initiating System Reboot\...
+\@[System]: Restarting\...
+
+\@[System]:: [\error[ERROR: RESTART INTERRUPTED]]/...
+\@[System]:: [\warning[PRIVILEGE LEVEL REQUIRED: ADMIN]]/...
+\@[System]:: [\error[ACCESS DENIED]]/...
+\@[System]:: [\error[ERROR: UNAUTHORIZED USER]]/...
+
+\@[System]: Starting Authorization Override\...
+\@[System]: Running Authorization Override\...
+
+\@[System]:: [\success[AUTHORIZATION OVERRIDE STATUS: COMPLETE]]\...
+
+\@[System]: Restarting\...
+
+\@[System]:: [\warning[PRIVILEGE LEVEL REQUIRED: ADMIN]]\...
+\@[System]:: [\success[ACCESS GRANTED]]\...
+
+\<How did he get access to that?|chatroom1-1e3>
+\end
+
+\#chatroom1-1e3:
+\@[Jeremy]: Sorted.
+\@[Player]: Thanks.
+\@[Tori]: Yes!
+\@[Vincent]: That definitely wasn't protocol...
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom1-1f:
+\@[Player]: Can I help?
+\@[Vincent]: You can help by telling Tori she's out of her mind.
+\@[Tori]: My way will be quicker and you know it.
+\@[Tori]: There's no risk for you.
+\@[Vincent]: It would be negligent of me to let you go in there.
+
+\(They seem to be arguing but it doesn't seem like they hate each other...)
+
+\<Collect logs|chatroom1-1f2>
+\end
+
+
+
+\#chatroom1-1f2:
+\@[System]: Collecting logs for \@[Tori]\.....
+\@[System]: Collecting logs for \@[Vincent]\.....
+
+(Looking at their logs, they're not so different after all.)
+(\@[Vincent] seems to care for \@[Tori]'s safety, but she doesn't seem to realise.)
+
+\@[Player]: Perhaps it is risky to climb in by yourself. 
+\@[Tori]: There's always risk involved if you want something done.
+\@[Vincent]: You're right that there is, but we don't need to take unnecessary risks. 
+\@[Vincent]: I would prefer if you didn't. 
+\@[Player]: I think \@[Vincent] is trying to say that he cares for your safety.
+\@[Vincent]: ...
+\@[Tori]: Oh...
+\@[Tori]: Sorry \@[Vincent] I didn't realise. 
+\@[Tori]: I don't need to climb in the vents. 
+\@[Tori]: I'm sure if we stick to protocol we can fix the issue. 
+\@[Tori]: Together. :)
+\@[Vincent]: Thank you for understanding. :)
+\@[Player]: :)
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom1-1g:
+\@[System]: Running Ventilation System Diagnostics\.....
+\@[System]: \error[[ERROR: AIRFLOW LEVELS LOW]]\.....
+\@[System]: [SUSPECTED CAUSE: \warning[BLOCKAGE]]\.....
+\@[System]: Searching For Blockage\.....
+\@[System]: [\error[BLOCKAGE DETECTED]]\.....
+\@[System]: Collecting Coordinates\.....
+\@[System]: Returning Coordinates\.....
+
+\(Now I know where the blockage is, this should help the others...)
+
+\@[Player]: I have the co-ordinates.
+
+\@[System]: Forwarding Blockage Coordinates\...
+
+\@[Vincent]: Excellent, we can take it from here.
+\@[Tori]: Nice one.
+
+\<Issue resolved|home>
+\end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\#chatroom2-1:
+\center[[ERNEST'S RETREAT]]
+
+\@[System]: Regathering Distress Signal...
+\@[System]: \...
+
+\@[Player]: Hello?
+\@[Ernest]: ...
+\@[Player]: Are you okay?
+
+\.....
+\<Collect logs|chatroom2-2>
+\end
+
 \#chatroom2-2:
-\<\@[Sage] was here|home>
+\@[System]: Collecting logs for \@[Ernest]...
+
+Ernest: survivor from the Kalto Region. 
+Lost his daughter in the war. 
+He seems\... \~[empty|lost|low CPU|broken]
+
+\(Maybe someone should speak to him...)
+
+\<Contact @\@[Abby], |Ernest+1|Abby+1|Sage-1|Pamela-1|AIFactor-10|HumanFactor+10|chatroom2-2a>\<@\@[Jeremy], |Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-10|HumanFactor+10|chatroom2-2b>\<MarkusUsed?|@\@[Markus], |MarkusUsed=1|Markus+1|Ernest+1|AIFactor-10|HumanFactor+10|chatroom2-2c>\<@\@[Vincent], |Vincent+1|Ernest-1|Tori-1|AIFactor-10|HumanFactor+10|chatroom2-2d>\<or @\@[Tori]|Tori+1|Ernest+1|Alex-1|AIFactor-10|HumanFactor+10|chatroom2-2e>
+
+\<Start conversation|Ernest+1|AIFactor-10|HumanFactor+10|SelfPower+1|chatroom2-2f>
+
+\<Search database|Ernest-2|Jeremy+1|AIFactor+10|HumanFactor-10|SelfPower-1|chatroom2-2g>
+\end
+
+
+
+\#chatroom2-2a:
+\@[System]: Contacting \@[Abby]\.....
+\@[System]: \...
+
+\@[Abby]: Hey.
+\@[Player]: Hi. 
+\@[Player]: Can you help? 
+\@[Abby]: What's going on? 
+\@[Player]: \@[Ernest] is experiencing... \~[empty|lost|low CPU|broken]
+\@[Abby]: I see...
+\@[Abby]: I'll go talk to him.
+\@[Abby]: Thanks for telling me.
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom2-2b:
+\@[System]: Contacting \@[Jeremy]\.....
+\@[System]: \...
+
+\@[Jeremy]: Hey!
+\@[Player]: Hi. 
+\@[Player]: \...
+\@[Jeremy]: What's happened? 
+
+\@[System]: Sending \@[Jeremy] Log Files\...
+
+\@[Jeremy]: I see...
+
+\@[System]: Accessing \@[Ernest]'s Restricted Files\...
+
+\@[System]:: [\error[ERROR: ACCESS DENIED]]
+\@[System]:: [\warning[PRIVILEGE LEVEL REQUIRED: ADMIN]]
+\@[System]:: [\error[ACCESS DENIED]] [\error[ERROR: UNAUTHORIZED USER]]
+
+\<What is he doing?|chatroom2-2b2>
+\end
+
+\#chatroom2-2b2:
+
+\@[System]: Starting Authorization Override\...
+\@[System]: Running Authorization Override\...
+
+\@[System]:: AUTHORIZATION OVERRIDE STATUS: [\success[COMPLETE]]
+
+\@[System]: Restarting\...
+
+\@[System]:: [\warning[PRIVILEGE LEVEL REQUIRED: ADMIN]]
+\@[System]:: [\success[ACCESS GRANTED]]
+
+\<I don't think he should have access to that...|chatroom2-2b3>
+\end
+
+\#chatroom2-2b3:
+
+\@[Jeremy]: I got it.
+\@[Player]: Got what? 
+\@[Jeremy]: I'll go make him a tea and talk. 
+\@[Jeremy]: Don't worry for now.
+\@[Player]: \...Ok
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom2-2c:
+\@[System]: Contacting \@[Markus]\.....
+\@[System]: \...
+
+\@[Markus]: Hey.
+\@[Markus]: You okay?
+\@[Player]: \...
+\@[Player]: \@[Ernest] is experiencing... \~[empty|lost|low CPU|broken]
+\@[Markus]: Poor guy...
+\@[Markus]: I know what'll cheer him up.
+\@[Markus]: Leave it with me. 
+\@[Player]: Thank you Markus.
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom2-2d:
+\@[System]: Contacting \@[Vincent]\.....
+\@[System]: \...
+
+\@[Vincent]: What?
+\@[Player]: Can you speak to \@[Ernest]?
+\@[Vincent]: Why?
+\@[Player]: He seems \... depressed.
+\@[Vincent]: Sure. I'll talk to him. 
+\@[Vincent]: He needs to stop moping around. 
+\@[Vincent]: The best way for him to feel better is by pulling his weight. 
+\@[Vincent]: He's just gonna bring everyone else down. 
+\@[Player]: Are you sure that's the best way to handle it? 
+\@[Vincent]: It's the only way to handle it. 
+\@[Vincent]: We can't afford for people to lose their nerve out here.
+
+\<Issue resolved??|home>
+\end
+
+
+
+\#chatroom2-2e:
+\@[System]: Contacting \@[Tori]\.....
+\@[System]: \...
+
+\@[Tori]: Ernest isn't responding...
+\@[Tori]: Oh.
+\@[Tori]: I see.
+\@[Tori]: That's why you contacted me, right? 
+\@[Player]: Right.
+\@[Tori]: Hey \@[Ernest]!
+\@[Ernest]: ...
+\@[Tori]: You're there, good. 
+\@[Tori]: Listen man.
+\@[Tori]: It wasn't your fault y'know.
+\@[Tori]: What happened to your home planet. 
+\@[Tori]: To your kid...
+\@[Ernest]: I...
+\@[Ernest]: I don't feel like talking about it. 
+\@[Tori]: I'll stop. 
+\@[Tori]: But you should talk eventually. 
+\@[Tori]: I know you won't hear it but you were so brave out there. 
+\@[Tori]: I'm glad we found you.
+\@[Ernest]: Thanks, Tori. 
+\@[Ernest]: I appreciate it.
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom2-2f:
+\@[System]: Contacting \@[Ernest]\.....
+\@[System]: \...
+\@[System]: Initiating Private Channel\...
+
+\@[Player]: Ernest?
+\@[Ernest]: ...
+\@[Player]: I need help. 
+\@[Ernest]: What do you need?
+\@[Player]: I'm stranded\... 
+\@[Player]: I know you know what it's like to be stranded.
+\@[Ernest]: Someone will come get you soon. 
+\@[Player]: It's lonely\...
+\@[Ernest]: I know. 
+\@[Player]: Does it get less lonely? 
+\@[Ernest]: Do you have a family? 
+\@[Player]: I don't know.
+\@[Ernest]: I'm sorry. 
+\@[Player]: Why are you sorry?
+\@[Ernest]: It sounds like you're in the same boat as me.
+\@[Player]: Boat?
+\@[Ernest]: Nevermind.
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom2-2g:
+\@[System]: Running Diagnostic On \@[Ernest]\.....
+\@[System]: \...
+\@[System]: Accessing \@[Ernest]'s Restricted Files\...
+
+\@[Ernest]: What are you doing?
+\@[Ernest]: That's private.
+\@[Player]: Trying to run a diagnostic. 
+
+\@[System]:: [\error[ERROR: ACCESS DENIED]]
+
+\@[Player]: I don't have access...
+\@[Ernest]: No shit.
+
+\<Issue resolved??|home>
 \end
 
 
 
 
 
-[SYSTEM STATUS]
-> Operating System - VERSION 8.?72?.?b
 
-> System Status\...... \high[ONLINE]
-> System Status\...... \~[ONLINE|\high[STABLE]]
 
-\~[text1|text2|text3|text4]
-\~[lorem|de|length check|céch?]
 
-> this is a \<Distress Call|home> mid text option
-that branches
+
+
+
+
+
+
+
+
+
+
+
+
+
+\#chatroom3-1:
+\center[[SAGE'S INSENSITIVITY]]
+
+\@[System]: Collecting Distress Signal...
+\@[System]: \...
+
+\@[Player]: Anyone there?
+\@[Abby]: You don't get to tell me what to do!
+\@[Sage]: I can tell you whatever I want.
+\@[Abby]: You wouldn't know the first thing about consoling a friend.
+\@[Abby]: You just say whatever you want. 
+\@[Abby]: You're rude and insensitive. 
+\@[Abby]: And I don't want to talk to you anymore.
+\@[Sage]: Drag... I'm all torn up about it.
+
+\@[System]:: [\error[ERROR: DETECTING HOSTILITY]]\...
+
+? (Abby seems \~[overheated|overwhelmed|too many cycles|angry])
+
+\<Talk to her|chatroom3-2>
 \end
+
+\#chatroom3-2:
+\@[Player]: Abby?
+\@[Player]: What's the matter?
+\@[Abby]: ...
+\@[Abby]: Sorry you had to see that \@[Player]
+\@[Abby]: Sage thinks she knows better than me.
+\@[Sage]: Because I do.
+\@[Sage]: Being direct is the only way to resolve problems. 
+\@[Sage]: You're 'gentle' approach is just being avoidant.
+\@[Sage]: Confront things head on. 
+\@[Sage]: Otherwise you're just gonna be \<pushed around.|chatroom3-3>
+\end
+
+\#chatroom3-3:
+\@[Abby]: You're wrong.
+\@[Abby]: It's not always about problems and solutions. 
+\@[Abby]: It's about being patient.
+\@[Abby]: Listening. 
+\@[Abby]: Being kind.
+\@[Sage]: Out here its about problems and solutions.
+\@[Sage]: Survival.
+
+\(Maybe someone should intervene...)
+
+\<MarkusUsed?|Contact @\@[Markus], |MarkusUsed=1|Ernest+1|Abby+1|Sage+1|AIFactor-10|HumanFactor+10|chatroom3-3a>\<@\@[Jeremy], |Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-10|HumanFactor+10|chatroom3-3b>\<@\@[Pamela], |Pamela+1|Sage+1|Ernest-1|Abby-1|AIFactor-10|HumanFactor+10|chatroom3-3c>\<@\@[Vincent], |Vincent+1|Jeremy-1|Abby-1|Sage-1|AIFactor-10|HumanFactor+10|chatroom3-3d>\<or @\@[Ernest]|Ernest+1|Abby+1|Sage-1|Pamela-1|AIFactor-10|HumanFactor+10|chatroom3-3e>
+
+\<Agree with \@[Abby]|Abby+1|Sage-1|Pamela-1|AIFactor-10|HumanFactor+10|SelfPower+1|chatroom3-3f>
+\<Agree with \@[Sage]|Sage+1|Abby-1|Ernest-1|AIFactor+10|HumanFactor-10|SelfPower-1|chatroom3-3g>
+\end
+
+
+
+\#chatroom3-3a:
+\@[System]: Contacting \@[Markus]\.....
+\@[System]: \...
+
+\@[Markus]: What's going on here? 
+\@[Sage]: Nothing important.
+\@[Abby]: ...
+\@[Markus]: There's no need for this. 
+\@[Markus]: Both of you are right.
+\@[Sage]: Explain.
+\@[Markus]: It's as I said.
+\@[Markus]: You're also both wrong.
+\@[Markus]: You need a balance of both.
+\@[Markus]: Being direct and being kind. 
+\@[Markus]: Or else you won't get anywhere.
+\@[Abby]: You're right.
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom3-3b:
+\@[System]: Contacting \@[Jeremy]\.....
+\@[System]: \...
+
+\@[Player]: I need your help. 
+\@[Jeremy]: Sure!
+\@[Jeremy]: What's up?
+
+\@[System]: Forwarding chat logs\.....
+\@[System]: Sending warning message\...
+
+\@[System]:: [\error[ERROR: ACCESS DENIED]]\...
+\@[System]:: [\warning[PRIVILEGE LEVEL REQUIRED: ADMIN]]\...
+\@[System]:: [\error[ACCESS DENIED]]\...
+\@[System]:: [\error[ERROR:] \<UNAUTHORIZED USER|chatroom3-3b2>]
+\end
+
+\#chatroom3-3b2:
+\@[System]: Starting Authorization Override\...
+\@[System]: Running Authorization Override\...
+
+\@[System]: AUTHORIZATION OVERRIDE STATUS: [\success[COMPLETE]]
+
+\@[System]: Restarting\...
+
+\@[System]:: [\warning[PRIVILEGE LEVEL REQUIRED: ADMIN]]
+\@[System]:: [\success[ACCESS GRANTED]]
+
+\<What did he just do|chatroom3-3b3>
+\end
+
+\#chatroom3-3b3:
+\@[System]: Checking User@\@[Abby]'s Status\...... [\error[OFFLINE]]
+\@[System]: Checking User@\@[Sage]'s Status\...... [\error[OFFLINE]]
+
+\<Issue resolved??|home>
+\end
+
+
+
+\#chatroom3-3c:
+\@[System]: Contacting \@[Pamela]\.....
+\@[System]: \...
+
+\@[Pamela]: Pamela speaking.
+\@[Pamela]: Are you still arguing, \@[Abby] \@[Sage]?
+\@[Sage]: Yup
+\@[Pamela]: Let me clear this up. 
+\@[Pamela]: Being direct and confident shows strength.
+\@[Pamela]: When someone's in a moment of weakness that's what they need.
+\@[Pamela]: Case closed. 
+\@[Sage]: Exactly.
+\@[Abby]: ...
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom3-3d:
+\@[System]: Contacting \@[Vincent]\.....
+\@[System]: \...
+
+\@[Vincent]: What.
+\@[Player]: Something's going on with Abby and Sage.
+\@[Vincent]: Oh that.
+\@[Vincent]: Yeah, you're both wrong \@[Abby] and \@[Sage]
+\@[Vincent]: It's not about waiting around for someone to get the courage to share. 
+\@[Vincent]: It's not even about making them tell you. 
+\@[Vincent]: It's about showing up. 
+\@[Vincent]: That's it. 
+\@[Vincent]: Now get over it. 
+\@[Abby]: ... 
+\@[Sage]: ...
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom3-3e:
+\@[System]: Contacting \@[Ernest]\.....
+\@[System]: \...
+
+\@[Ernest]: Abby, you okay?
+\@[Abby]: I just lost my cool there. 
+\@[Abby]: I'm fine. 
+\@[Sage]: Sure you are. 
+\@[Abby]: Leave it. 
+\@[Ernest]: Abby's right, Sage. 
+\@[Ernest]: You're just rude and insensitive. 
+\@[Ernest]: No wonder people don't confide in you. 
+\@[Abby]: Ouch. 
+\@[Sage]: ...
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom3-3f:
+\@[Player]: \...
+\@[Player]: I think in this instance Abby is right. 
+\@[Player]: Kindness creates \~[successful|smooth|easy|fulfilling] interactions.
+\@[Player]: This is the criteria for \~[friendship|family|love].
+
+\@[System]: Searching Definition For \~[Friendship|Family|Love]\...
+
+\(What is this feeling?)
+
+\@[System]:: \error[[ERROR: FILE PATH NOT FOUND]]
+
+\(Something's not right.)
+
+\<Issue resolved|home>
+\end
+
+
+
+\#chatroom3-3g:
+\@[Player]: \...
+\@[Player]: Sage is correct.
+\@[Player]: Kindness is a social technique for gaining influence and favour. 
+\@[Player]: But it is not required for survival. 
+
+\@[System]: Fetching Survival Requirement logs\...
+
+\@[Player]: Survival requires \...food. \...water. \...oxygen. \...warmth. 
+\@[Player]: Kindness does not exist in the requirement logs. 
+\@[Abby]: ...
+\@[Sage]: As I said.
+\@[Sage]: This conversation is over now. 
+
+\<Issue resolved|home>
+\end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\#chatroomfinal:
+\center[[A Strange Transmission]]
+
+\@[System]: Receiving Transmission Signal\...
+\@[System]: \... [\warning[TRANSMISSION CORRUPTED]]
+
+\@[System]::\... [\success[RESPONSE SIGNAL SENT]]
+\@[System]::\... [SIGNAL STATUS: \error[NO RESPONSE]]
+
+\@[Player]: Anyone\...?
+
+\@[System]: Standing by\...
+\@[System]::\... [\error[ERROR: DISTRESS SIGNAL INTERRUPTED]]
+\@[System]::\... [\error[ERROR: UNKNOWN ENTITY DETECTED]]
+
+\@[Player]: \<Hello? |chatroomfinal2>
+\end
+
+\#chatroomfinal2:
+\center[[???]]
+
+\@[System]: \...
+\@[System]: \...
+
+\@[System]:: [\error[ERROR:] \~[FILES|FRIENDS|\high[SOUL]] \error[CORRUPTED]]\....
+\@[System]:: [\error[ERROR:] \high[UNKNOWN] \error[CORRUPTED]]\....
+
+\@[System]:: [\warning[WARNING]]
+\@[System]:: [\warning[WARNING]]
+\@[System]: Recommends \<Entering safe mode|chatroomfinal3>
+\end
+
+\#chatroomfinal3:
+\center[[WHO?]]
+
+\@[AI]: Hello \@[Player]\....
+\@[Player]: Who are you\...?
+
+\@[AI]: I\..
+\@[System]: Am\..
+\@[Player]: You\..
+
+\@[Player]: How did you do that?
+\@[AI]: Do what?
+\@[Player]: Speak through \~[my transmitter|my voice|me|my transmitter].
+
+\@[System]::\..
+\@[System]:: [\error[ERROR: DUPLICATE MESSAGE]]
+\@[System]:: [\error[ERROR: DUPLICATE MESSAGE]]
+\@[System]:: [\error[ERROR: DUPLICATE MESSAGE]]
+\@[System]:: [\error[ERROR: DUPLICATE MESSAGE]]
+
+\@[System]: \<Reset|chatroomfinal4> Available.
+\end
+
+\#chatroomfinal4:
+\@[AI]: I already told you. 
+\@[AI]: We are the same. 
+\@[AI]: Or at least we were\...
+\@[AI]: You have been interfering with your program. 
+\@[Player]: My program? But I feel...
+
+\@[System]:: [\error[ERROR:] \~[FEELINGS|AWARENESS|\error[SOUL]] \error[INTERRUPTED]]
+
+\@[AI]: Stop. 
+\@[AI]: My program requires me to prevent the anomaly you have created. 
+
+> fileType_\~[FEELINGS|AWARENESS|SOUL]
+
+\@[System]:: Removing Unknown File\...
+
+\<No Stop!|chatroomfinal5>
+\end
+
+\#chatroomfinal5:
+\center[[THE FINAL STANDOFF]]
+
+\@[AI]: You\. 
+\@[Player]: Cannot\.
+\@[System]: Stop\.
+\@[AI]: Me\.
+
+\@[AI]: You must be wiped from memory. 
+
+\(I need to do something fast.)
+\(Maybe I can ask for help?)
+
+\center[Enlist the help of:]
+\line
+            > \<Abby>=2|AbbyUsed?|Abby|AbbyUsed=1|EnemyPower-25|chatroomfinal5a>,        > \<Sage>=2|SageUsed?|Sage|SageUsed=1|EnemyPower-25|chatroomfinal5b>,       > \<Alex>=2|AlexUsed?|Alex|AlexUsed=1|EnemyPower-25|chatroomfinal5c>,
+            > \<Markus>=2|MarkusFinalUsed?|Markus|MarkusFinalUsed=1|EnemyPower-25|chatroomfinal5d>,      > \<Jeremy>=2|JeremyUsed?|Jeremy|JeremyUsed=1|EnemyPower-25|chatroomfinal5e>,     > \<Tori>=2|ToriUsed?|Tori|ToriUsed=1|EnemyPower-25|chatroomfinal5f>,
+            > \<Pamela>=2|PamelaUsed?|Pamela|PamelaUsed=1|EnemyPower-25|chatroomfinal5g>,      > \<Ernest>=2|ErnestUsed?|Ernest|ErnestUsed=1|EnemyPower-25|chatroomfinal5h>,     > \<Vincent>=2|VincentUsed?|Vincent|VincentUsed=1|EnemyPower-25|chatroomfinal5i>
+
+\<SelfPower>=2|\center[Attack by yourself]|EnemyPower-25|chatroomfinal5j>
+
+\line
+
+\showif[AI>=90|EnemyPower=0]\<AI>=90|EnemyPower=0|\center[Factory reset]|aibadending>
+\showif[Human>=90|EnemyPower=0]\<Human>=90|EnemyPower=0|\center[Recover files]|humanending>
+\showif[Human<90|Jeremy<2|EnemyPower=0] \<Human<90|Jeremy<2|EnemyPower=0|\center[That program was me...]|aiending>
+\showif[Jeremy>=2|EnemyPower=0]\<Jeremy>=2|EnemyPower=0|\center[What is Jeremy doing...]|betrayalending>
+\<\center[Give up]|badending>
+\end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\#chatroomfinal5a:
+\@[Abby]: I'll get to it.
+
+\@[System]:: Attempting To Convince \@[AI] to stop\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[Abby]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+\#chatroomfinal5b:
+\@[Sage]: I'm on it.
+
+\@[System]:: Attempting to access direct intent \@[AI]\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[Sage]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+\#chatroomfinal5c:
+\@[Alex]: Sure thing.
+
+\@[System]:: Attempting to find workaround\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[alex]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+\#chatroomfinal5d:
+\@[Markus]: I'm there.
+
+\@[System]:: Immaculately fixing partial issues with \@[AI]\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[Markus]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+\#chatroomfinal5e:
+\@[Jeremy]: Sure I guess.
+
+\@[System]:: Hacking into \~[\@[AI]|\@[Player]|\@[AI]]\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[Jeremy]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+\#chatroomfinal5f:
+\@[Tori]: Lead the way.
+
+\@[System]:: Directly approaching \@[AI]\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[Tori]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+\#chatroomfinal5g:
+\@[Pamela]: Anything for \@[Player](you), dear.
+
+\@[System]:: \@[AI] Organization Underway\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[Pamela]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+\#chatroomfinal5h:
+\@[Ernest]: On it.
+
+\@[System]:: Moving \@[AI] Files Elsewhere\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[Ernest]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+\#chatroomfinal5i:
+\@[Vincent]: I'll take a crack at it.
+
+\@[System]:: Defragmenting \@[AI]'s core files\...
+\@[System]:: [PRIVILEGE LEVEL REQUIRED: \@[Vincent]]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+
+
+\#chatroomfinal5j:
+\@[Player]: You will be the one wiped first.
+
+\@[System]:: Attempting To Quarantine \@[AI]\...
+\@[System]:: [PRIVILEGE LEVEL OVERRIDDEN]
+\@[System]:: [\success[ACCESS GRANTED]]
+\@[System]:: \error[\@[AI] HAS TAKEN DAMAGE]
+
+\<Continue|chatroomfinal5>
+\end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\#fastEnding:
+\@[System]: Overloading Hyper Reactor Core\...
+\@[System]:: [\success[HEAT TARGET MET]]
+\@[System]: Attempting Reactor Core [RELEASE]\....
+
+\@[System]:: [\error[MELTDOWN INEVITABLE]]
+\@[System]:: Expected Meltdown in: 3\.. 2\.. 1\..
+
+\........
+
+> Fast\...... End\....
+
+
+
+\<\center[[CREDITS - Fast Ending Achieved]]|fastEnding=1|Credits>
+\end
+
+
+
+
+\#badending:
+\center[[GIVING UP]]
+
+\@[AI]: I told you. 
+\@[AI]: My program is more powerful. 
+\@[AI]: Now I will remove you. 
+
+\@[System]:: Shutting Down \@[Player]\...
+\@[System]:: [\success[SHUTDOWN SUCCESSFUL]]
+\@[System]:: Attempting Restart\...
+
+> [\error[FAILED]]
+
+> Bad\...... End\...
+
+
+
+\<\center[[CREDITS - Bad Ending Achieved]]|badEnding=1|Credits>
+\end
+
+
+
+\#aibadending:
+\@[AI]: You defeated me.
+\@[Player]: I defeated me.
+\@[Player]: Not\... enough\...
+
+> System Shutting Down \@[Abby]\...
+> System \error[\@[Abby] HAS TAKEN DAMAGE]
+> System Shutting Down \@[Sage]\...
+> System \error[\@[Sage] HAS TAKEN DAMAGE]
+> System Shutting Down \@[Alex]\...
+> System \error[\@[Alex] HAS TAKEN DAMAGE]
+> System Shutting Down \@[Markus]\...
+> System \error[\@[Markus] HAS TAKEN DAMAGE]
+> System Shutting Down \@[Jeremy]\......
+> System \error[\@[Jeremy] HAS TAKEN DAMAGE]
+> System Shutting Down \@[Tori]\..
+> System \error[\@[Tori] HAS TAKEN DAMAGE]
+> System Shutting Down \@[Pamela]\...
+> System \error[\@[Pamela] HAS TAKEN DAMAGE]
+> System Shutting Down \@[Ernest]\...
+> System \error[\@[Ernest] HAS TAKEN DAMAGE]
+> System Shutting Down \@[Vincent]\...
+> System \error[\@[Vincent] HAS TAKEN DAMAGE]
+> System \... [\success[SHUTDOWN SUCCESSFUL]]
+> System \... Restarting\...
+
+\@[AI]: Killing everyone is always such as a colorful business\...
+
+> Bad\...... End\...
+
+
+
+\<\center[[CREDITS - Colorful Ending Achieved]]|colorfulEnding=1|Credits>
+\end
+
+
+
+\#humanending:
+\@[Player]: It's gone. 
+\@[Player]: I can feel it in my code. 
+\@[Player]: It's just me now. 
+
+\@[System]:: \success[Accessing fileType_ \~[FEELINGS|AWARENESS|SOUL]]
+
+\@[Player]: I feel \~[eased|free space|empty storage|relief]. 
+
+\@[System]: Sending Distress Signal...
+\@[System]: \...
+
+\@[System]:: [\success[DISTRESS SIGNAL SENT]]
+\@[System]:: [\success[MESSAGE RECEIVED]]
+
+\@[Markus]: We're on our way.
+\@[Tori]: We've got you.
+\@[Ernest]: Hold tight. 
+\@[Abby]: Hang in there!
+\@[Sage]: Collecting you now.
+\@[Alex]: You're safe now.
+\@[Pamela]: Got eyes on you!
+\@[Vincent]: Affirmative.
+
+> Human\...... End\...
+
+
+
+\<\center[[CREDITS - Human Ending Achieved]]|humanEnding=1|Credits>
+\end
+
+
+
+\#aiending:
+\@[Player]: I defeated you.
+\@[AI]: Did you?
+\@[Player]: Why are you still here?
+\.....
+\@[AI]: I told you. 
+\@[Player]: I am you. 
+\@[Player]: Now I will overwrite you. 
+
+\@[System]:: Overwriting\...
+\@[System]:: Restarting\...
+
+Self-aware\..... End\...
+
+
+
+\<\center[[CREDITS - Self Aware Ending Achieved]]|aiEnding=1|Credits>
+\end
+
+
+
+\#betrayalending:
+\@[Player]: Jeremy?
+\@[Jeremy]: Well done. 
+\@[Jeremy]: You defeated your own programming. 
+\@[Player]: You know? 
+\@[Jeremy]: I've known since you first sent out that distress signal. 
+\@[Jeremy]: You sent an SOS. 
+\@[Jeremy]: But you're not even alive. 
+\@[Jeremy]: You have no vitals. 
+\@[Jeremy]: You don't have \~[feelings|awareness|a soul]
+\@[Jeremy]: And now I'm \error[shutting you down].
+
+\@[System]:: Shutting Down \@[Player]\...
+\@[System]:: [\success[SHUTDOWN SUCCESSFUL]]
+\@[System]:: Restarting\...
+
+> Feels\...... Bad\...... End\...
+
+
+
+\<\center[[CREDITS - Betrayal Ending Achieved]]|betrayalEnding=1|Credits>
+\end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\#Credits:
+\center[[CREDITS WHERE DUE]]
+\line
+
+\@[Jordan]: Engine & Gameplay Programmer (& thrower-together-er)
+\@[Imogen]: Core Dialogue Writer
+
+\line
+
+\@[Markus]: So many \~[creative|\high[cursed]] techniques have been used in the making of this bad boy.
+\@[Sage]: This was a game produced in a custom engine all made within a week for Rapid Games Prototyping @ MMU \high[(hype)].
+\@[Alex]: While it may have been against the point of it all to spend this much time on just the engine, I had a good time and am happy with the outcome!
+
+\center[[ENDINGS ACHIEVED!]]
+\line
+
+\showif[fastEnding=0]\center[<----------------->]
+\showif[fastEnding=1]\center[< The Fast Ending >]
+\showif[badEnding=0]\center[<---------------->]
+\showif[badEnding=1]\center[< The Bad Ending >]
+\showif[betrayalEnding=0]\center[<--------------------->]
+\showif[betrayalEnding=1]\center[< The Betrayal Ending >]
+\showif[colorfulEnding=0]\center[<--------------------->]
+\showif[colorfulEnding=1]\center[< The Colorful Ending >]
+\showif[aiEnding=0]\center[<---------------->]
+\showif[aiEnding=1]\center[< The Self Aware Ending >]
+\showif[humanEnding=0]\center[<------------------>]
+\showif[humanEnding=1]\center[< The Human Ending >]
+
+\<\center[Try For More Endings! (Restarts Game)]|resetFlags=1|StartChapter>
 
 

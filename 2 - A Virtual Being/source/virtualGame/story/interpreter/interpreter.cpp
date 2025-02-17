@@ -5,7 +5,7 @@
 
 StoryInterpreter::StoryInterpreter() :
 	m_characters(), m_flags(),
-	m_currentLine(0),
+	m_currentLine(1),
 	m_lines(), m_activeLines(),
 	m_drawLine(0), m_drawCharacter(0), m_delay(0),
 	m_lastGoto(""), m_relativeScale(1.0f),
@@ -26,9 +26,10 @@ StoryInterpreter::StoryInterpreter() :
 	addCharacter(Character("Abby", Vector3(255, 153, 153) / 255.0f));
 	addCharacter(Character("Vincent", Vector3(136, 17, 255) / 255.0f));
 
-	setFlag("AIFactor", 50);
-	setFlag("HumanFactor", 50);
-	setFlag("EnemyPower", 100);
+	addCharacter(Character("Jordan", Vector3(51, 0, 238) / 255.0f));
+	addCharacter(Character("Imogen", Vector3(255, 119, 170) / 255.0f));
+
+	setFlag("resetFlags", 1);
 }
 StoryInterpreter::~StoryInterpreter() {}
 
@@ -56,6 +57,21 @@ void StoryInterpreter::addCharacter(const Character& character) {
 	m_characters.emplace_back(character);
 }
 void StoryInterpreter::setFlag(const String& flagName, const int flagValue) {
+	if (flagName == "resetFlags") {
+		for (auto it = m_flags.begin(); it != m_flags.end();) {
+			if (it->first.size() >= 6 && it->first.substr(it->first.size() - 6) == "Ending") {
+				it++;
+				continue;
+			}
+			it = m_flags.erase(it);
+		}
+
+		setFlag("AIFactor", 50);
+		setFlag("HumanFactor", 50);
+		setFlag("EnemyPower", 100);
+		return;
+	}
+
 	auto it = m_flags.find(flagName);
 	if (it != m_flags.end())
 		m_flags.erase(it);
@@ -72,7 +88,7 @@ void StoryInterpreter::process() {
 
 	if (m_activeLines.size() <= 0) {
 		while (m_currentLine < m_lines.size() && m_lines[m_currentLine] != "\\end") {
-			printf("[%zu] %s\n", m_lines[m_currentLine].size(), m_lines[m_currentLine].c_str());
+			// printf("[%zu] %s\n", m_lines[m_currentLine].size(), m_lines[m_currentLine].c_str());
 			m_activeLines.emplace_back(m_lines[m_currentLine]);
 			m_currentLine++;
 		}
@@ -85,13 +101,18 @@ void StoryInterpreter::process() {
 		std::vector<int> lineEquivalent;
 		lineEquivalent.reserve(line.size());
 
+		bool hiddenLine = false;
+
 		DrawInformation drawInformation;
 		int lineSelectableOffset = 0;
-		for (int j = 0; j < line.size(); j++) {
+		for (int j = 0; j < line.size() && !hiddenLine; j++) {
 			String newLine = line.substr(j);
 			const size_t newLineLength = newLine.size();
 
+			drawInformation.hide = false;
 			if (!resolveSpecial(newLine, drawInformation)) {
+				if (drawInformation.hide)
+					hiddenLine = true;
 				lineEquivalent.push_back(j + lineSelectableOffset);
 				continue;
 			}
@@ -101,7 +122,7 @@ void StoryInterpreter::process() {
 			j--;
 		}
 
-		if (m_drawCharacter < line.size()) {
+		if (m_drawCharacter < line.size() && !hiddenLine) {
 			if (line[m_drawCharacter] == '.') {
 				for (int i = lineEquivalent[m_drawCharacter]; i >= 0; i--) {
 					if (m_activeLines[m_drawLine][i] == '.')
@@ -116,15 +137,16 @@ void StoryInterpreter::process() {
 		} else {
 			m_drawCharacter = 0;
 			m_drawLine++;
+			m_delay = 0.1f;
 		}
 	}
 	if (m_delay <= 0)
-		m_delay = 0.01f;
+		m_delay = 0.008f;
 }
 
 static const float spacing = 1.2f;
 static const float lineSpacing = 1.5f;
-static const float scale = 17.5f;
+static const float scale = 15.5f;
 static const Vector3 offset(50.0f, 50.0f, 0.0f);
 
 static const int maxLineWidth =
@@ -157,6 +179,7 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 				.canSplit = false,
 			});
 
+		bool skipDraw = false;
 		for (int j = 0; j < line.size(); j++) {
 			String newLine = line.substr(j);
 			const int newLineLength = newLine.size();
@@ -167,22 +190,44 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 				.enabled = false,
 				.errorOccurred = false,
 				.colorWholeLine = false,
+				.hide = false,
 			};
 			const bool special = resolveSpecial(newLine, drawInformation);
 			if (drawInformation.colorWholeLine)
 				defaultColor = drawInformation.color;
+			if (drawInformation.hide) {
+				if (j == 0)
+					skipDraw = true;
+				else
+					line = line.substr(0, j);
+				break;
+			};
+
+			if (special) {
+				line = line.substr(0, j) + newLine;
+				const int lineSelectableOffset = ((int)newLineLength - (int)newLine.size());
+				if (lineSelectableOffset > 0) {
+					// Smaller -> Remove elements.
+					for (int i = 0; i < lineSelectableOffset; i++)
+						lineSections.erase(lineSections.begin() + j + drawInformation.specialCount);
+				} else if (lineSelectableOffset < 0) {
+					// Bigger -> Add elements.
+					for (int i = 0; i < -lineSelectableOffset; i++)
+						lineSections.insert(lineSections.begin() + j + 1, lineSections[j]);
+				}
+			}
 
 			if (drawInformation.specialCount > 0) {
 				for (int i = 0; i < drawInformation.specialCount; i++) {
 					const int index = j + i;
 					lineSections[index].color = drawInformation.color;
-
 					lineSections[index].originalLine = lineSections[j].originalLine;
-					lineSections[index].enabled |= drawInformation.enabled;
 					lineSections[index].errorOccurred |= drawInformation.errorOccurred;
 
-					if (lineSections[index].group == -1)
+					if (lineSections[index].group == -1 || (!lineSections[index].enabled && drawInformation.enabled))
 						lineSections[index].group = activeLineGroup;
+
+					lineSections[index].enabled |= drawInformation.enabled;
 				}
 				activeLineGroup++;
 			} else {
@@ -190,23 +235,12 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 					lineSections[j].color = drawInformation.color;
 			}
 
-			if (!special)
-				continue;
-
-			line = line.substr(0, j) + newLine;
-			const int lineSelectableOffset = ((int)newLineLength - (int)newLine.size());
-			if (lineSelectableOffset > 0) {
-				// Smaller -> Remove elements.
-				for (int i = 0; i < lineSelectableOffset; i++)
-					lineSections.erase(lineSections.begin() + j + drawInformation.specialCount);
-			} else if (lineSelectableOffset < 0) {
-				// Bigger -> Add elements.
-				for (int i = 0; i < -lineSelectableOffset; i++)
-					lineSections.insert(lineSections.begin() + j + 1, lineSections[j]);
+			if (special) {
+				j--;
 			}
-
-			j--;
 		}
+		if (skipDraw)
+			continue;
 
 		for (int i = 0; i < line.size() && i < lineSections.size(); i++) {
 			if (lineSections[i].group != -1 || line[i] != ' ')
@@ -224,7 +258,6 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 		// for (int i = 0; i < line.size(); i++)
 		// 	printf("%i", (int)(lineSections[i].color.y() * 9));
 		// printf("\n");
-		// exit(0);
 
 		struct DrawLine {
 			String line;
@@ -289,7 +322,8 @@ void StoryInterpreter::draw(Renderer& renderer, TextRenderer& textRenderer) {
 			});
 		}
 
-		const int maxDrawCharacters = (lineIndex == m_drawLine) ? m_drawCharacter : 99652;
+		const int maxDrawCharacters =
+			(lineIndex == m_drawLine) ? (m_drawCharacter + ((drawLines.size() - 1) * textOffset)) : 99652;
 
 		for (int i = 0, remainingCharacters = maxDrawCharacters; i < drawLines.size() && m_interactingGroup == -1 && remainingCharacters > 0; i++) {
 			for (int j = 0; j < drawLines[i].line.size() && j < drawLines[i].sections.size() && remainingCharacters > 0; j++) {
@@ -386,14 +420,29 @@ void StoryInterpreter::processInput() {
 		readFile();
 		if (!gotoLine(m_lastGoto)) {
 			m_activeLines.clear();
-			m_currentLine = 0;
+			m_currentLine = 1;
 		}
 		m_inputCooldown = 1.0f;
+	}
+	if (Input::s_input->isKeyUp(GLFW_KEY_F2)) {
+		readFile();
+
+		int lastIndex = getGotoLine(m_lastGoto);
+		if (lastIndex == -1)
+			lastIndex = 0;
+
+		while (++lastIndex < m_lines.size()) {
+			if (m_lines[lastIndex].substr(0, 2) == "\\#") {
+				gotoLine(m_lines[lastIndex].substr(2, m_lines[lastIndex].size() - 3));
+				m_inputCooldown = 0.5f;
+				break;
+			}
+		}
 	}
 	if (Input::s_input->isKeyUp(GLFW_KEY_F5)) {
 		readFile();
 		m_activeLines.clear();
-		m_currentLine = 0;
+		m_currentLine = 1;
 		m_inputCooldown = 1.0f;
 	}
 }
@@ -521,6 +570,57 @@ const bool StoryInterpreter::resolveSpecial(String& input, DrawInformation& draw
 
 		return true;
 	}
+	if (input.substr(0, 2) == "\\(") {
+		input = input.substr(2);
+
+		int i = 0;
+		for (; i < input.size() && input[i] != ')'; i++) {
+		}
+		if (i >= input.size() || input[i] != ')')
+			return false;
+
+		const String thought = input.substr(0, i);
+
+		input = "? (" + thought + ")" + input.substr(i + 1);
+		drawInformation.color = Vector3(255, 221, 238) / 255.0f;
+		drawInformation.specialCount = thought.size() + 2 + 2;
+		return true;
+	}
+
+	if (input.substr(0, 8) == "\\showif[") {
+		input = input.substr(8);
+
+		std::vector<String> commands;
+
+		int i = 0, j = 0;
+		for (; i < input.size() && input[i] != ']'; i++) {
+			if (input[i] == '|') {
+				commands.push_back(input.substr(j, i - j));
+				j = i + 1;
+			}
+		}
+		if (i < input.size() && input[i] == ']') {
+			commands.push_back(input.substr(j, i - j));
+		} else {
+			return false;
+		}
+		bool passesAllConditions = true;
+		for (size_t k = 0; k < commands.size() && passesAllConditions; k++) {
+			if (!isCharacterCondition(commands[k]))
+				return false;
+
+			if (!characterConditionMet(commands[k]))
+				passesAllConditions = false;
+		}
+
+		if (passesAllConditions) {
+			input = input.substr(i + 1);
+			return true;
+		}
+
+		drawInformation.hide = true;
+		return false;
+	}
 	if (input.substr(0, 14) == "\\relationship[") {
 		input = input.substr(14);
 
@@ -561,7 +661,7 @@ const bool StoryInterpreter::resolveSpecial(String& input, DrawInformation& draw
 			output = " " + output;
 
 		input = output + input.substr(i + 1);
-		drawInformation.specialCount = output.size() - 1;
+		drawInformation.specialCount = output.size();
 		drawInformation.color = Vector3(1.0f, 1.0f, 1.0f);
 		return true;
 	}
@@ -572,7 +672,7 @@ const bool StoryInterpreter::resolveSpecial(String& input, DrawInformation& draw
 		std::vector<String> commands;
 
 		int i = 0, j = 0;
-		for (; i < input.size() && (input[i] != '>' || (i + 1 < input.size() && input[i + 1] != ' ')); i++) {
+		for (; i < input.size() && (input[i] != '>' || (i + 1 < input.size() && (('0' <= input[i + 1] && input[i + 1] <= '9') || input[i + 1] == '='))); i++) {
 			if (input[i] == '|') {
 				commands.push_back(input.substr(j, i - j));
 				j = i + 1;
@@ -695,7 +795,8 @@ const bool StoryInterpreter::handleInteraction(String& input) {
 		std::vector<String> commands;
 
 		int i = 0, j = 0;
-		for (; i < input.size() && (input[i] != '>' || (i + 1 < input.size() && input[i + 1] != ' ')); i++) {
+		// for (; i < input.size() && (input[i] != '>' || (i + 1 < input.size() && input[i + 1] != ' ')); i++) {
+		for (; i < input.size() && (input[i] != '>' || (i + 1 < input.size() && (('0' <= input[i + 1] && input[i + 1] <= '9') || input[i + 1] == '='))); i++) {
 			if (input[i] == '|') {
 				commands.push_back(input.substr(j, i - j));
 				j = i + 1;

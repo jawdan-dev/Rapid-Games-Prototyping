@@ -37,6 +37,7 @@ private:
 		bool enabled;
 		bool errorOccurred;
 		bool colorWholeLine;
+		bool hide;
 	};
 	const int shouldHideCharacter(const char* string);
 	const bool resolveSpecial(String& input, DrawInformation& drawInformation) const;
