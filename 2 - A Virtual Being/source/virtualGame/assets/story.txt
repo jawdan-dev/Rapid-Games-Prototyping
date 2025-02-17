@@ -1365,7 +1365,7 @@ Self-aware\..... End\...
 \showif[betrayalEnding=1]\center[< The Betrayal Ending >]
 \showif[colorfulEnding=0]\center[<--------------------->]
 \showif[colorfulEnding=1]\center[< The Colorful Ending >]
-\showif[aiEnding=0]\center[<---------------->]
+\showif[aiEnding=0]\center[<----------------------->]
 \showif[aiEnding=1]\center[< The Self Aware Ending >]
 \showif[humanEnding=0]\center[<------------------>]
 \showif[humanEnding=1]\center[< The Human Ending >]
