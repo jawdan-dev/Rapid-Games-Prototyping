@@ -360,6 +360,9 @@ void StoryInterpreter::readFile() {
 		while (i < story.size() && story[i] != '\n')
 			line += story[i++];
 
+		while (line.size() > 0 && line[line.size() - 1] == ' ')
+			line.pop_back();
+
 		m_lines.emplace_back(line);
 	}
 }
