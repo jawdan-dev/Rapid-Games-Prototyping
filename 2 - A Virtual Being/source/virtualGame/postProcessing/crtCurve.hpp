@@ -60,8 +60,16 @@ public:
 		m_uniformBuffer.setData("u_crtViewProjection", crtViewProjection, GL_FLOAT_MAT4);
 
 		Vector2 mousePos = Input::s_input->getMousePosition();
-		const Vector2 inputScalar(getWidth(), getHeight());
+		const Vector2 inputScalarRaw(getWidth(), getHeight());
+		const Vector2 inputScalar(inputScalarRaw.y() / screenRatio, inputScalarRaw.y());
+		const Vector2 offset = Vector2(getWidth() - inputScalar.x(), 0) * 0.5f;
+		printf("aw: %i ,, %f %f: offset: %f :: %f %f\n", getWidth(), inputScalar.x(), inputScalar.y(), offset.x(), mousePos.x(), mousePos.y());
+		mousePos -= offset;
 		mousePos /= inputScalar;
+
+		mousePos.x() = __min(__max(mousePos.x(), 0.0f), 1.0f);
+		mousePos.y() = __min(__max(mousePos.y(), 0.0f), 1.0f);
+
 
 		const Embeds::Embed inputMap = Embeds::s_InputMap;
 		const int xPos = mousePos.x() * (float)Embeds::getWidth(inputMap),
@@ -75,7 +83,7 @@ public:
 		if (color.a == 0) {
 			mousePos = Vector2(0.0f, 0.0f);
 		} else {
-			mousePos = Vector2((float)x / (float)0xfff, (float)y / (float)0xfff) * inputScalar;
+			mousePos = Vector2((float)x / (float)0xfff, (float)y / (float)0xfff) * inputScalarRaw;
 		}
 		Input::s_input->setWeakMousePosition(mousePos);
 	}
