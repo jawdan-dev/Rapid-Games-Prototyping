@@ -26,34 +26,64 @@ const GLuint Shader::compileShader(const String& source, const GLenum shaderType
 	if (shader == 0)
 		BEING_ERROR("Failed to create shader.");
 
-	const char* cSource = source.c_str();
-	GLint len = source.size();
-	glShaderSource(shader, 1, &cSource, &len);
-	glCompileShader(shader);
+	String correctedSource = source;
+#ifdef __EMSCRIPTEN__
 
-	int success;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		char infoLog[512];
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		printf("%s\n", infoLog);
+	std::map<String, String> replacementTree;
+	replacementTree.emplace("#version 460 core", "#version 300 es");
+	if (shaderType == GL_FRAGMENT_SHADER) {
+		replacementTree.emplace("out float", "out mediump float");
+		replacementTree.emplace("out vec2", "out mediump vec2");
+		replacementTree.emplace("out vec3", "out mediump vec3");
+		replacementTree.emplace("out vec4", "out mediump vec4");
+		replacementTree.emplace("in float", "in mediump float");
+		replacementTree.emplace("in vec2", "in mediump vec2");
+		replacementTree.emplace("in vec3", "in mediump vec3");
+		replacementTree.emplace("in vec4", "in mediump vec4");
+		replacementTree.emplace("\tfloat", "\tmediump float");
+		replacementTree.emplace("\tvec2", "\tmediump vec2");
+		replacementTree.emplace("\tvec3", "\tmediump vec3");
+		replacementTree.emplace("\tvec4", "\tmediump vec4");
+		replacementTree.emplace("texture2D", "texture");
+	}
 
-		printf("%s\n", source.c_str());
-
-		switch (shaderType) {
-			case GL_VERTEX_SHADER: {
-				BEING_ERROR("Vertex shader compilation failed.");
-			} break;
-			case GL_GEOMETRY_SHADER: {
-				BEING_ERROR("Geometry shader compilation failed.");
-			} break;
-			case GL_FRAGMENT_SHADER: {
-				BEING_ERROR("Fragment shader compilation failed.");
-			} break;
+	for (int i = correctedSource.size() - 1; i >= 0; i--) {
+		for (const auto& it : replacementTree) {
+			if (i + it.first.size() > correctedSource.size() || correctedSource.substr(i, it.first.size()) != it.first)
+				continue;
+			correctedSource.replace(i, it.first.size(), it.second);
 		}
-	};
+	}
+#endif
 
-	return shader;
+const char* cSource = correctedSource.c_str();
+GLint len = correctedSource.size();
+glShaderSource(shader, 1, &cSource, &len);
+glCompileShader(shader);
+
+int success;
+glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+if (!success) {
+	char infoLog[512];
+	glGetShaderInfoLog(shader, 512, NULL, infoLog);
+	printf("%s\n", infoLog);
+
+	printf("%s\n", correctedSource.c_str());
+
+	switch (shaderType) {
+		case GL_VERTEX_SHADER: {
+			BEING_ERROR("Vertex shader compilation failed.");
+		} break;
+		case GL_GEOMETRY_SHADER: {
+			BEING_ERROR("Geometry shader compilation failed.");
+		} break;
+		case GL_FRAGMENT_SHADER: {
+			BEING_ERROR("Fragment shader compilation failed.");
+		} break;
+	}
+};
+
+return shader;
 }
 const GLuint Shader::compileProgram(const String& vertexSource, const String& fragmentSource) {
 	const GLuint vertexShader = compileShader(vertexSource, GL_VERTEX_SHADER);
@@ -117,13 +147,13 @@ void Shader::loadAttributes() {
 
 		m_attributes.emplace(
 			String(nameBuffer),
-			(ShaderAttribute) {
-			.m_location = attributeLocation,
+			(ShaderAttribute){
+				.m_location = attributeLocation,
 				.m_glType = attributeType,
 				.m_dataSize = glGetTypeByteSize(attributeType),
 				.m_dataOffset = staticAttribute ? m_staticAttributesTotalSize : m_instanceAttributesTotalSize,
 				.m_isStatic = staticAttribute,
-		});
+			});
 
 		const size_t dataSize = glGetTypeByteSize(attributeType);
 		if (staticAttribute) {
@@ -158,10 +188,10 @@ void Shader::loadUniforms() {
 
 		m_uniforms.emplace(
 			String(nameBuffer),
-			(ShaderUniform) {
-			.m_location = uniformLocation,
+			(ShaderUniform){
+				.m_location = uniformLocation,
 				.m_glType = uniformType,
-		});
+			});
 	}
 
 	delete[] nameBuffer;

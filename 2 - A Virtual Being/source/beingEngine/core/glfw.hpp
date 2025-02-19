@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __EMSCRIPTEN__
+#	include <emscripten.h>
+#endif
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 

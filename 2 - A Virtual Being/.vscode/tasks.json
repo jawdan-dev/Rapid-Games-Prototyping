@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Emscripten Build",
+			"type": "shell",
+			"isBackground": false,
+			"options": {
+				"cwd": "${workspaceFolder}",
+			},
+			"command": "./modules/emsdk/upstream/emscripten/emcmake cmake -S . -B build-web -DCMAKE_BUILD_TYPE=Debug && cmake --build build-web "
+		}
+	]
+}

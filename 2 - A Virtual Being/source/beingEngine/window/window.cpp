@@ -74,13 +74,11 @@ const bool Window::isOpen() {
 }
 
 void Window::process() {
-	m_input.processInput();
 	m_time.update(glfwGetTime());
-
 	glfwPollEvents();
 }
 
 void Window::render() {
 	glfwSwapBuffers(m_window);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_input.processInput();
 }

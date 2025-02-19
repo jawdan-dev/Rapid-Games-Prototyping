@@ -8,6 +8,7 @@ public:
     Application();
 
     void start();
+    void update(void* const data);
 
 private:
     Window m_window;

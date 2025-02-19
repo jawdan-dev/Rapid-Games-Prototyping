@@ -26,6 +26,14 @@ typedef std::string String;
 #define STRINGIFY(x) _STRINGIFY(x)
 #define BEING_ERROR(msg) throw std::runtime_error(__FILE_NAME__ ":" STRINGIFY(__LINE__) ": " msg);
 
+#ifndef __max
+#	define __max(a, b) (a < b ? b : a)
+#endif
+#ifndef __min
+#	define __min(a, b) (a < b ? a : b)
+#endif
+
+
 constexpr float PI = 3.14159265358979323846;
 constexpr float degToRad = PI / 180.0f;
 constexpr float screenRatio = 1080.0f / 1920.0f;

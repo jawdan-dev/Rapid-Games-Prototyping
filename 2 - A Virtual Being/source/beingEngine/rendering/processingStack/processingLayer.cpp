@@ -66,7 +66,7 @@ void ProcessingLayer::updateTextures() {
 	}
 
 	glBindRenderbuffer(GL_RENDERBUFFER, m_depthTexture);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_width, m_height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, m_width, m_height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthTexture);
 
 	glDrawBuffers(m_attachments.size(), m_attachments.data());

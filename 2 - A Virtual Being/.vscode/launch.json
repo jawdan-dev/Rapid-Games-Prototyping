@@ -2,12 +2,20 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "CMake",
+			"name": "Desktop Build",
 			"type": "cppdbg",
 			"request": "launch",
             "program": "${command:cmake.launchTargetPath}",
             "cwd": "${command:cmake.getLaunchTargetDirectory}",
 			"miDebuggerPath": "gdb.exe"
+		},
+		{
+			"name": "Web Build",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:8080/binaries/web/SYSTEM_WR3CK.html",
+			"webRoot": "${workspaceFolder}/binaries/web/",
+			"preLaunchTask": "Emscripten Build",
 		}
 	]
 }

@@ -67,7 +67,7 @@ public:
 		mousePos /= inputScalar;
 
 		mousePos.x() = __min(__max(mousePos.x(), 0.0f), 1.0f);
-		mousePos.y() = __min(__max(mousePos.y(), 0.0f), 1.0f);
+		mousePos.y() = __min(__max(1.0f - mousePos.y(), 0.0f), 1.0f);
 
 
 		const Embeds::Embed inputMap = Embeds::s_InputMap;
