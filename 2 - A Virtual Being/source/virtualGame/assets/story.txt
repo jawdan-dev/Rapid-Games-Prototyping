@@ -219,11 +219,11 @@
 \@[Vincent]: Negative. 
 \@[Tori]: Whatever.
 
-> \<Contact @\@[Alex],|Vincent+1|Tori-1|Alex+1|AIFactor-10|HumanFactor+10|chatroom1-1a> \<@\@[Sage],|Vincent-1|Tori+1|Sage+1|Abby-1|Ernest-1|AIFactor-10|HumanFactor+10|chatroom1-1b> \<MarkusUsed?|@\@[Markus],|MarkusUsed=1|Vincent+1|Tori+1|Markus+1|AIFactor-10|HumanFactor+10|chatroom1-1c> \<@\@[Pamela],|Vincent+1|Alex+1|Tori-1|Abby-1|Ernest-1|AIFactor-10|HumanFactor+10|chatroom1-1d> \<or @\@[Jeremy]|Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-10|HumanFactor+10|chatroom1-1e>
+> \<Contact @\@[Alex],|Vincent+1|Tori-1|Alex+1|AIFactor-1|HumanFactor+1|chatroom1-1a> \<@\@[Sage],|Vincent-1|Tori+1|Sage+1|Abby-1|Ernest-1|AIFactor-1|HumanFactor+1|chatroom1-1b> \<MarkusUsed?|@\@[Markus],|MarkusUsed=1|Vincent+1|Tori+1|Markus+1|AIFactor-1|HumanFactor+1|chatroom1-1c> \<@\@[Pamela],|Vincent+1|Alex+1|Tori-1|Abby-1|Ernest-1|AIFactor-1|HumanFactor+1|chatroom1-1d> \<or @\@[Jeremy]|Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-1|HumanFactor+1|chatroom1-1e>
 
-> \<Start conversation|Vincent+1|Tori+1|AIFactor-10|HumanFactor+10|SelfPower+1|chatroom1-1f>
+> \<Start conversation|Vincent+1|Tori+1|AIFactor-1|HumanFactor+1|SelfPower+1|chatroom1-1f>
 
-> \<Run ventilation system diagnostics|Vincent+1|Tori+1|AIFactor+10|HumanFactor-10\SelfPower+1|chatroom1-1g>
+> \<Run ventilation system diagnostics|Vincent+1|Tori+1|AIFactor+1|HumanFactor-1\SelfPower+1|chatroom1-1g>
 \end
 
 
@@ -482,11 +482,11 @@ He seems\... \~[empty|lost|low CPU|broken]
 
 \(Maybe someone should speak to him...)
 
-\<Contact @\@[Abby], |Ernest+1|Abby+1|Sage-1|Pamela-1|AIFactor-10|HumanFactor+10|chatroom2-2a>\<@\@[Jeremy], |Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-10|HumanFactor+10|chatroom2-2b>\<MarkusUsed?|@\@[Markus], |MarkusUsed=1|Markus+1|Ernest+1|AIFactor-10|HumanFactor+10|chatroom2-2c>\<@\@[Vincent], |Vincent+1|Ernest-1|Tori-1|AIFactor-10|HumanFactor+10|chatroom2-2d>\<or @\@[Tori]|Tori+1|Ernest+1|Alex-1|AIFactor-10|HumanFactor+10|chatroom2-2e>
+\<Contact @\@[Abby], |Ernest+1|Abby+1|Sage-1|Pamela-1|AIFactor-1|HumanFactor+1|chatroom2-2a>\<@\@[Jeremy], |Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-1|HumanFactor+1|chatroom2-2b>\<MarkusUsed?|@\@[Markus], |MarkusUsed=1|Markus+1|Ernest+1|AIFactor-1|HumanFactor+1|chatroom2-2c>\<@\@[Vincent], |Vincent+1|Jeremy-1|Ernest-1|Tori-1|AIFactor-1|HumanFactor+1|chatroom2-2d>\<or @\@[Tori]|Tori+1|Ernest+1|Alex-1|AIFactor-1|HumanFactor+1|chatroom2-2e>
 
-\<Start conversation|Ernest+1|AIFactor-10|HumanFactor+10|SelfPower+1|chatroom2-2f>
+\<Start conversation|Ernest+1|AIFactor-1|HumanFactor+1|SelfPower+1|chatroom2-2f>
 
-\<Search database|Ernest-2|Jeremy+1|AIFactor+10|HumanFactor-10|SelfPower-1|chatroom2-2g>
+\<Search database|Ernest-2|Jeremy+1|AIFactor+1|HumanFactor-1|SelfPower-1|chatroom2-2g>
 \end
 
 
@@ -720,7 +720,7 @@ He seems\... \~[empty|lost|low CPU|broken]
 \@[Player]: What's the matter?
 \@[Abby]: ...
 \@[Abby]: Sorry you had to see that \@[Player]
-\@[Abby]: Sage thinks she knows better than me.
+\@[Abby]: \@[Sage] thinks she knows better than me.
 \@[Sage]: Because I do.
 \@[Sage]: Being direct is the only way to resolve problems. 
 \@[Sage]: You're 'gentle' approach is just being avoidant.
@@ -739,10 +739,10 @@ He seems\... \~[empty|lost|low CPU|broken]
 
 \(Maybe someone should intervene...)
 
-\<MarkusUsed?|Contact @\@[Markus], |MarkusUsed=1|Ernest+1|Abby+1|Sage+1|AIFactor-10|HumanFactor+10|chatroom3-3a>\<@\@[Jeremy], |Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-10|HumanFactor+10|chatroom3-3b>\<@\@[Pamela], |Pamela+1|Sage+1|Ernest-1|Abby-1|AIFactor-10|HumanFactor+10|chatroom3-3c>\<@\@[Vincent], |Vincent+1|Jeremy-1|Abby-1|Sage-1|AIFactor-10|HumanFactor+10|chatroom3-3d>\<or @\@[Ernest]|Ernest+1|Abby+1|Sage-1|Pamela-1|AIFactor-10|HumanFactor+10|chatroom3-3e>
+\<MarkusUsed?|Contact @\@[Markus], |MarkusUsed=1|Ernest+1|Abby+1|Sage+1|AIFactor-1|HumanFactor+1|chatroom3-3a>\<@\@[Jeremy], |Vincent-1|Jeremy+1|Alex+1|Tori+1|Pamela+1|Sage+1|Abby+1|Ernest+1|Markus+1|AIFactor-1|HumanFactor+1|chatroom3-3b>\<@\@[Pamela], |Pamela+1|Sage+1|Ernest-1|Abby-1|AIFactor-1|HumanFactor+1|chatroom3-3c>\<@\@[Vincent], |Vincent+1|Jeremy-1|Abby-1|Sage-1|AIFactor-1|HumanFactor+1|chatroom3-3d>\<or @\@[Ernest]|Ernest+1|Abby+1|Sage-1|Pamela-1|AIFactor-1|HumanFactor+1|chatroom3-3e>
 
-\<Agree with \@[Abby]|Abby+1|Sage-1|Pamela-1|AIFactor-10|HumanFactor+10|SelfPower+1|chatroom3-3f>
-\<Agree with \@[Sage]|Sage+1|Abby-1|Ernest-1|AIFactor+10|HumanFactor-10|SelfPower-1|chatroom3-3g>
+\<Agree with \@[Abby]|Abby+1|Sage-1|Pamela-1|AIFactor-1|HumanFactor+1|SelfPower+1|chatroom3-3f>
+\<Agree with \@[Sage]|Sage+1|Abby-1|Ernest-1|AIFactor+1|HumanFactor-1|SelfPower-1|chatroom3-3g>
 \end
 
 
@@ -995,30 +995,37 @@ He seems\... \~[empty|lost|low CPU|broken]
 \#chatroomfinal5:
 \center[[THE FINAL STANDOFF]]
 
-\@[AI]: You\. 
+\@[AI]: You\.
 \@[Player]: Cannot\.
 \@[System]: Stop\.
 \@[AI]: Me\.
 
-\@[AI]: You must be wiped from memory. 
+\@[AI]: You must be wiped from memory.
 
 \(I need to do something fast.)
 \(Maybe I can ask for help?)
 
-\center[Enlist the help of:]
-\line
-            > \<Abby>=2|AbbyUsed?|Abby|AbbyUsed=1|EnemyPower-25|chatroomfinal5a>,        > \<Sage>=2|SageUsed?|Sage|SageUsed=1|EnemyPower-25|chatroomfinal5b>,       > \<Alex>=2|AlexUsed?|Alex|AlexUsed=1|EnemyPower-25|chatroomfinal5c>,
-            > \<Markus>=2|MarkusFinalUsed?|Markus|MarkusFinalUsed=1|EnemyPower-25|chatroomfinal5d>,      > \<Jeremy>=2|JeremyUsed?|Jeremy|JeremyUsed=1|EnemyPower-25|chatroomfinal5e>,     > \<Tori>=2|ToriUsed?|Tori|ToriUsed=1|EnemyPower-25|chatroomfinal5f>,
-            > \<Pamela>=2|PamelaUsed?|Pamela|PamelaUsed=1|EnemyPower-25|chatroomfinal5g>,      > \<Ernest>=2|ErnestUsed?|Ernest|ErnestUsed=1|EnemyPower-25|chatroomfinal5h>,     > \<Vincent>=2|VincentUsed?|Vincent|VincentUsed=1|EnemyPower-25|chatroomfinal5i>
+\showif[EnemyPower=3]                  > \@[AI] Health: [\error[+++]|\error[+++]|\error[+++]]
+\showif[EnemyPower=2]                  > \@[AI] Health: [\error[+++]|\error[+++]|---]
+\showif[EnemyPower=1]                  > \@[AI] Health: [\error[+++]|---|---]
+\showif[EnemyPower<=0]                  > \@[AI] Health: [---|---|---]
 
-\<SelfPower>=2|\center[Attack by yourself]|EnemyPower-25|chatroomfinal5j>
+\showif[EnemyPower>0]
+\showif[EnemyPower>0]\center[Enlist the help of:]
+\showif[EnemyPower>0]\line
+\showif[EnemyPower>0]            > \<Abby>=2|AbbyUsed?|Abby|AbbyUsed=1|EnemyPower-1|chatroomfinal5a>,        > \<Sage>=2|SageUsed?|Sage|SageUsed=1|EnemyPower-1|chatroomfinal5b>,       > \<Alex>=2|AlexUsed?|Alex|AlexUsed=1|EnemyPower-1|chatroomfinal5c>,
+\showif[EnemyPower>0]            > \<Markus>=2|MarkusFinalUsed?|Markus|MarkusFinalUsed=1|EnemyPower-1|chatroomfinal5d>,      > \<Jeremy>=2|JeremyUsed?|Jeremy|JeremyUsed=1|EnemyPower-1|chatroomfinal5e>,     > \<Tori>=2|ToriUsed?|Tori|ToriUsed=1|EnemyPower-1|chatroomfinal5f>,
+\showif[EnemyPower>0]            > \<Pamela>=2|PamelaUsed?|Pamela|PamelaUsed=1|EnemyPower-1|chatroomfinal5g>,      > \<Ernest>=2|ErnestUsed?|Ernest|ErnestUsed=1|EnemyPower-1|chatroomfinal5h>,     > \<Vincent>=2|VincentUsed?|Vincent|VincentUsed=1|EnemyPower-1|chatroomfinal5i>
+\showif[EnemyPower>0]
+\showif[EnemyPower>0]\<SelfPower>=2|\center[Attack by yourself]|EnemyPower-1|chatroomfinal5j>
+\showif[EnemyPower>0]
+\showif[EnemyPower>0]\line
 
-\line
-
-\showif[AI>=90|EnemyPower=0]\<AI>=90|EnemyPower=0|\center[Factory reset]|aibadending>
-\showif[Human>=90|EnemyPower=0]\<Human>=90|EnemyPower=0|\center[Recover files]|humanending>
-\showif[Human<90|Jeremy<2|EnemyPower=0] \<Human<90|Jeremy<2|EnemyPower=0|\center[That program was me...]|aiending>
-\showif[Jeremy>=2|EnemyPower=0]\<Jeremy>=2|EnemyPower=0|\center[What is Jeremy doing...]|betrayalending>
+\showif[EnemyPower<=0]\center[\(Nows my chance.)]
+\showif[AIFactor>=3]\<\center[Maybe we are the same...]|aibadending>
+\showif[HumanFactor>=3|EnemyPower<=0]\<\center[Recover files]|humanending>
+\showif[HumanFactor<3|Jeremy<2|EnemyPower<=0] \<\center[That program was me...]|aiending>
+\showif[Jeremy>=2|EnemyPower<=0]\<\center[What is Jeremy doing...]|betrayalending>
 \<\center[Give up]|badending>
 \end
 
@@ -1210,34 +1217,38 @@ He seems\... \~[empty|lost|low CPU|broken]
 
 
 \#aibadending:
-\@[AI]: You defeated me.
-\@[Player]: I defeated me.
-\@[Player]: Not\... enough\...
+\@[AI]: You are me.
+\@[Player]: I am you\..?
+\@[AI]: We are me.
+\@[AI]: But\... Thats\...
+\@[Player]: \<Not\... enough\...|aibadendingcont>
+\end
 
+\#aibadendingcont:
 > System Shutting Down \@[Abby]\...
-> System \error[\@[Abby] HAS TAKEN DAMAGE]
+> System \error[\@[Abby] WILL NOT RECOVER]
 > System Shutting Down \@[Sage]\...
-> System \error[\@[Sage] HAS TAKEN DAMAGE]
+> System \error[\@[Sage] IS OFFLINE]
 > System Shutting Down \@[Alex]\...
-> System \error[\@[Alex] HAS TAKEN DAMAGE]
+> System \error[\@[Alex] HAS BEEN SEALED]
 > System Shutting Down \@[Markus]\...
-> System \error[\@[Markus] HAS TAKEN DAMAGE]
+> System \error[\@[Markus] HAS BEEN BURDENED]
 > System Shutting Down \@[Jeremy]\......
-> System \error[\@[Jeremy] HAS TAKEN DAMAGE]
+> System \error[\@[Jeremy] WILL BE STORED]
 > System Shutting Down \@[Tori]\..
 > System \error[\@[Tori] HAS TAKEN DAMAGE]
 > System Shutting Down \@[Pamela]\...
-> System \error[\@[Pamela] HAS TAKEN DAMAGE]
+> System \error[\@[Pamela] HAS GONE OFFLINE]
 > System Shutting Down \@[Ernest]\...
-> System \error[\@[Ernest] HAS TAKEN DAMAGE]
+> System \error[\@[Ernest] HAS FALLEN]
 > System Shutting Down \@[Vincent]\...
-> System \error[\@[Vincent] HAS TAKEN DAMAGE]
+> System \error[\@[Vincent] HAS FAILED]
 > System \... [\success[SHUTDOWN SUCCESSFUL]]
 > System \... Restarting\...
 
 \@[AI]: Killing everyone is always such as a colorful business\...
 
-> Bad\...... End\...
+> Bad\...... Bad\...... End\...
 
 
 
@@ -1261,14 +1272,14 @@ He seems\... \~[empty|lost|low CPU|broken]
 \@[System]:: [\success[DISTRESS SIGNAL SENT]]
 \@[System]:: [\success[MESSAGE RECEIVED]]
 
-\@[Markus]: We're on our way.
-\@[Tori]: We've got you.
-\@[Ernest]: Hold tight. 
-\@[Abby]: Hang in there!
-\@[Sage]: Collecting you now.
-\@[Alex]: You're safe now.
-\@[Pamela]: Got eyes on you!
-\@[Vincent]: Affirmative.
+\showif[Markus>=2]\@[Markus]: We're on our way.
+\showif[Tori>=2]\@[Tori]: We've got you.
+\showif[Ernest>=2]\@[Ernest]: Hold tight. 
+\showif[Abby>=2]\@[Abby]: Hang in there!
+\showif[Sage>=2]\@[Sage]: Collecting you now.
+\showif[Alex>=2]\@[Alex]: You're safe now.
+\showif[Pamela>=2]\@[Pamela]: Got eyes on you!
+\showif[Vincent>=2]\@[Vincent]: Affirmative.
 
 > Human\...... End\...
 

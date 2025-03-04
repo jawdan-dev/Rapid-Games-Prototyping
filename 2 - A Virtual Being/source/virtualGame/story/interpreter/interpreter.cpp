@@ -66,9 +66,9 @@ void StoryInterpreter::setFlag(const String& flagName, const int flagValue) {
 			it = m_flags.erase(it);
 		}
 
-		setFlag("AIFactor", 50);
-		setFlag("HumanFactor", 50);
-		setFlag("EnemyPower", 100);
+		setFlag("AIFactor", 0);
+		setFlag("HumanFactor", 0);
+		setFlag("EnemyPower", 3);
 		return;
 	}
 
