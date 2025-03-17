@@ -1,4 +1,3 @@
-if (!m_enabled) return;
+event_inherited();
 
-draw_sprite(sprite_index, image_index, x, y);
-draw_text(x, y, string(m_networkID));
+draw_sprite(spr_player_blip, 0, m_drawX, m_drawY);

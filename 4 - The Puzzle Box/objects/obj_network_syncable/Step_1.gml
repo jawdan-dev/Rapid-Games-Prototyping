@@ -10,4 +10,7 @@ if (m_networkCooldown > 0) {
 m_networkUpdateData = false;
 m_networkCooldown = m_networkCooldownMax;
 
+
+
+
 Network_sendPacket("update", Network_getData(id));

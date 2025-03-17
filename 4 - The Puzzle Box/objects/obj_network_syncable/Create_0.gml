@@ -25,6 +25,7 @@ if (!obj_server.m_isHosting) {
 	// Ask for an id..
 	if (!obj_server.m_spawningSyncable)
 		Network_assignInstance(id, x, y);
+	m_enabled = true;
 } else {
 	m_networkID = Network_getUUID();
 	m_enabled = true;	

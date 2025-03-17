@@ -4,7 +4,7 @@ switch (networkEventType) {
 	case network_type_non_blocking_connect:
 	case network_type_connect: {
 		if (!m_isHosting) { 
-			room_goto(rm_game);
+			//room_goto(rm_game);
 			return;
 		}
 		
@@ -41,7 +41,7 @@ switch (networkEventType) {
 		
 		var packetData = {}
 		try {
-			var packetData = json_parse(bufferString);
+			packetData = json_parse(bufferString);
 		} catch(_err) { 
 			show_debug_message("Failed to parse JSON packet: {0}", bufferString);
 			break;

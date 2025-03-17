@@ -4,12 +4,14 @@ function Network_getUUID() {
 }
 
 function Network_sendPacket(_category, _data) {
-	if (obj_server.m_isHosting) return;
+	if (obj_server.m_isHosting) {
+		Network_sendPacketDirect(-1, _category, _data, true, false);
+		return;
+	}
 	Network_sendPacketDirect(obj_server.m_serverSocket, _category, _data, false, false);
 }
 
 function Network_sendPacketDirect(targetSocket, category, data, broadcast, ignoreTarget) {
-	show_debug_message("targetsocket: {0}, broadCast: {1}", targetSocket, broadcast);
 	if (targetSocket < 0 && !broadcast) return;
 	
 	var packet = {
@@ -30,15 +32,15 @@ function Network_sendPacketDirect(targetSocket, category, data, broadcast, ignor
 				if (ignoreTarget && m_clientSockets[i] == targetSocket) continue;
 				
 				//network_send_packet(m_clientSockets[i], buffer, bufferSize);
-				network_send_raw(m_clientSockets[i], buffer, bufferSize, network_send_text)
+				network_send_packet(m_clientSockets[i], buffer, bufferSize);
 
-				show_debug_message("Sending data to socket {0} of size {1}", m_clientSockets[i], bufferSize);
+				show_debug_message("Sending {2} data to socket {0} of size {1}", m_clientSockets[i], bufferSize, category);
 			}
 		}
 	} else {
-		show_debug_message("Sending data to socket {0} of size {1}", targetSocket, bufferSize);
-		network_send_raw(targetSocket, buffer, bufferSize, network_send_text)
-	}
+		show_debug_message("Sending {2} data to socket {0} of size {1}", targetSocket, bufferSize, category);
+		network_send_packet(targetSocket, buffer, bufferSize);
+	}	
 	
 	buffer_delete(buffer);
 }
@@ -53,6 +55,22 @@ function Network_handlePacket(_socket, _category, _data, _time) {
 			if (!obj_server.m_isHosting) break;
 			
 			// Player connected to us.
+			
+			var wordMapping = [];
+			var keys = ds_map_keys_to_array(obj_game_manager.m_wordMapping);
+			var keyCount = array_length(keys);
+			for (var i = 0; i < keyCount; i++) {
+				wordMapping[i] = {
+					m_key: keys[i],
+					m_word: ds_map_find_value(obj_game_manager.m_wordMapping, keys[i]),
+				};
+			}
+			
+			
+			Network_sendPacketDirect(_socket, "wordMapping", {
+				m_wordChoices: obj_game_manager.m_wordChoices,
+				m_wordMapping: wordMapping,			
+			}, false, false);
 		} break;
 		case "_onDisconnect": {
 			if (!obj_server.m_isHosting) break;
@@ -62,6 +80,43 @@ function Network_handlePacket(_socket, _category, _data, _time) {
 			if (!ds_map_exists(obj_server.m_playerUUIDs, _socket)) break;
 			var uuid = ds_map_find_value(obj_server.m_playerUUIDs, _socket);
 			Network_destroyIntance(uuid);
+		} break;
+		
+		case "wordMapping": {
+			if (obj_server.m_isHosting) break;
+			if (!structHasFields(_data, [ "m_wordChoices", "m_wordMapping" ])) break;
+			
+			obj_game_manager.m_wordChoices = _data.m_wordChoices;
+			
+			ds_map_clear(obj_game_manager.m_wordMapping);
+			var len = array_length(_data.m_wordMapping);
+			for (var i = 0; i < len; i++) {
+				ds_map_add(obj_game_manager.m_wordMapping, _data.m_wordMapping[i].m_key, _data.m_wordMapping[i].m_word);
+			}
+		} break;
+		
+		case "wordUpdate": {
+			if (obj_server.m_isHosting) {
+				if (!structHasFields(_data, [ "m_key", "m_word", "m_amount" ])) break;
+				
+				Game_addWordStatistic(_data.m_key, _data.m_word, _data.m_amount);
+			} else {
+				if (!structHasFields(_data, [ "m_key" ])) break;
+				if (!structHasFields(_data, [ "m_word" ])) {
+					// delete.
+					if (ds_map_exists(obj_game_manager.m_wordMapping, _data.m_key)) {
+						ds_map_delete(obj_game_manager.m_wordMapping, _data.m_key)
+					}
+					break;
+				}
+				
+				var value = ds_map_find_value(obj_game_manager.m_wordMapping, _data.m_key)
+				if (is_undefined(value)) {
+					ds_map_add(obj_game_manager.m_wordMapping, _data.m_key, _data.m_word);
+				} else if (value !=  _data.m_word) {
+					ds_map_replace(obj_game_manager.m_wordMapping, _data.m_key, _data.m_word);
+				}
+			}
 		} break;
 		
 		case "where": {
@@ -159,6 +214,8 @@ function Network_handlePacket(_socket, _category, _data, _time) {
 			
 			var instance = Network_getInstance(_data.m_networkID);
 			if (instance == noone) break;
+			
+			// TODO: Check perms.
 				
 			// Coolio.
 			Network_setData(instance, _data);

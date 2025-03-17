@@ -1,5 +1,7 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+function isDebugView() {
+	return keyboard_check(vk_f4);
+}
+
 function getDeltaTime(){
 	return delta_time * 0.0000001;
 }
@@ -12,6 +14,14 @@ function structHasFields(_struct, _fields) {
 	}
 	return true;
 }
+function stringHasCharacter(_str, _c) {
+	var len = string_length(_str);
+	for (var i = 0; i < len; i++)
+		if (string_char_at(_str, i) == _c)
+			return true;
+	return false;
+}
+
 
 function moveTowards(_x, _y, _tx, _ty, _moveAmount) {
 	var rx = _x, ry = _y;

@@ -12,8 +12,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Objects.yy",
+    "name": "Network",
+    "path": "folders/Objects/Network.yy",
   },
   "parentObjectId": null,
   "persistent": true,
