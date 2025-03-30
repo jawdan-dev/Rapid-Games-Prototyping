@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://cvnoa2p6jlrwv"]
+
+[ext_resource type="Script" uid="uid://ceyqi3mgv4m8f" path="res://Projectile/Projectile.gd" id="1_t7eop"]
+[ext_resource type="Material" uid="uid://cdu4k4q1b6wpw" path="res://Projectile/Projectile.tres" id="2_ghnax"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wbfu4"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_wbfu4"]
+
+[node name="Projectile" type="RigidBody3D"]
+collision_layer = 4
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_t7eop")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_wbfu4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("2_ghnax")
+mesh = SubResource("SphereMesh_wbfu4")
+
+[connection signal="body_entered" from="." to="." method="onWorldHit"]

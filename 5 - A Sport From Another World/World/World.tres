@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cimc0tqc5vynl"]
+
+[ext_resource type="Shader" uid="uid://blndu50wmqavt" path="res://World/World.gdshader" id="1_21m8e"]
+[ext_resource type="Texture2D" uid="uid://cnn8fka7861d3" path="res://World/Terrain.png" id="2_0mhpl"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_21m8e")
+shader_parameter/m_lightTexture = ExtResource("2_0mhpl")
+shader_parameter/darkColor = Color(0.478431, 0.882353, 0.984314, 1)
+shader_parameter/gridSize = 1.0

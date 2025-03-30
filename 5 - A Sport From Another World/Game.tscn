@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://bfmd8kbw2cf3r"]
+
+[ext_resource type="PackedScene" uid="uid://db8hid2d22ejn" path="res://World/World/World.tscn" id="1_wbfu4"]
+[ext_resource type="PackedScene" uid="uid://cvnoa2p6jlrwv" path="res://Projectile/Projectile.tscn" id="2_u44n3"]
+[ext_resource type="Script" uid="uid://cl1hghiwcttxr" path="res://Spawner.gd" id="2_xkndl"]
+
+[sub_resource type="Environment" id="Environment_xkndl"]
+ambient_light_color = Color(0, 0, 0.533333, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wbfu4"]
+
+[node name="Game" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_xkndl")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.294401, -0.540933, -0.787858, -0.153617, 0.840458, -0.519645, 0.943255, -0.0319552, -0.330528, 2.20318, 2.31902, 2.5799)
+fov = 126.563
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.045469, 0.957601, 0.284486, 0.423285, -0.239483, 0.873772, 0.904855, 0.160148, -0.394449, 0, 0, 0)
+
+[node name="Cube1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.5, 0.5)
+mesh = SubResource("BoxMesh_wbfu4")
+
+[node name="Cube2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, -1.5)
+mesh = SubResource("BoxMesh_wbfu4")
+
+[node name="World" parent="." instance=ExtResource("1_wbfu4")]
+m_worldSize = Vector3i(20, 8, 20)
+m_chunkSize = Vector3i(5, 5, 5)
+
+[node name="Projectile" parent="." instance=ExtResource("2_u44n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.416, 17.0047, 14.7629)
+
+[node name="Spawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 10, 25)
+script = ExtResource("2_xkndl")
+
+[node name="Bounds" type="StaticBody3D" parent="."]
