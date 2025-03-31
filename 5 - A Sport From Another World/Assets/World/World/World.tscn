@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://db8hid2d22ejn"]
 
-[ext_resource type="Script" uid="uid://ciplxsg77fml4" path="res://World/World/World.gd" id="1_618ql"]
+[ext_resource type="Script" uid="uid://ciplxsg77fml4" path="res://Assets/World/World/World.gd" id="1_618ql"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_w6vhu"]
 plane = Plane(1, 0, 0, 0)

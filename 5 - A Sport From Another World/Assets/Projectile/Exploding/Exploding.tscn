@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfqijsgb3dnqn"]
+
+[ext_resource type="PackedScene" uid="uid://cvnoa2p6jlrwv" path="res://Assets/Projectile/Base/Projectile.tscn" id="1_7wodj"]
+
+[node name="Exploding" instance=ExtResource("1_7wodj")]

@@ -7,6 +7,10 @@ enum TerrainType {
 	Grass = 2,
 	Dirt = 3, 
 	Stone = 4,
+	Player0,
+	Player1,
+	Player2,
+	Player3,
 };
 
 const s_edgeLookup = [
@@ -300,19 +304,26 @@ func _ready() -> void:
 	m_grid.resize(m_size.x * m_size.y * m_size.z);
 	m_types.resize(m_size.x * m_size.y * m_size.z);
 	
-	var noise : FastNoiseLite = FastNoiseLite.new(); 
+	var noiseMap : FastNoiseLite = FastNoiseLite.new(); 
 	var noiseScale : float = 2.5;
 	
 	var v : Vector3i;
 	var i : int = 0;
+	var noise : float;
+	var type : TerrainType;
 	for z in range(m_size.z):	
 		v.z = z + m_absolutePos.z;
 		for y in range(m_size.y):
 			v.y = y + m_absolutePos.y;
 			for x in range(m_size.x):
 				v.x = x + m_absolutePos.x;
-				m_grid[i] = clampf(noise.get_noise_2d((v.x as float) * noiseScale, (v.z as float) * noiseScale) + (1 - (v.y * 0.1)), -1, 1);
-				m_types[i] = TerrainType.Grass;
+				noise = noiseMap.get_noise_2d((v.x as float) * noiseScale, (v.z as float) * noiseScale) + (2 - (v.y * 0.1));
+				type = TerrainType.Grass;				
+				if (noise > 1.0): type = TerrainType.Stone;
+				elif (noise > 0.5): type = TerrainType.Dirt;
+				
+				m_grid[i] = clampf(noise, -1, 1);
+				m_types[i] = type;
 				i += 1;
 	deferUpdate();
 
@@ -389,22 +400,22 @@ func deferUpdate(updateSurroundings : bool = false) -> void:
 	m_updated = true;
 	m_world.m_updateQueue.append(self);
 	
-func changeSphere(center : Vector3, radius : float, type : TerrainType) -> void:
-	var amount : float = -1 if type == TerrainType.None else 1;
+func changeSphere(center : Vector3, radius : float, type : TerrainType, amount : float) -> bool:
+	if (amount == 0):
+		amount = -1 if type == TerrainType.None else 1;
 	
 	center -= Vector3(m_absolutePos);
 	#var rad : Vector3i = (Vector3i.ONE * int(ceil(radius + 1)));
 	var minPos : Vector3i = Vector3i.ZERO; #(Vector3i(center) - rad).clamp(Vector3i.ZERO, m_size);
 	var maxPos : Vector3i = m_size; #(Vector3i(center) + rad).clamp(Vector3i.ZERO, m_size);
 	
-	var f : float;
 	var dist : float;
 	var target : float;
 	
 	var updated : bool = false;
 	var closeUpdate : bool = false;
 	
-	var amountAbs : float = abs(amount) * 2;
+	#var amountAbs : float = abs(amount) * 2;
 	var amountSign : float = sign(amount);
 	
 	var i : int = 0;
@@ -422,12 +433,13 @@ func changeSphere(center : Vector3, radius : float, type : TerrainType) -> void:
 					updated = true;
 					if (x == 0 || y == 0 || z == 0): closeUpdate = true;
 					m_grid[i] = target; #move_toward(m_grid[i], target, amountAbs);
-					if (amount > 0): m_types[i] = type;
+					if (amount > 0 || type != TerrainType.None): m_types[i] = type;
 				
 				i += 1;
 	
 	if (updated):
 		deferUpdate(closeUpdate);
+	return updated;
 	
 func updateMesh() -> void:
 	# TODO: If no changes, go away?
@@ -440,7 +452,6 @@ func updateMesh() -> void:
 	
 	var lookupIndex : int;
 	var lookupReadIndex : int;
-	var u : Vector3i;
 	var readCount : int;
 	
 	var v : Vector3i;
@@ -469,7 +480,7 @@ func updateMesh() -> void:
 					for i : int in range(readCount):
 						edge = s_edgeLookup[lookupIndex][lookupReadIndex + i];
 						vertices.push_back(getEdgePosition(edge, v));
-						types.push_back(Vector2(getEdgeType(edge, v) - 0.875, 0.5));
+						types.push_back(Vector2(getEdgeType(edge, v), 0.5));
 					
 					lookupReadIndex += readCount;
 					
@@ -477,12 +488,10 @@ func updateMesh() -> void:
 					indices.append(baseIndex + 1);
 					indices.append(baseIndex + 2);
 					
-					var lastUsedIndex = 2;
 					for i : int in range(3, readCount):
 						indices.append(baseIndex + 0);
 						indices.append(baseIndex + i - 1);
 						indices.append(baseIndex + i);
-						lastUsedIndex = i;
 	
 	
 	if (vertices.size() < 2):
