@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://d03jg8pkcnupo"]
+
+[ext_resource type="Script" uid="uid://b4u324br3ffyb" path="res://Assets/Item/Animator.gd" id="1_ec3ij"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7ad4c"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_ec3ij"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_rktaq"]
+
+[node name="Blobgun" type="Node3D"]
+script = ExtResource("1_ec3ij")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.00950058, -0.544442, 0, 0.066323, 0.0779898, 0, 0, 0, 0.067, -0.0233274, 0.234275, -0.000530005)
+mesh = SubResource("BoxMesh_7ad4c")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0164423, 0.281427, 0.00262783, -0.000500913, -0.00857379, 0.0862562, 0.153116, -0.0302489, -3.80627e-09, -0.177663, 0.259971, -0.000530005)
+mesh = SubResource("PrismMesh_ec3ij")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.13073e-09, 0.392409, 0, -0.0487455, -1.71528e-08, 0, 0, 0, 0.163983, 0, 0.279045, 0)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.7256e-09, 0.0850609, 0, -0.0852318, -3.71814e-09, 0, 0, 0, 0.0695575, -0.115074, 0.287251, 0)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.7256e-09, 0.0850609, 0, -0.0852318, -3.71814e-09, 0, 0, 0, 0.0695575, 0.00323131, 0.287251, 0)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.7256e-09, 0.0850609, 0, -0.0852318, -3.71814e-09, 0, 0, 0, 0.0695575, 0.112479, 0.287251, 0)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.0311933, 0.109888, 0, -0.037458, -0.0915097, 0, 0, 0, 0.163983, 0.232814, 0.235932, 0)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")

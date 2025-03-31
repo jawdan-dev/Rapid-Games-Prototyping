@@ -14,10 +14,16 @@ config/name="5 - A Sport From Another World"
 run/main_scene="uid://bfmd8kbw2cf3r"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
 [file_customization]
 
 folder_colors={
 "res://Assets/": "green",
+"res://Assets/Item/": "red",
 "res://Assets/Player/": "yellow",
 "res://Exports/": "orange",
 "res://Scenes/": "red"

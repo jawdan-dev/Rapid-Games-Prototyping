@@ -40,13 +40,20 @@ var m_gravity : float = 0;
 #####################################################################
 @export_category("Tools")
 enum Tool {
-	None, Drill, BlobGun, Shotgun, 
+	None, 
+	Drill, Blobgun, Shotgun, 
+	COUNT
 };
 @export var m_currentTool : Tool = Tool.None;
 var m_useTool : bool = false;
 var m_toolCooldown : float = 0.0;
+var m_currentAnimator : Animator = null;
+var m_lastAnimator : Animator = null;
+var m_nextWeapon : bool = false;
+var m_nextWeaponLastFrame : bool = false;
 #####################################################################
 @export_group("Pickaxe")
+@export var m_pickaxeAnimator : Animator;
 @export var m_pickaxeCooldownMax : float = 0.45;
 @export var m_pickaxeDistance : float = 0.9;
 @export var m_pickaxeRadius : float = 1.2;
@@ -54,6 +61,7 @@ var m_toolCooldown : float = 0.0;
 var m_usePickaxe : bool = false;
 #####################################################################
 @export_group("Drill")
+@export var m_drillAnimator : Animator;
 @export var m_drillDistance : float = 1;
 @export var m_drillRadius : float = 1.25;
 @export var m_drillMovementFactorMax : float = 1.25;
@@ -62,12 +70,20 @@ var m_usePickaxe : bool = false;
 @export var m_drillDPS : float = 8.0;
 var m_drillMovementFactor : float = 0.0;
 #####################################################################
+@export_group("Blobgun")
+@export var m_blobgunAnimator : Animator;
+@export var m_blobgunSplashCount : int = 10;
+@export var m_blobgunSplashSize : float = 0.7;
+@export var m_blobgunSpeed : float = 10.0;
+@export var m_blobgunSize : float = 2.0;
+@export var m_blobgunCooldownMax : float = 1.45;
 #####################################################################
 @export_group("Shotgun")
+@export var m_shotgunAnimator : Animator;
 @export var m_shotgunAngleMax : float = TAU * 0.05
-@export var m_shotgunPelletCount : int = 20;
+@export var m_shotgunPelletCount : int = 30;
 @export var m_shotgunPelletSpeed : float = 30;
-@export var m_shotgunPelletSize : float = 1.1;
+@export var m_shotgunPelletSize : float = 0.9;
 @export var m_shotgunCooldownMax : float = 0.85;
 #####################################################################
 
@@ -86,6 +102,7 @@ func _ready() -> void:
 	if (m_externalCamera): playerBit = 0b0;
 	var playerBits : int = 0b1111 << (2)
 	$Camera.cull_mask = $Camera.cull_mask & ~playerBit;
+	$CanvasLayer/SubViewportContainer/SubViewport/SeeThrough.cull_mask = $CanvasLayer/SubViewportContainer/SubViewport/SeeThrough.cull_mask & ~playerBit;
 	$Mesh.layers = playerBit;
 	$Mesh/Eyes.layers = playerBit;
 
@@ -159,6 +176,14 @@ func _process(delta: float) -> void:
 	m_useTool = Input.get_joy_axis(controllerID, JOY_AXIS_TRIGGER_RIGHT) > 0.8;
 	m_usePickaxe = Input.is_joy_button_pressed(controllerID, JOY_BUTTON_RIGHT_SHOULDER);
 	
+	m_nextWeapon = Input.is_joy_button_pressed(controllerID, JOY_BUTTON_LEFT_SHOULDER);
+	if (m_nextWeapon):
+		if (!m_nextWeaponLastFrame):
+			m_currentTool = (m_currentTool + 1) % Tool.COUNT;
+		m_nextWeaponLastFrame = true;
+	else:
+		m_nextWeaponLastFrame = false;
+	
 	if (Input.is_joy_button_pressed(controllerID, JOY_BUTTON_B)):
 		World.s_worldInstance.changeSphere(position, getPlayerRadius() * 3, getTerrainType(), -1);
 	
@@ -173,14 +198,27 @@ func _physics_process(delta: float) -> void:
 	regenHealth(delta);
 	$CanvasLayer/Health.set_instance_shader_parameter("i_healthPercentage", m_currentHealth / m_maxHealth);
 	
-	if (m_toolCooldown > 0):
-		m_toolCooldown -= delta;
+	m_drillAnimator.visible = false;
+	if (m_lastAnimator != m_currentAnimator):
+		if (m_lastAnimator != null):
+			m_lastAnimator.visible = false;
+		m_lastAnimator = m_currentAnimator;
+		if (m_currentAnimator != null):
+			m_currentAnimator.visible = true;
+	
+	if (m_currentAnimator != null):
+		if (m_currentAnimator.hasFinished()):
+			m_currentAnimator = null;
 	else:
 		m_useTool = Tool_pickaxe(delta) && m_useTool;
 		match (m_currentTool):
 			Tool.Drill: Tool_drill(delta);
+			Tool.Blobgun: Tool_blobgun(delta);
 			Tool.Shotgun: Tool_shotgun(delta);
 	
+	if (m_currentAnimator != null):
+		m_currentAnimator.visible = true;
+
 	var totalMovement : Vector3 = Vector3.ZERO;
 	
 	var forward : Vector3 = Vector3(sin(m_cameraAngle.x), 0, cos(m_cameraAngle.x));	
@@ -306,6 +344,9 @@ func Tool_pickaxe(delta) -> bool:
 	if (!m_usePickaxe): return true;
 	m_toolCooldown = m_pickaxeCooldownMax;
 	
+	m_pickaxeAnimator.play();
+	m_currentAnimator = m_pickaxeAnimator;
+	
 	var forward : Vector3 = getForward();
 	World.s_worldInstance.changeSphere(
 		global_position + (forward * m_pickaxeDistance),
@@ -317,10 +358,15 @@ func Tool_pickaxe(delta) -> bool:
 	
 	return false;
 	
-func Tool_drill(delta) -> void:
+var m_drillProgressAni : float = 0.0;
+func Tool_drill(delta) -> void:	
+	m_drillAnimator.visible = true;
+	
+	var m_drillProgressAniTarget : float = 0;
 	var forward : Vector3 = getForward();
 	
 	if (m_useTool && m_drillMovementFactor > 0):
+		m_drillProgressAniTarget = 0.5;
 		var worldSpace : PhysicsDirectSpaceState3D = get_world_3d().direct_space_state;
 		var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
 			global_position, 
@@ -346,21 +392,45 @@ func Tool_drill(delta) -> void:
 	else:
 		m_drillMovementFactor = move_toward(m_drillMovementFactor, 0, delta / (m_drillMovementCooldown * m_drillMovementFactorMax));
 
+	m_drillProgressAni = move_toward(m_drillProgressAni, m_drillProgressAniTarget, delta * 2.0);
+	m_drillAnimator.m_animationProgress = m_drillProgressAni;
+	m_drillAnimator.updateModel();
+
+func Tool_blobgun(delta) -> void:
+	if (m_currentAnimator == null):
+		m_currentAnimator = m_blobgunAnimator;
+	
+	if (!m_useTool): return;
+	m_toolCooldown = m_blobgunCooldownMax;
+	
+	m_blobgunAnimator.play();
+	m_currentAnimator = m_blobgunAnimator;
+	
+	var forward : Vector3 = getForward();
+	Projectile.Spawn(
+		$Camera.global_position + forward,
+		forward * m_blobgunSpeed,
+		getTerrainType(), m_blobgunSize,
+		0,
+		m_blobgunSplashCount, m_blobgunSplashSize
+	);
+
 func Tool_shotgun(delta) -> void:
+	if (m_currentAnimator == null):
+		m_currentAnimator = m_shotgunAnimator;
+		
 	if (!m_useTool): return;
 	m_toolCooldown = m_shotgunCooldownMax;
 	
-	print("test");
+	m_shotgunAnimator.play();
+	m_currentAnimator = m_shotgunAnimator;
 	
-	const spawnDist : float = 1.1;
 	for i in range(m_shotgunPelletCount):
 		var forward : Vector3 = getRandomForward(m_shotgunAngleMax);
-		var projectile : Projectile = Projectile.Spawn(
-			global_position + (forward * spawnDist),
+		Projectile.Spawn(
+			$Camera.global_position + forward,
 			forward * m_shotgunPelletSpeed,
 			getTerrainType(), m_shotgunPelletSize,
 			[-1, -1, -1, 1, 1].pick_random()
 		);
-		PlayerManager.s_instance.add_child(projectile);
-		print(forward);
 		

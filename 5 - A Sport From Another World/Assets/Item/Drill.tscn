@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://bmngwdugd1v1r"]
+
+[ext_resource type="Script" uid="uid://b4u324br3ffyb" path="res://Assets/Item/Animator.gd" id="1_e8uy4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7ad4c"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_rktaq"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_e8uy4"]
+top_radius = 0.0
+
+[node name="Drill" type="Node3D"]
+script = ExtResource("1_e8uy4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.0054e-09, -0.204386, 0, -4.0054e-09, 3.90518e-16, 0.0916329, -0.0916329, 8.934e-09, -4.0054e-09, -0.0941983, 0.139522, 0.000510693)
+mesh = SubResource("BoxMesh_7ad4c")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0487455, 5.86198e-14, 0, -1.45588e-22, -1.71527e-08, 0.163983, -3.33067e-15, -0.392409, -7.16792e-09, -0.139522, 0.139522, 0)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.0311933, 0.109888, 0, -0.037458, -0.0915097, 0, 0, 0, 0.163983, -0.0982174, 0.235932, 0)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.0312025, -0.109866, 0, 0.0374504, -0.0915366, 0, 0, 0, 0.163983, -0.243319, 0.296714, -0.000640512)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.0312025, 0.109866, 0, -0.0374504, -0.0915368, 0, 0, 0, 0.163983, -0.244677, 0.0584566, -0.00164932)
+mesh = SubResource("BoxMesh_rktaq")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.39876e-08, -0.32, 0, 0.32, -1.39876e-08, 0, 0, 0, 0.32, -0.473741, 0.170465, 0)
+mesh = SubResource("CylinderMesh_e8uy4")
+skeleton = NodePath("../MeshInstance3D")

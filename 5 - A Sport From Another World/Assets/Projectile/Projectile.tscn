@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cvnoa2p6jlrwv"]
 
-[ext_resource type="Script" uid="uid://ceyqi3mgv4m8f" path="res://Assets/Projectile/Base/Projectile.gd" id="1_t7eop"]
-[ext_resource type="Material" uid="uid://cdu4k4q1b6wpw" path="res://Assets/Projectile/Base/Projectile.tres" id="2_ghnax"]
+[ext_resource type="Script" uid="uid://ceyqi3mgv4m8f" path="res://Assets/Projectile/Projectile.gd" id="1_t7eop"]
+[ext_resource type="Material" uid="uid://cdu4k4q1b6wpw" path="res://Assets/Projectile/Projectile.tres" id="2_ghnax"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wbfu4"]
 
@@ -11,7 +11,7 @@
 collision_layer = 4
 collision_mask = 3
 contact_monitor = true
-max_contacts_reported = 1
+max_contacts_reported = 2
 script = ExtResource("1_t7eop")
 
 [node name="Collider" type="CollisionShape3D" parent="."]

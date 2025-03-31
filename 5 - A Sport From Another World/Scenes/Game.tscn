@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bfmd8kbw2cf3r"]
+[gd_scene load_steps=7 format=3 uid="uid://bfmd8kbw2cf3r"]
 
 [ext_resource type="PackedScene" uid="uid://db8hid2d22ejn" path="res://Assets/World/World/World.tscn" id="1_gl6un"]
+[ext_resource type="Script" uid="uid://bmr11qbxha50a" path="res://Assets/Projectile/ProjectileManager.gd" id="2_b2bpf"]
 [ext_resource type="PackedScene" uid="uid://biiavygxfnlc0" path="res://Assets/Spawner/Spawner.tscn" id="2_j5yw3"]
 [ext_resource type="PackedScene" uid="uid://b3ob3jld7ln8t" path="res://Assets/Player/Player.tscn" id="3_j5yw3"]
 [ext_resource type="Script" uid="uid://cdp3jt5ndqvwf" path="res://Scenes/PlayerManager.gd" id="4_kldst"]
@@ -13,6 +14,9 @@ ambient_light_color = Color(0, 0, 0.533333, 1)
 [node name="PlayerManager" type="Node" parent="."]
 script = ExtResource("4_kldst")
 
+[node name="ProjectileManager" type="Node3D" parent="."]
+script = ExtResource("2_b2bpf")
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_xkndl")
 
@@ -21,49 +25,14 @@ transform = Transform3D(-0.045469, 0.957601, 0.284486, 0.423285, -0.239483, 0.87
 layers = 3
 
 [node name="World" parent="." instance=ExtResource("1_gl6un")]
-m_worldSize = Vector3i(20, 20, 20)
+m_worldSize = Vector3i(40, 20, 40)
 m_chunkSize = Vector3i(4, 4, 4)
 
 [node name="Spawner" parent="." instance=ExtResource("2_j5yw3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 10, 25)
-
-[node name="Player0" parent="." instance=ExtResource("3_j5yw3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 20, 25)
-m_playerIndex = null
-m_inputDeadzone = null
-m_maxHealth = null
-m_healthRegenSpeed = null
-m_regenCooldown = null
-m_digoutScale = null
-m_movementSpeed = null
-m_cameraLookSpeed = null
-m_cameraInternalHeight = null
-m_cameraArmHeight = null
-m_cameraArmLength = null
-m_cameraArmRadius = null
-m_cameraSafeDistance = null
-m_fallThreshold = null
-m_fallDamageMultiplier = null
-m_fallSizeMultiplier = null
-m_currentTool = 1
-m_pickaxeCooldownMax = null
-m_pickaxeDistance = null
-m_pickaxeRadius = null
-m_pickaxeDPS = null
-m_drillDistance = null
-m_drillRadius = null
-m_drillMovementFactorMax = null
-m_drillMovementCooldown = null
-m_drillMovementSpeed = null
-m_drillDPS = null
-m_shotgunAngleMax = null
-m_shotgunPelletCount = null
-m_shotgunPelletSpeed = null
-m_shotgunPelletSize = null
-m_shotgunCooldownMax = null
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 40, 80)
+m_cooldownMax = 0.3
 
 [node name="Split" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="GridContainer" type="GridContainer" parent="Split"]
 anchors_preset = 15
@@ -87,8 +56,11 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="Split/GridContainer/0"]
 handle_input_locally = false
-size = Vector2i(2, 2)
-render_target_update_mode = 0
+size = Vector2i(576, 324)
+render_target_update_mode = 4
+
+[node name="Player0" parent="Split/GridContainer/0/SubViewport" instance=ExtResource("3_j5yw3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 20, 25)
 
 [node name="1" type="SubViewportContainer" parent="Split/GridContainer"]
 texture_filter = 1
@@ -100,43 +72,12 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="Split/GridContainer/1"]
 handle_input_locally = false
-size = Vector2i(2, 2)
-render_target_update_mode = 0
+size = Vector2i(576, 324)
+render_target_update_mode = 4
 
 [node name="Player1" parent="Split/GridContainer/1/SubViewport" instance=ExtResource("3_j5yw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.7278, 40, 74.2614)
 m_playerIndex = 1
-m_inputDeadzone = null
-m_maxHealth = null
-m_healthRegenSpeed = null
-m_regenCooldown = null
-m_digoutScale = null
-m_movementSpeed = null
-m_cameraLookSpeed = null
-m_cameraInternalHeight = null
-m_cameraArmHeight = null
-m_cameraArmLength = null
-m_cameraArmRadius = null
-m_cameraSafeDistance = null
-m_fallThreshold = null
-m_fallDamageMultiplier = null
-m_fallSizeMultiplier = null
-m_currentTool = null
-m_pickaxeCooldownMax = null
-m_pickaxeDistance = null
-m_pickaxeRadius = null
-m_pickaxeDPS = null
-m_drillDistance = null
-m_drillRadius = null
-m_drillMovementFactorMax = null
-m_drillMovementCooldown = null
-m_drillMovementSpeed = null
-m_drillDPS = null
-m_shotgunAngleMax = null
-m_shotgunPelletCount = null
-m_shotgunPelletSpeed = null
-m_shotgunPelletSize = null
-m_shotgunCooldownMax = null
 
 [node name="2" type="SubViewportContainer" parent="Split/GridContainer"]
 texture_filter = 1
@@ -148,43 +89,12 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="Split/GridContainer/2"]
 handle_input_locally = false
-size = Vector2i(2, 2)
-render_target_update_mode = 0
+size = Vector2i(576, 324)
+render_target_update_mode = 4
 
 [node name="Player2" parent="Split/GridContainer/2/SubViewport" instance=ExtResource("3_j5yw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5819, 30.1044, 27.0076)
 m_playerIndex = 2
-m_inputDeadzone = null
-m_maxHealth = null
-m_healthRegenSpeed = null
-m_regenCooldown = null
-m_digoutScale = null
-m_movementSpeed = null
-m_cameraLookSpeed = null
-m_cameraInternalHeight = null
-m_cameraArmHeight = null
-m_cameraArmLength = null
-m_cameraArmRadius = null
-m_cameraSafeDistance = null
-m_fallThreshold = null
-m_fallDamageMultiplier = null
-m_fallSizeMultiplier = null
-m_currentTool = null
-m_pickaxeCooldownMax = null
-m_pickaxeDistance = null
-m_pickaxeRadius = null
-m_pickaxeDPS = null
-m_drillDistance = null
-m_drillRadius = null
-m_drillMovementFactorMax = null
-m_drillMovementCooldown = null
-m_drillMovementSpeed = null
-m_drillDPS = null
-m_shotgunAngleMax = null
-m_shotgunPelletCount = null
-m_shotgunPelletSpeed = null
-m_shotgunPelletSize = null
-m_shotgunCooldownMax = null
 
 [node name="3" type="SubViewportContainer" parent="Split/GridContainer"]
 texture_filter = 1
@@ -196,40 +106,9 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="Split/GridContainer/3"]
 handle_input_locally = false
-size = Vector2i(2, 2)
-render_target_update_mode = 0
+size = Vector2i(576, 324)
+render_target_update_mode = 4
 
 [node name="Player3" parent="Split/GridContainer/3/SubViewport" instance=ExtResource("3_j5yw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9999, 40, 74.2614)
 m_playerIndex = 3
-m_inputDeadzone = null
-m_maxHealth = null
-m_healthRegenSpeed = null
-m_regenCooldown = null
-m_digoutScale = null
-m_movementSpeed = null
-m_cameraLookSpeed = null
-m_cameraInternalHeight = null
-m_cameraArmHeight = null
-m_cameraArmLength = null
-m_cameraArmRadius = null
-m_cameraSafeDistance = null
-m_fallThreshold = null
-m_fallDamageMultiplier = null
-m_fallSizeMultiplier = null
-m_currentTool = null
-m_pickaxeCooldownMax = null
-m_pickaxeDistance = null
-m_pickaxeRadius = null
-m_pickaxeDPS = null
-m_drillDistance = null
-m_drillRadius = null
-m_drillMovementFactorMax = null
-m_drillMovementCooldown = null
-m_drillMovementSpeed = null
-m_drillDPS = null
-m_shotgunAngleMax = null
-m_shotgunPelletCount = null
-m_shotgunPelletSpeed = null
-m_shotgunPelletSize = null
-m_shotgunCooldownMax = null

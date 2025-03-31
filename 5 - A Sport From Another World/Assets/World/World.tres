@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cimc0tqc5vynl"]
 
 [ext_resource type="Shader" uid="uid://blndu50wmqavt" path="res://Assets/World/World.gdshader" id="1_bab1u"]
-[ext_resource type="Texture2D" uid="uid://cnn8fka7861d3" path="res://Assets/World/Terrain.png" id="2_k5ifh"]
+[ext_resource type="Texture2D" uid="uid://do2u5hyyx51lk" path="res://Assets/World/Terrain.png" id="2_k5ifh"]
 
 [resource]
 render_priority = 0

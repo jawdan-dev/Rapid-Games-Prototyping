@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cdu4k4q1b6wpw"]
 
-[ext_resource type="Shader" uid="uid://da8rlrjiksat3" path="res://Assets/Projectile/Base/Projectile.gdshader" id="1_2khak"]
+[ext_resource type="Shader" uid="uid://da8rlrjiksat3" path="res://Assets/Projectile/Projectile.gdshader" id="1_2khak"]
 [ext_resource type="Texture2D" uid="uid://do2u5hyyx51lk" path="res://Assets/World/Terrain.png" id="2_fd0gw"]
 
 [resource]

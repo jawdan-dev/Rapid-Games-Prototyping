@@ -36,8 +36,6 @@ static func deregisterPlayer(player : Player) -> void:
 static func respawnPlayer(player : Player) -> void:
 	player.m_currentHealth = player.m_maxHealth;
 	player.m_gravity = 0;
-	player.m_currentTool = Player.Tool.Shotgun;
+	#player.m_currentTool = Player.Tool.None;
 	player.global_position = World.s_worldInstance.getSafePoint();
 	player.digout();
-
-	
