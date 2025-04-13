@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Make Build",
+			"type": "shell",
+			"isBackground": false,
+			"options": {
+				"cwd": "${workspaceFolder}",
+			},
+			"command": "cd ~/Documents/GitHub/Rapid-Games-Prototyping/6---Goblin-Hero/ && make > C:/devkitPro/msys2/msys2.exe",
+		}
+	]
+}

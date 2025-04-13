@@ -1,0 +1,15 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Desktop Build",
+			"type": "cppdbg",
+			"request": "launch",
+            "program": "${workspaceFolder}/emulator/melonDS.exe",
+			"args": [ "${workspaceFolder}/Goblin_Hero.nds" ],
+			"preLaunchTask": "Make Build",
+            "cwd": "${workspaceFolder}",
+			"miDebuggerPath": ""
+		}
+	]
+}
