@@ -13,7 +13,8 @@ Sprite::Sprite(const unsigned int* const data,
 			   const unsigned short* const palette, const int paletteSize,
 			   const int width, const int height,
 			   const int tileSizeX, const int tileSizeY,
-			   const bool transparent) {
+			   const bool transparent) :
+	m_images(nullptr), m_textureCount(0) {
 
 	CORE_INITIALIZE();
 
@@ -70,29 +71,39 @@ Sprite::~Sprite() {
 	delete[] m_images;
 }
 
-const int Sprite::getSpriteWidth() {
+const int Sprite::getSpriteCount() const {
+	return m_textureCount;
+}
+const int Sprite::getSpriteWidth() const {
 	return m_textureCount > 0 ? m_images[0].width : 0;
 }
-const int Sprite::getSpriteHeight() {
+const int Sprite::getSpriteHeight() const {
 	return m_textureCount > 0 ? m_images[0].height : 0;
 }
 
-void Sprite::draw(const int x, const int y, const int index) {
-	glSprite(x, y, GL_FLIP_NONE, &m_images[index]);
+void Sprite::draw(const int x, const int y, const int index, const int flipMode) const {
+	glSprite(x, y, flipMode, &m_images[index]);
 }
-void Sprite::drawExt(const int x, const int y, const int xScale, const int yScale, const int index) {
+void Sprite::drawExt(const int x, const int y, const int xScale, const int yScale, const int index) const {
 	if (xScale <= 0 || yScale <= 0)
 		return;
 	constexpr int scaleFactor = ((1 << 12) / 100);
 	glSpriteScaleXY(x, y, xScale * scaleFactor, yScale * scaleFactor, GL_FLIP_NONE, &m_images[index]);
 }
-void Sprite::drawTo(const int x, const int y, const int width, const int height, const int index) {
-	const int
-		xScale = (width * (1 << 12)) / getSpriteWidth(),
-		yScale = (height * (1 << 12)) / getSpriteHeight();
-
-	glSpriteScaleXY(
+void Sprite::drawTo(const int x, const int y, const int width, const int height, const int index) const {
+	glSpriteOnQuad(
 		x, y,
-		xScale, yScale,
+		x, y + height,
+		x + width, y + height,
+		x + width, y,
+		0, 0,
 		GL_FLIP_NONE, &m_images[index]);
+
+	// const int
+	// 	xScale = (width * (1 << 12)) / getSpriteWidth(),
+	// 	yScale = (height * (1 << 12)) / getSpriteHeight();
+	// glSpriteScaleXY(
+	// 	x, y,
+	// 	xScale, yScale,
+	// 	GL_FLIP_NONE, &m_images[index]);
 }

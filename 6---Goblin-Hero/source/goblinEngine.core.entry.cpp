@@ -1,6 +1,8 @@
 #include "goblinEngine.application.hpp"
 #include "goblinEngine.core.hpp"
 
+#include <time.h>
+
 /**
  * PROBABLE BUG(?) FOUND.
  *
@@ -10,6 +12,7 @@
  */
 
 int main(void) {
+	srand(time(nullptr));
 	Application app;
 	app.start();
 }

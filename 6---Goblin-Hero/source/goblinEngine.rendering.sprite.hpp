@@ -18,12 +18,13 @@ public:
 		   const bool transparent = true);
 	~Sprite();
 
-	const int getSpriteWidth();
-	const int getSpriteHeight();
+	const int getSpriteCount() const;
+	const int getSpriteWidth() const;
+	const int getSpriteHeight() const;
 
-	void draw(const int x, const int y, const int index = 0);
-	void drawExt(const int x, const int y, const int xScale, const int yScale, const int index = 0);
-	void drawTo(const int x, const int y, const int width, const int height, const int index = 0);
+	void draw(const int x, const int y, const int index = 0, const int flipMode = GL_FLIP_NONE) const;
+	void drawExt(const int x, const int y, const int xScale, const int yScale, const int index = 0) const;
+	void drawTo(const int x, const int y, const int width, const int height, const int index = 0) const;
 
 private:
 	glImage* m_images;

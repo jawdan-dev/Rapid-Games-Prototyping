@@ -12,5 +12,5 @@ public:
 				const int width, const int height,
 				const bool transparent = true);
 
-	void drawPanel(const int x, const int y, const int w, const int h);
+	void drawPanel(const int x, const int y, const int w, const int h, const int type = 0);
 };

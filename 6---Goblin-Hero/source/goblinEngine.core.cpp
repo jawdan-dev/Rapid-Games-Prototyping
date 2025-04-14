@@ -12,7 +12,6 @@ void CORE_INITIALIZE() {
 	vramSetBankA(VRAM_A_TEXTURE);
 	vramSetBankB(VRAM_B_TEXTURE);
 	vramSetBankE(VRAM_E_TEX_PALETTE);
-	// vramSetBankF(VRAM_F_TEX_PALETTE);
 
 	{
 		oamInit(&oamSub, SpriteMapping_Bmp_2D_256, false);
@@ -34,19 +33,24 @@ void CORE_INITIALIZE() {
 	glScreen2D();
 }
 
-void CORE_ERROR(const char* msg) {
-	CORE_INITIALIZE();
-
-	videoSetModeSub(MODE_FIFO);
-	// consoleDemoInit();
+void CORE_ERROR(const char* msg...) {
+	consoleDemoInit();
 	consoleClear();
 
-	iprintf("ERROR: %s\n\nPress any to exit.", msg);
+	char buffer[256];
+	va_list args;
+	va_start(args, msg);
+	vsprintf(buffer, msg, args);
+	va_end(args);
+
+	iprintf("\nPress any to exit.\nERROR LOG:\n\n%s", buffer);
+
 	while (pmMainLoop()) {
 		scanKeys();
 		if (keysDown())
 			break;
 		swiWaitForVBlank();
 	}
+
 	exit(1);
 }
