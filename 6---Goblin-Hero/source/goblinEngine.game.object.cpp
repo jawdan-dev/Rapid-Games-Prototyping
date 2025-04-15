@@ -1,23 +1,20 @@
 #include "goblinEngine.game.object.hpp"
 
-std::vector<GameObject*> GameObject::s_toStart;
+std::set<GameObject*> GameObject::s_toStart;
 std::set<GameObject*> GameObject::s_toFree;
 
 GameObject::GameObject(const char* name, GameObject* const parent) :
 	m_enabled(true), m_name(name),
 	m_parent(nullptr), m_children() {
 	setParent(parent);
-	s_toStart.emplace_back(this);
+	queueStart();
 }
 GameObject::~GameObject() {
-	setParent(nullptr);
-	clearChildren(true);
-	for (size_t i = 0; i < s_toStart.size(); i++) {
-		if (s_toStart[i] != this)
-			continue;
-		s_toStart.erase(s_toStart.begin() + i);
-		break;
-	}
+	removeParent();
+	clearChildren();
+	auto it = s_toStart.find(this);
+	if (it != s_toStart.end())
+		s_toStart.erase(it);
 }
 
 void GameObject::start() {}
@@ -25,11 +22,15 @@ void GameObject::update() {}
 void GameObject::drawTop() {}
 void GameObject::drawBottom() {}
 
+
+void GameObject::queueStart() {
+	s_toStart.emplace(this);
+}
+
 void GameObject::_startAll() {
-	for (size_t i = 0; i < s_toStart.size(); i++)
-		s_toStart[i]->start();
+	for (auto it = s_toStart.begin(); it != s_toStart.end(); it++)
+		(*it)->start();
 	s_toStart.clear();
-	s_toStart.shrink_to_fit();
 }
 void GameObject::_updateAll() {
 	if (!m_enabled)
@@ -66,12 +67,15 @@ void GameObject::setParent(GameObject* const parent) {
 	if (m_parent == parent)
 		return;
 
+	if (parent == nullptr) {
+		removeParent();
+		return;
+	}
+
 	if (m_parent != nullptr)
 		m_parent->removeChild(this);
-	if (parent != nullptr)
-		parent->addChild(this);
 
-	m_parent = parent;
+	parent->addChild(this);
 }
 void GameObject::removeParent() {
 	if (m_parent == nullptr)
@@ -119,27 +123,25 @@ void GameObject::getChildren(const char* childName, std::vector<GameObject*>* co
 	}
 }
 void GameObject::addChild(GameObject* const child) {
-	if (child->m_parent == this) return;
+	if (child->m_parent == this)
+		return;
+
+	child->removeParent();
 	m_children.emplace_back(child);
 	child->m_parent = this;
 }
 void GameObject::removeChild(GameObject* const child) {
 	for (size_t i = 0; i < m_children.size(); i++) {
-		if (child != m_children[i])
+		if (m_children[i] != child)
 			continue;
 		m_children.erase(m_children.begin() + i);
 		child->m_parent = nullptr;
 		break;
 	}
 }
-void GameObject::clearChildren(const bool free) {
-	if (free) {
-		for (size_t i = 0; i < m_children.size(); i++)
-			delete m_children[i];
-	} else {
-		for (size_t i = 0; i < m_children.size(); i++)
-			m_children[i]->m_parent = nullptr;
-	}
+void GameObject::clearChildren() {
+	for (size_t i = 0; i < m_children.size(); i++)
+		delete m_children[i];
 	m_children.clear();
 }
 void GameObject::sortChildren(bool (*func)(GameObject* const, GameObject* const), const bool fullPass) {
@@ -176,6 +178,6 @@ void GameObject::queueFree() {
 }
 void GameObject::_freeAll() {
 	for (auto it = s_toFree.begin(); it != s_toFree.end(); it++)
-		delete *it;
+		(*it)->~GameObject();
 	s_toFree.clear();
 }

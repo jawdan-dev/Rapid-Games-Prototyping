@@ -87,13 +87,8 @@ public:
 			if ((*it)->getCharacterType() != from)
 				continue;
 
-			// This isnt really a fix.
-			CharacterSorterObject* sorter = (CharacterSorterObject*)(*it)->getObjectInScene("CharacterSorterObject");
-			if (sorter == nullptr)
-				continue;
-
 			for (int i = 0; i < n; i++) {
-				sorter->addChild(new CharacterObject(type, (*it)->getPos()));
+				(*it)->getParent()->addChild(new CharacterObject(type, (*it)->getPos()));
 				AttackParticlesObject::spawnParticle((*it)->getPos(), 10.0f, 3);
 			}
 			break;
@@ -103,10 +98,6 @@ public:
 		int remaining = n;
 		for (auto it = CharacterObject::s_characters.begin(); it != CharacterObject::s_characters.end(); it++) {
 			if ((*it)->getCharacterType() != from)
-				continue;
-
-			// This worst fix ever.
-			if ((CharacterSorterObject*)(*it)->getObjectInScene("CharacterSorterObject") == nullptr)
 				continue;
 
 			(*it)->setCharacterType(to);

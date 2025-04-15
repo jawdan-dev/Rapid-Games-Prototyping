@@ -13,6 +13,8 @@ public:
 	virtual void drawTop();
 	virtual void drawBottom();
 
+	void queueStart();
+
 	static void _startAll();
 	void _updateAll();
 	void _drawTopAll();
@@ -28,8 +30,8 @@ public:
 	void getChildren(const char* childName, std::vector<GameObject*>* const output, const bool recursive = false);
 	void addChild(GameObject* const child);
 	void removeChild(GameObject* const child);
-	void clearChildren(const bool free = true);
-	void sortChildren(bool(*func)(GameObject* const, GameObject* const), const bool fullPass = true);
+	void clearChildren();
+	void sortChildren(bool (*func)(GameObject* const, GameObject* const), const bool fullPass = true);
 
 	GameObject* const getObjectInScene(const char* name);
 	void getObjectsInScene(const char* name, std::vector<GameObject*>* const output);
@@ -38,7 +40,7 @@ public:
 	static void _freeAll();
 
 private:
-	static std::vector<GameObject*> s_toStart;
+	static std::set<GameObject*> s_toStart;
 	static std::set<GameObject*> s_toFree;
 
 private:

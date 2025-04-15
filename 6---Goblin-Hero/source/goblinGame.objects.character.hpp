@@ -94,13 +94,14 @@ public:
 		m_pos(pos), m_lastPosX(pos.m_x), m_flipped(false),
 		m_health(0),
 		m_target(nullptr), m_attackCooldown(0) {
-		s_characters.emplace(this);
 		setCharacterType(characterType);
+		s_characters.emplace(this);
 	}
 	virtual ~CharacterObject() {
 		auto it = s_characters.find(this);
 		if (it != s_characters.end())
 			s_characters.erase(it);
+
 		//
 		std::set<CharacterObject*>& from = isPlayer() ? s_playerCharacters : s_enemyCharacters;
 		it = from.find(this);
@@ -378,7 +379,7 @@ public:
 
 		const CharacterStats& characterStats = getCharacterStats(m_characterType);
 		m_health = characterStats.m_maxHealth;
-		start();
+		queueStart();
 	}
 
 public:
